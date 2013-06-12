@@ -1,22 +1,23 @@
 {
-  "name": "generator-webapp",
-  "version": "0.2.3",
-  "description": "Default Yeoman generator for scaffolding out a front-end web app",
+  "name": "generator-mobile",
+  "version": "0.0.1",
+  "description": "Mobile generator for scaffolding out a front-end web app",
   "keywords": [
     "yeoman-generator",
     "web",
     "app",
     "front-end",
     "h5bp",
-    "modernizr"
+    "modernizr",
+    "mobile"
   ],
-  "homepage": "https://github.com/yeoman/generator-webapp",
-  "bugs": "https://github.com/yeoman/generator-webapp/issues",
+  "homepage": "https://github.com/yeoman/generator-mobile",
+  "bugs": "https://github.com/yeoman/generator-mobile/issues",
   "author": "Chrome Developer Relations",
   "main": "app/index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/yeoman/generator-webapp.git"
+    "url": "git://github.com/yeoman/generator-mobile.git"
   },
   "scripts": {
     "test": "mocha --reporter spec"

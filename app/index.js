@@ -50,6 +50,8 @@ AppGenerator.prototype.askFor = function askFor() {
     name: 'includeRequireJS',
     message: 'Would you like to include RequireJS (for AMD support)?',
     default: true
+  }, {
+
   }];
 
   this.prompt(prompts, function (props) {
@@ -60,6 +62,23 @@ AppGenerator.prototype.askFor = function askFor() {
 
     cb();
   }.bind(this));
+};
+
+AppGenerator.prototype.framework = function framework() {
+  switch(this.frameworkChoice) {
+    case 1:
+      // Twitter Bootstrap 3.0
+      break
+    case 2:
+      // PureCSS
+      break;
+    case 3:
+      // TopCoat
+      break;
+    default:
+      // NOOP
+      break;
+  }
 };
 
 AppGenerator.prototype.gruntfile = function gruntfile() {
