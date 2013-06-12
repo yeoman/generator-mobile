@@ -39,47 +39,48 @@ AppGenerator.prototype.askFor = function askFor() {
   console.log(this.yeoman);
   console.log('Out of the box I include HTML5 Boilerplate, jQuery and Modernizr.');
 
-  var prompts = [{
-    type: 'confirm',
-    name: 'compassBootstrap',
-    message: 'Would you like to include Twitter Bootstrap for Sass?',
-    default: true
-  },
+  var prompts = [
   {
     type: 'confirm',
     name: 'includeRequireJS',
     message: 'Would you like to include RequireJS (for AMD support)?',
     default: true
   }, {
-
+    name: 'frameworkChoice',
+    message: 'Would you like to include a responsive framework?\n    1: Twitter Bootstrap\n    2: PureCSS\n    3: TopCoat\n    0: No Framework\n',
+    default: 0
   }];
 
   this.prompt(prompts, function (props) {
     // manually deal with the response, get back and store the results.
     // we change a bit this way of doing to automatically do this in the self.prompt() method.
-    this.compassBootstrap = props.compassBootstrap;
     this.includeRequireJS = props.includeRequireJS;
+    this.frameworkChoice = props.frameworkChoice;
 
     cb();
   }.bind(this));
 };
 
-AppGenerator.prototype.framework = function framework() {
-  switch(this.frameworkChoice) {
-    case 1:
-      // Twitter Bootstrap 3.0
-      break
-    case 2:
-      // PureCSS
-      break;
-    case 3:
-      // TopCoat
-      break;
-    default:
-      // NOOP
-      break;
+AppGenerator.prototype.bootstrapJs = function bootstrapJs() {
+  if(this.frameworkChoice !== 1) {
+    return;
   }
-};
+
+  var cb = this.async();
+
+}
+
+AppGenerator.prototype.pure = function pure() {
+  if(this.frameworkChoice == 2) {
+    this.copy('pure-min.css', 'app/bower_components/pure/pure-min.css');
+  }
+}
+
+AppGenerator.prototype.topcoat = function topcoat() {
+  if(this.frameworkChoice == 3) {
+
+  }
+}
 
 AppGenerator.prototype.gruntfile = function gruntfile() {
   this.template('Gruntfile.js');
@@ -114,26 +115,8 @@ AppGenerator.prototype.h5bp = function h5bp() {
   this.copy('htaccess', 'app/.htaccess');
 };
 
-AppGenerator.prototype.bootstrapImg = function bootstrapImg() {
-  if (this.compassBootstrap) {
-    this.copy('glyphicons-halflings.png', 'app/images/glyphicons-halflings.png');
-    this.copy('glyphicons-halflings-white.png', 'app/images/glyphicons-halflings-white.png');
-  }
-};
-
-AppGenerator.prototype.bootstrapJs = function bootstrapJs() {
-  // TODO: create a Bower component for this
-  if (this.compassBootstrap) {
-    this.copy('bootstrap.js', 'app/scripts/vendor/bootstrap.js');
-  }
-};
-
 AppGenerator.prototype.mainStylesheet = function mainStylesheet() {
-  if (this.compassBootstrap) {
-    this.copy('main.scss', 'app/styles/main.scss');
-  } else {
-    this.copy('main.css', 'app/styles/main.css');
-  }
+  this.copy('main.css', 'app/styles/main.css');
 };
 
 AppGenerator.prototype.writeIndex = function writeIndex() {
@@ -160,29 +143,6 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
       sourceFileList: ['scripts/hello.js'],
       searchPath: '.tmp'
     });
-  }
-
-  if (this.compassBootstrap) {
-    defaults.push('Twitter Bootstrap');
-  }
-
-  if (this.compassBootstrap && !this.includeRequireJS) {
-    // wire Twitter Bootstrap plugins
-    this.indexFile = this.appendScripts(this.indexFile, 'scripts/plugins.js', [
-      'bower_components/sass-bootstrap/js/bootstrap-affix.js',
-      'bower_components/sass-bootstrap/js/bootstrap-alert.js',
-      'bower_components/sass-bootstrap/js/bootstrap-dropdown.js',
-      'bower_components/sass-bootstrap/js/bootstrap-tooltip.js',
-      'bower_components/sass-bootstrap/js/bootstrap-modal.js',
-      'bower_components/sass-bootstrap/js/bootstrap-transition.js',
-      'bower_components/sass-bootstrap/js/bootstrap-button.js',
-      'bower_components/sass-bootstrap/js/bootstrap-popover.js',
-      'bower_components/sass-bootstrap/js/bootstrap-typeahead.js',
-      'bower_components/sass-bootstrap/js/bootstrap-carousel.js',
-      'bower_components/sass-bootstrap/js/bootstrap-scrollspy.js',
-      'bower_components/sass-bootstrap/js/bootstrap-collapse.js',
-      'bower_components/sass-bootstrap/js/bootstrap-tab.js'
-    ]);
   }
 
   if (this.includeRequireJS) {

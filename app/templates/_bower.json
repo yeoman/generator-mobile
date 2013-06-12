@@ -1,8 +1,10 @@
 {
   "name": "<%= _.slugify(appname) %>",
   "version": "0.0.0",
-  "dependencies": {<% if (compassBootstrap) { %>
-    "sass-bootstrap": "~2.3.0",<% } %><% if (includeRequireJS) { %>
+  "dependencies": {<% if (frameworkChoice == 1 && false) { %>
+    "bootstrap": "git://github.com/twitter/bootstrap.git",<% } %><% if (frameworkChoice == 2) { %>
+    "pure": "~0.2.0",<% } %><% if (frameworkChoice == 3) { %>
+    "topcoat": "~0.4.1",<% } %><% if (includeRequireJS) { %>
     "requirejs": "~2.1.4",<% } %>
     "modernizr": "~2.6.2",
     "jquery": "~1.9.1"
