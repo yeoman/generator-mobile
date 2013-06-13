@@ -163,6 +163,11 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
       'bower_components/bootstrap/bootstrap-transition.js',
       'bower_components/bootstrap/bootstrap-typeahead.js'
     ]);
+
+    this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/bootstrap.css', [
+      'styles/vendor/bootstrap/bootstrap.css'
+    ]);
+
   } else if(this.frameworkChoice == 2) {
     this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/pure.min.css', [
       'styles/vendor/pure/pure-min.css'
