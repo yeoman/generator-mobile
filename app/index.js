@@ -62,23 +62,24 @@ AppGenerator.prototype.askFor = function askFor() {
 };
 
 AppGenerator.prototype.bootstrapJs = function bootstrapJs() {
-  if(this.frameworkChoice !== 1) {
+  if(this.frameworkChoice != 1) {
     return;
   }
 
-  var cb = this.async();
-
+  this.copy('bootstrap.css', 'app/styles/vendor/bootstrap/bootstrap.css');
 }
 
 AppGenerator.prototype.pure = function pure() {
-  if(this.frameworkChoice == 2) {
-    this.copy('pure-min.css', 'app/bower_components/pure/pure-min.css');
+  if(this.frameworkChoice != 2) {
+    return;
   }
+
+  this.copy('pure-min.css', 'app/styles/vendor/pure/pure-min.css');
 }
 
 AppGenerator.prototype.topcoat = function topcoat() {
-  if(this.frameworkChoice == 3) {
-
+  if(this.frameworkChoice != 3) {
+    return;
   }
 }
 
@@ -162,6 +163,10 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
       'bower_components/bootstrap/bootstrap-transition.js',
       'bower_components/bootstrap/bootstrap-typeahead.js'
     ]);
+  } else if(this.frameworkChoice == 2) {
+    this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/pure.min.css', [
+      'styles/vendor/pure/pure-min.css'
+      ]);
   }
 
   if (this.includeRequireJS) {
