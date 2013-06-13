@@ -1,7 +1,7 @@
 {
   "name": "<%= _.slugify(appname) %>",
   "version": "0.0.0",
-  "dependencies": {<% if (frameworkChoice == 1 && false) { %>
+  "dependencies": {<% if (frameworkChoice == 1) { %>
     "bootstrap": "git://github.com/twitter/bootstrap.git",<% } %><% if (frameworkChoice == 2) { %>
     "pure": "~0.2.0",<% } %><% if (frameworkChoice == 3) { %>
     "topcoat": "~0.4.1",<% } %><% if (includeRequireJS) { %>

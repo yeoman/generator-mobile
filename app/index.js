@@ -145,6 +145,25 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
     });
   }
 
+  if(this.frameworkChoice == 1) {
+    // Add Twitter Bootstrap scripts
+    this.indexFile = this.appendScripts(this.indexFile, 'scripts/vendor/bootstrap.js', [
+      'bower_components/bootstrap/bootstrap-affix.js',
+      'bower_components/bootstrap/bootstrap-alert.js',
+      'bower_components/bootstrap/bootstrap-button.js',
+      'bower_components/bootstrap/bootstrap-carousel.js',
+      'bower_components/bootstrap/bootstrap-collapse.js',
+      'bower_components/bootstrap/bootstrap-dropdown.js',
+      'bower_components/bootstrap/bootstrap-modal.js',
+      'bower_components/bootstrap/bootstrap-popover.js',
+      'bower_components/bootstrap/bootstrap-scrollspy.js',
+      'bower_components/bootstrap/bootstrap-tab.js',
+      'bower_components/bootstrap/bootstrap-tooltip.js',
+      'bower_components/bootstrap/bootstrap-transition.js',
+      'bower_components/bootstrap/bootstrap-typeahead.js'
+    ]);
+  }
+
   if (this.includeRequireJS) {
     defaults.push('RequireJS');
   } else {
@@ -172,7 +191,7 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
 // TODO(mklabs): to be put in a subgenerator like rjs:app
 AppGenerator.prototype.requirejs = function requirejs() {
   var requiredScripts = (this.compassBootstrap) ? '[\'app\', \'jquery\', \'bootstrap\']' : '[\'app\', \'jquery\']';
-  var bootstrapPath = (this.compassBootstrap) ? '        bootstrap: \'vendor/bootstrap\'\n    },' : '    },';
+  var bootstrapPath = (this.compassBootstrap) ? ',\n        bootstrap: \'vendor/bootstrap\'\n    },' : '    },';
 
   if (this.includeRequireJS) {
     this.indexFile = this.appendScripts(this.indexFile, 'scripts/main.js', ['bower_components/requirejs/require.js'], {
@@ -191,7 +210,7 @@ AppGenerator.prototype.requirejs = function requirejs() {
     this.mainJsFile = [
       'require.config({',
       '    paths: {',
-      '        jquery: \'../bower_components/jquery/jquery\',',
+      '        jquery: \'../bower_components/jquery/jquery\'',
       bootstrapPath,
       '    shim: {',
       '        bootstrap: {',
