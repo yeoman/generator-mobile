@@ -50,21 +50,25 @@ AppGenerator.prototype.askFor = function askFor() {
     message: 'Would you like to include a mobile-first UI framework?\n    1: Twitter Bootstrap\n    2: PureCSS\n    3: TopCoat\n    4: Foundation\n    0: No Framework\n',
     default: 0
   },{
+    type: 'confirm',
     name: 'layoutChoice',
     message: 'Would you like to include some layout boilerplate for this framework?',
-    default: 0
+    default: false
   },{
+    type: 'confirm',
     name: 'fastclickChoice',
     message: 'Would you like to include FastClick to remove click delays in touch UIs?',
-    default: 0
+    default: false
   },{
+    type: 'confirm',
     name: 'offlineHelper',
     message: 'Would you like to include a helper for offline storage?',
-    default: 0
+    default: false
   },{
+    type: 'confirm',
     name: 'fullscreenAPI',
     message: 'Would you like to include boilerplate for the Fullscreen API?',
-    default: 0
+    default: false
   }];
 
 
@@ -89,36 +93,69 @@ AppGenerator.prototype.askFor = function askFor() {
 // TODO: Don't use pre-minified versions of these deps
 
 AppGenerator.prototype.bootstrapJs = function bootstrapJs() {
-  if(this.frameworkChoice != 1) {
-    return;
+  if(this.frameworkChoice == 1) {
+    this.frameworkSelected = 'bootstrap';
+    this.copy('layouts/bootstrap/assets/css/bootstrap.css', 'app/styles/vendor/bootstrap/bootstrap.css');
   }
-
-  this.copy('layouts/bootstrap/assets/css/bootstrap.css', 'app/styles/vendor/bootstrap/bootstrap.css');
 }
 
 AppGenerator.prototype.pure = function pure() {
-  if(this.frameworkChoice != 2) {
-    return;
+  if(this.frameworkChoice == 2) {
+    this.frameworkSelected = 'pure';
+    this.copy('layouts/pure/stylesheets/pure-min.css', 'app/styles/vendor/pure/pure-min.css');
   }
-
-  this.copy('layouts/pure/stylesheets/pure-min.css', 'app/styles/vendor/pure/pure-min.css');
 }
 
 AppGenerator.prototype.topcoat = function topcoat() {
-  if(this.frameworkChoice != 3) {
-    return;
+  if(this.frameworkChoice == 3) {
+    this.frameworkSelected = 'topcoat';
+    this.copy('layouts/topcoat/css/topcoat-mobile-light.css', 'app/styles/vendor/topcoat/topcoat-min.css');
   }
-
-  this.copy('layouts/topcoat/css/topcoat-mobile-light.css', 'app/styles/vendor/topcoat/topcoat-min.css');
 }
 
 AppGenerator.prototype.foundation = function foundation() {
-  if(this.frameworkChoice != 4) {
-    return;
+  if(this.frameworkChoice == 4) {
+    this.frameworkSelected = 'foundation';
+    this.copy('layouts/foundation/stylesheets/foundation.min.css', 'app/styles/vendor/foundation/foundation-min.css');
   }
-  this.copy('layouts/foundation/stylesheets/foundation.min.css', 'app/styles/vendor/foundation/foundation-min.css');
 }
 
+
+// ----------------------------------------------------------------
+// Layouts
+// ----------------------------------------------------------------
+
+AppGenerator.prototype.addLayout = function gruntfile() {
+  if(this.frameworkChoice){ 
+
+    var layoutStr = "";
+
+    console.log(this.frameworkSelected +' was chosen');
+
+    // a framework was chosen
+    if(this.frameworkSelected == 'bootstrap'){
+
+      layoutStr = this.readFileAsString(path.join(this.sourceRoot(), 'layouts/bootstrap/index.html'));
+
+    }else if(this.frameworkSelected == 'pure'){
+
+      layoutStr = this.readFileAsString(path.join(this.sourceRoot(), 'layouts/pure/index.html'));
+
+    }else if(this.frameworkSelected == 'topcoat'){
+
+      //TODO: Get a Topcoat boilerplate
+      //this.readFileAsString(path.join(this.sourceRoot(), 'layouts/bootstrap/index.html');
+
+    }else if(this.frameworkSelected == 'foundation'){
+
+      layoutStr = this.readFileAsString(path.join(this.sourceRoot(), 'layouts/foundation/index.html'));
+    }
+
+    // Replace the page logic comment with the layoutString
+    this.indexFile = this.indexFile.replace("<!--your page logic-->", layoutStr);
+
+  }
+};
 
 // ----------------------------------------------------------------
 
