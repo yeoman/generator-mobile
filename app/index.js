@@ -173,6 +173,12 @@ AppGenerator.prototype.fastclick = function packageJSON() {
   }
 };
 
+AppGenerator.prototype.fullscreen = function packageJSON() {
+  if(this.fullscreenAPI){
+    this.copy('fullscreensnippet.js', 'app/scripts/fullscreensnippet.js');
+  }
+};
+
 AppGenerator.prototype.git = function git() {
   this.copy('gitignore', '.gitignore');
   this.copy('gitattributes', '.gitattributes');

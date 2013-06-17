@@ -20,16 +20,16 @@ function fullScreenElement() {
     return document.webkitFullScreenElement || document.webkitCurrentFullScreenElement || document.mozFullScreenElement || document.fullScreenElement;
 }
 
-var image = document.querySelector('img');
+var el = document.querySelector('body');
 
-image.requestFullScreen = image.webkitRequestFullScreen || image.mozRequestFullScreen || image.requestFullScreen;
+el.requestFullScreen = el.webkitRequestFullScreen || el.mozRequestFullScreen || el.requestFullScreen;
 
 document.body.onclick = function(e) {
     console.log(fullScreenElement());
-    if ((isFullScreen() && e.target !== image) || fullScreenElement() === image) {
+    if ((isFullScreen() && e.target !== el) || fullScreenElement() === el) {
         document.cancelFullScreen();
-    } else if (e.target === image) {
-        image.requestFullScreen();
+    } else if (e.target === el) {
+        el.requestFullScreen();
     } else {
         document.body.requestFullScreen();
     }
