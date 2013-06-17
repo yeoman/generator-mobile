@@ -47,7 +47,7 @@ AppGenerator.prototype.askFor = function askFor() {
     default: true
   }, {
     name: 'frameworkChoice',
-    message: 'Would you like to include a responsive framework?\n    1: Twitter Bootstrap\n    2: PureCSS\n    3: TopCoat\n    0: No Framework\n',
+    message: 'Would you like to include a mobile-first UI framework?\n    1: Twitter Bootstrap\n    2: PureCSS\n    3: TopCoat\n    0: No Framework\n',
     default: 0
   }];
 
