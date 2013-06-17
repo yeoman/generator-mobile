@@ -49,13 +49,34 @@ AppGenerator.prototype.askFor = function askFor() {
     name: 'frameworkChoice',
     message: 'Would you like to include a mobile-first UI framework?\n    1: Twitter Bootstrap\n    2: PureCSS\n    3: TopCoat\n    4: Foundation\n    0: No Framework\n',
     default: 0
+  },{
+    name: 'layoutChoice',
+    message: 'Would you like to include some layout boilerplate for this framework?',
+    default: 0
+  },{
+    name: 'fastclickChoice',
+    message: 'Would you like to include FastClick to remove click delays in touch UIs?',
+    default: 0
+  },{
+    name: 'offlineHelper',
+    message: 'Would you like to include a helper for offline storage?',
+    default: 0
+  },{
+    name: 'fullscreenAPI',
+    message: 'Would you like to include boilerplate for the Fullscreen API?',
+    default: 0
   }];
+
 
   this.prompt(prompts, function (props) {
     // manually deal with the response, get back and store the results.
     // we change a bit this way of doing to automatically do this in the self.prompt() method.
     this.includeRequireJS = props.includeRequireJS;
     this.frameworkChoice = props.frameworkChoice;
+    this.layoutChoice = props.layoutChoice;
+    this.fastclickChoice = props.fastclickChoice;
+    this.offlineHelper = props.offlineHelper;
+    this.fullscreenAPI = props.fullscreenAPI;
 
     cb();
   }.bind(this));
@@ -107,6 +128,12 @@ AppGenerator.prototype.gruntfile = function gruntfile() {
 
 AppGenerator.prototype.packageJSON = function packageJSON() {
   this.template('_package.json', 'package.json');
+};
+
+AppGenerator.prototype.fastclick = function packageJSON() {
+  if(this.fastClick){
+    this.copy('fastclick.js', 'app/scripts/fastclick.js');
+  }
 };
 
 AppGenerator.prototype.git = function git() {
