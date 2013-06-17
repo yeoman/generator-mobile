@@ -47,7 +47,7 @@ AppGenerator.prototype.askFor = function askFor() {
     default: true
   }, {
     name: 'frameworkChoice',
-    message: 'Would you like to include a mobile-first UI framework?\n    1: Twitter Bootstrap\n    2: PureCSS\n    3: TopCoat\n    0: No Framework\n',
+    message: 'Would you like to include a mobile-first UI framework?\n    1: Twitter Bootstrap\n    2: PureCSS\n    3: TopCoat\n   4: Foundation\n   0: No Framework\n',
     default: 0
   }];
 
@@ -61,12 +61,18 @@ AppGenerator.prototype.askFor = function askFor() {
   }.bind(this));
 };
 
+// --------------------------------------------------------------- 
+// Mobile-first UI Frameworks
+// ---------------------------------------------------------------
+// TODO: Use Bower for pulling all of these deps in
+// TODO: Don't use pre-minified versions of these deps
+
 AppGenerator.prototype.bootstrapJs = function bootstrapJs() {
   if(this.frameworkChoice != 1) {
     return;
   }
 
-  this.copy('bootstrap.css', 'app/styles/vendor/bootstrap/bootstrap.css');
+  this.copy('layouts/bootstrap/assets/css/bootstrap.css', 'app/styles/vendor/bootstrap/bootstrap.css');
 }
 
 AppGenerator.prototype.pure = function pure() {
@@ -74,14 +80,26 @@ AppGenerator.prototype.pure = function pure() {
     return;
   }
 
-  this.copy('pure-min.css', 'app/styles/vendor/pure/pure-min.css');
+  this.copy('layouts/pure/stylesheets/pure-min.css', 'app/styles/vendor/pure/pure-min.css');
 }
 
 AppGenerator.prototype.topcoat = function topcoat() {
   if(this.frameworkChoice != 3) {
     return;
   }
+
+  this.copy('layouts/topcoat/css/topcoat-mobile-light.css', 'app/styles/vendor/topcoat/topcoat-min.css');
 }
+
+AppGenerator.prototype.foundation = function foundation() {
+  if(this.frameworkChoice != 4) {
+    return;
+  }
+  this.copy('layouts/foundation/stylesheets/foundation.min.css', 'app/styles/vendor/foundation/foundation-min.css');
+}
+
+
+// ----------------------------------------------------------------
 
 AppGenerator.prototype.gruntfile = function gruntfile() {
   this.template('Gruntfile.js');
