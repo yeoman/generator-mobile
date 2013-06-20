@@ -96,6 +96,7 @@ AppGenerator.prototype.bootstrapJs = function bootstrapJs() {
   if(this.frameworkChoice == 1) {
     this.frameworkSelected = 'bootstrap';
     this.copy('layouts/bootstrap/assets/css/bootstrap.css', 'app/styles/vendor/bootstrap/bootstrap.css');
+    //this.copy('layouts/bootstrap/assets/js/bootstrap.min.js', 'app/scripts/vendor/bootstrap/bootstrap.min.js');
   }
 }
 
@@ -134,7 +135,8 @@ AppGenerator.prototype.addLayout = function gruntfile() {
 
     // a framework was chosen
     if(this.frameworkSelected == 'bootstrap'){
-
+      this.copy('layouts/bootstrap/assets/js/application.js', 'app/scripts/application.js');
+      this.copy('layouts/bootstrap/assets/js/holder/holder.js', 'app/scripts/holder.js');
       layoutStr = this.readFileAsString(path.join(this.sourceRoot(), 'layouts/bootstrap/index.html'));
 
     }else if(this.frameworkSelected == 'pure'){
@@ -239,24 +241,32 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
 
   if(this.frameworkChoice == 1) {
     // Add Twitter Bootstrap scripts
+    /**var bootstrapDir = 'bower_components/bootstrap/js/';
+
     this.indexFile = this.appendScripts(this.indexFile, 'scripts/vendor/bootstrap.js', [
-      'bower_components/bootstrap/bootstrap-affix.js',
-      'bower_components/bootstrap/bootstrap-alert.js',
-      'bower_components/bootstrap/bootstrap-button.js',
-      'bower_components/bootstrap/bootstrap-carousel.js',
-      'bower_components/bootstrap/bootstrap-collapse.js',
-      'bower_components/bootstrap/bootstrap-dropdown.js',
-      'bower_components/bootstrap/bootstrap-modal.js',
-      'bower_components/bootstrap/bootstrap-popover.js',
-      'bower_components/bootstrap/bootstrap-scrollspy.js',
-      'bower_components/bootstrap/bootstrap-tab.js',
-      'bower_components/bootstrap/bootstrap-tooltip.js',
-      'bower_components/bootstrap/bootstrap-transition.js',
-      'bower_components/bootstrap/bootstrap-typeahead.js'
-    ]);
+      bootstrapDir+'bootstrap-affix.js',
+      bootstrapDir+'bootstrap-alert.js',
+      bootstrapDir+'bootstrap-button.js',
+      bootstrapDir+'bootstrap-carousel.js',
+      bootstrapDir+'bootstrap-collapse.js',
+      bootstrapDir+'bootstrap-dropdown.js',
+      bootstrapDir+'bootstrap-modal.js',
+      bootstrapDir+'bootstrap-popover.js',
+      bootstrapDir+'bootstrap-scrollspy.js',
+      bootstrapDir+'bootstrap-tab.js',
+      bootstrapDir+'bootstrap-tooltip.js',
+      bootstrapDir+'bootstrap-transition.js',
+      bootstrapDir+'bootstrap-typeahead.js'
+    ]);**/
 
     this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/bootstrap.css', [
       'styles/vendor/bootstrap/bootstrap.css'
+    ]);
+    this.indexFile = this.appendScripts(this.indexFile, 'scripts/holder.js', [
+      'scripts/holder.js',
+    ]);
+    this.indexFile = this.appendScripts(this.indexFile, 'scripts/application.js', [
+      'scripts/application.js',
     ]);
     defaults.push('Twitter Bootstrap');
 
