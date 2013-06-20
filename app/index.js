@@ -126,9 +126,9 @@ AppGenerator.prototype.foundation = function foundation() {
 // ----------------------------------------------------------------
 
 AppGenerator.prototype.addLayout = function gruntfile() {
-  if(this.frameworkChoice){ 
+  var layoutStr = "<!--yeoman-welcome-->";
 
-    var layoutStr = "";
+  if(this.layoutChoice && this.frameworkChoice) { 
 
     console.log(this.frameworkSelected +' was chosen');
 
@@ -139,6 +139,10 @@ AppGenerator.prototype.addLayout = function gruntfile() {
 
     }else if(this.frameworkSelected == 'pure'){
 
+      this.copy('layouts/pure/stylesheets/marketing.css', 'app/styles/marketing.css');
+      this.indexFile = this.appendStyles(this.indexFile, 'styles/marketing.css', [
+      'styles/marketing.css'
+      ]);
       layoutStr = this.readFileAsString(path.join(this.sourceRoot(), 'layouts/pure/index.html'));
 
     }else if(this.frameworkSelected == 'topcoat'){
@@ -150,11 +154,10 @@ AppGenerator.prototype.addLayout = function gruntfile() {
 
       layoutStr = this.readFileAsString(path.join(this.sourceRoot(), 'layouts/foundation/index.html'));
     }
-
-    // Replace the page logic comment with the layoutString
-    this.indexFile = this.indexFile.replace("<!--your page logic-->", layoutStr);
-
   }
+
+  // Replace the page logic comment with the layoutString
+  this.indexFile = this.indexFile.replace("<!--your page logic-->", layoutStr);
 };
 
 // ----------------------------------------------------------------
@@ -255,11 +258,13 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
     this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/bootstrap.css', [
       'styles/vendor/bootstrap/bootstrap.css'
     ]);
+    defaults.push('Twitter Bootstrap');
 
   } else if(this.frameworkChoice == 2) {
     this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/pure.min.css', [
       'styles/vendor/pure/pure-min.css'
       ]);
+    defaults.push('PureCSS');
   }
 
   if (this.includeRequireJS) {
@@ -283,7 +288,7 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
   ]);
 
   // append the default content
-  this.indexFile = this.indexFile.replace('<body>', '<body>\n' + contentText.join('\n'));
+  this.indexFile = this.indexFile.replace('<!--yeoman-welcome-->', contentText.join('\n'));
 };
 
 // TODO(mklabs): to be put in a subgenerator like rjs:app
