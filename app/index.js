@@ -86,7 +86,7 @@ AppGenerator.prototype.askFor = function askFor() {
   }.bind(this));
 };
 
-// --------------------------------------------------------------- 
+// ---------------------------------------------------------------
 // Mobile-first UI Frameworks
 // ---------------------------------------------------------------
 // TODO: Use Bower for pulling all of these deps in
@@ -96,7 +96,7 @@ AppGenerator.prototype.bootstrapJs = function bootstrapJs() {
   if(this.frameworkChoice == 1) {
     this.frameworkSelected = 'bootstrap';
     this.copy('layouts/bootstrap/assets/css/bootstrap.css', 'app/styles/vendor/bootstrap/bootstrap.css');
-    //this.copy('layouts/bootstrap/assets/js/bootstrap.min.js', 'app/scripts/vendor/bootstrap/bootstrap.min.js');
+    this.copy('layouts/bootstrap/assets/js/bootstrap.min.js', 'app/scripts/vendor/bootstrap/bootstrap.js');
   }
 }
 
@@ -129,7 +129,7 @@ AppGenerator.prototype.foundation = function foundation() {
 AppGenerator.prototype.addLayout = function gruntfile() {
   var layoutStr = "<!--yeoman-welcome-->";
 
-  if(this.layoutChoice && this.frameworkChoice) { 
+  if(this.layoutChoice && this.frameworkChoice) {
 
     console.log(this.frameworkSelected +' was chosen');
 
@@ -213,6 +213,63 @@ AppGenerator.prototype.mainStylesheet = function mainStylesheet() {
   this.copy('main.css', 'app/styles/main.css');
 };
 
+// TODO(mklabs): to be put in a subgenerator like rjs:app
+AppGenerator.prototype.requirejs = function requirejs() {
+  var requiredScripts = ['app', 'jquery'];
+  var bootstrapPath;
+  if(this.frameworkChoice == 1) {
+    requiredScripts.push('bootstrap');
+    bootstrapPath = ',\n        bootstrap: \'vendor/bootstrap/bootstrap\'\n    },';
+  } else {
+    bootstrapPath = '    },';
+  }
+
+  if (this.includeRequireJS) {
+    var requiredScriptsString = '[';
+    for(var i = 0; i < requiredScripts.length; i++) {
+      requiredScriptsString += '\''+requiredScripts[i]+'\'';
+      if((i+1) < requiredScripts.length) {
+        requiredScriptsString += ', ';
+      }
+    }
+    requiredScriptsString += ']';
+
+    this.indexFile = this.appendScripts(this.indexFile, 'scripts/main.js', ['bower_components/requirejs/require.js'], {
+      'data-main': 'scripts/main'
+    });
+
+    // add a basic amd module
+    this.write('app/scripts/app.js', [
+      '/*global define */',
+      'define([], function () {',
+      '    \'use strict\';\n',
+      '    return \'\\\'Allo \\\'Allo!\';',
+      '});'
+    ].join('\n'));
+
+    this.mainJsFile = [
+      'require.config({',
+      '    paths: {',
+      '        jquery: \'../bower_components/jquery/jquery\'',
+      bootstrapPath,
+      '    shim: {',
+      '        bootstrap: {',
+      '            deps: [\'jquery\'],',
+      '            exports: \'jquery\'',
+      '        }',
+      '    }',
+      '});',
+      '',
+      'require(' + requiredScriptsString + ', function (app, $) {',
+      '    \'use strict\';',
+      '    // use app here',
+      '    console.log(app);',
+      '    console.log(\'Running jQuery %s\', $().jquery);',
+      '});'
+    ].join('\n');
+  }
+};
+
 AppGenerator.prototype.writeIndex = function writeIndex() {
   // prepare default content text
   var defaults = ['HTML5 Boilerplate'];
@@ -241,33 +298,15 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
 
   if(this.frameworkChoice == 1) {
     // Add Twitter Bootstrap scripts
-    /**var bootstrapDir = 'bower_components/bootstrap/js/';
-
-    this.indexFile = this.appendScripts(this.indexFile, 'scripts/vendor/bootstrap.js', [
-      bootstrapDir+'bootstrap-affix.js',
-      bootstrapDir+'bootstrap-alert.js',
-      bootstrapDir+'bootstrap-button.js',
-      bootstrapDir+'bootstrap-carousel.js',
-      bootstrapDir+'bootstrap-collapse.js',
-      bootstrapDir+'bootstrap-dropdown.js',
-      bootstrapDir+'bootstrap-modal.js',
-      bootstrapDir+'bootstrap-popover.js',
-      bootstrapDir+'bootstrap-scrollspy.js',
-      bootstrapDir+'bootstrap-tab.js',
-      bootstrapDir+'bootstrap-tooltip.js',
-      bootstrapDir+'bootstrap-transition.js',
-      bootstrapDir+'bootstrap-typeahead.js'
-    ]);**/
-
     this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/bootstrap.css', [
       'styles/vendor/bootstrap/bootstrap.css'
     ]);
-    this.indexFile = this.appendScripts(this.indexFile, 'scripts/holder.js', [
-      'scripts/holder.js',
-    ]);
-    this.indexFile = this.appendScripts(this.indexFile, 'scripts/application.js', [
-      'scripts/application.js',
-    ]);
+    //this.indexFile = this.appendScripts(this.indexFile, 'scripts/holder.js', [
+    //  'scripts/holder.js',
+    //]);
+    //this.indexFile = this.appendScripts(this.indexFile, 'scripts/application.js', [
+    //  'scripts/application.js',
+    //]);
     defaults.push('Twitter Bootstrap');
 
   } else if(this.frameworkChoice == 2) {
@@ -299,48 +338,6 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
 
   // append the default content
   this.indexFile = this.indexFile.replace('<!--yeoman-welcome-->', contentText.join('\n'));
-};
-
-// TODO(mklabs): to be put in a subgenerator like rjs:app
-AppGenerator.prototype.requirejs = function requirejs() {
-  var requiredScripts = (this.compassBootstrap) ? '[\'app\', \'jquery\', \'bootstrap\']' : '[\'app\', \'jquery\']';
-  var bootstrapPath = (this.compassBootstrap) ? ',\n        bootstrap: \'vendor/bootstrap\'\n    },' : '    },';
-
-  if (this.includeRequireJS) {
-    this.indexFile = this.appendScripts(this.indexFile, 'scripts/main.js', ['bower_components/requirejs/require.js'], {
-      'data-main': 'scripts/main'
-    });
-
-    // add a basic amd module
-    this.write('app/scripts/app.js', [
-      '/*global define */',
-      'define([], function () {',
-      '    \'use strict\';\n',
-      '    return \'\\\'Allo \\\'Allo!\';',
-      '});'
-    ].join('\n'));
-
-    this.mainJsFile = [
-      'require.config({',
-      '    paths: {',
-      '        jquery: \'../bower_components/jquery/jquery\'',
-      bootstrapPath,
-      '    shim: {',
-      '        bootstrap: {',
-      '            deps: [\'jquery\'],',
-      '            exports: \'jquery\'',
-      '        }',
-      '    }',
-      '});',
-      '',
-      'require(' + requiredScripts + ', function (app, $) {',
-      '    \'use strict\';',
-      '    // use app here',
-      '    console.log(app);',
-      '    console.log(\'Running jQuery %s\', $().jquery);',
-      '});'
-    ].join('\n');
-  }
 };
 
 AppGenerator.prototype.app = function app() {
