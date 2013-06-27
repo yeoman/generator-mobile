@@ -736,12 +736,14 @@ FastClick.attach = function(layer) {
 
 
 if (typeof define !== 'undefined' && define.amd) {
-
     // AMD. Register as an anonymous module.
+
+    define("fastclick", ["fastclick"]);
+/*
     define(function() {
         'use strict';
         return FastClick;
-    });
+    });*/
 } else if (typeof module !== 'undefined' && module.exports) {
     module.exports = FastClick.attach;
     module.exports.FastClick = FastClick;
