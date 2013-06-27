@@ -61,8 +61,8 @@ AppGenerator.prototype.askFor = function askFor() {
     default: false
   },{
     type: 'confirm',
-    name: 'offlineHelper',
-    message: 'Would you like to include a helper for offline storage?',
+    name: 'asyncLocalStorage',
+    message: 'Would you like to include a polyfill for localStorage?',
     default: false
   },{
     type: 'confirm',
@@ -79,7 +79,7 @@ AppGenerator.prototype.askFor = function askFor() {
     this.frameworkChoice = props.frameworkChoice;
     this.layoutChoice = props.layoutChoice;
     this.fastclickChoice = props.fastclickChoice;
-    this.offlineHelper = props.offlineHelper;
+    this.asyncLocalStorage = props.asyncLocalStorage;
     this.fullscreenAPI = props.fullscreenAPI;
 
     cb();
@@ -172,17 +172,29 @@ AppGenerator.prototype.packageJSON = function packageJSON() {
   this.template('_package.json', 'package.json');
 };
 
-AppGenerator.prototype.fastclick = function packageJSON() {
-  if(this.fastClick){
+AppGenerator.prototype.fastclick = function fastclick() {
+  if(this.fastclickChoice){
     this.copy('fastclick.js', 'app/scripts/fastclick.js');
+    this.copy('fastclick.example.js', 'app/scripts/fastclick.example.js');
   }
 };
 
-AppGenerator.prototype.fullscreen = function packageJSON() {
+
+AppGenerator.prototype.fullscreen = function fullscreen() {
   if(this.fullscreenAPI){
     this.copy('fullscreensnippet.js', 'app/scripts/fullscreensnippet.js');
   }
 };
+
+
+AppGenerator.prototype.storage = function storage() {
+  if(this.asyncLocalStorage){
+    this.copy('async.localStorage.js', 'app/scripts/async.localStorage.js');
+    this.copy('async.localStorage.examples.js', 'app/scripts/async.localStorage.examples.js');   
+  }
+
+};
+
 
 AppGenerator.prototype.git = function git() {
   this.copy('gitignore', '.gitignore');
@@ -301,13 +313,8 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
     this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/bootstrap.css', [
       'styles/vendor/bootstrap/bootstrap.css'
     ]);
-    //this.indexFile = this.appendScripts(this.indexFile, 'scripts/holder.js', [
-    //  'scripts/holder.js',
-    //]);
-    //this.indexFile = this.appendScripts(this.indexFile, 'scripts/application.js', [
-    //  'scripts/application.js',
-    //]);
-    defaults.push('Twitter Bootstrap');
+
+    defaults.push('Twitter Bootstrap 3');
 
   } else if(this.frameworkChoice == 2) {
     this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/pure.min.css', [
@@ -323,6 +330,31 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
   }
 
 
+
+  if(this.asyncLocalStorage){
+    this.indexFile = this.appendScripts(this.indexFile, 
+      'scripts/async-local-storage.js', [
+      'scripts/async.localStorage.js',
+      'scripts/async.localStorage.examples.js'
+    ]);
+    defaults.push('Async localStorage Polyfill');
+  }
+
+  if(this.fullscreenAPI){
+    this.indexFile = this.appendScripts(this.indexFile, 'scripts/fullscreensnippet.js', [
+      'scripts/fullscreensnippet.js'
+    ]);
+    defaults.push('Fullscreen API snippet');
+  }
+
+  if(this.fastclickChoice){
+    this.indexFile = this.appendScripts(this.indexFile, 'scripts/fastclick.js', [
+      'scripts/fastclick.js',
+      'scripts/fastclick.example.js'
+    ]);
+    defaults.push('FastClick');
+  }
+  
   // iterate over defaults and create content string
   defaults.forEach(function (el) {
     contentText.push('                    <li>' + el  +'</li>');
@@ -335,6 +367,7 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
     '                <h3>Enjoy coding! - Yeoman</h3>',
     ''
   ]);
+
 
   // append the default content
   this.indexFile = this.indexFile.replace('<!--yeoman-welcome-->', contentText.join('\n'));
