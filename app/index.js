@@ -273,9 +273,9 @@ AppGenerator.prototype.requirejs = function requirejs() {
 AppGenerator.prototype.writeIndex = function writeIndex() {
   // prepare default content text
   var defaults = ['HTML5 Boilerplate'];
+
+  
   var contentText = [
-    '        <div class="container">',
-    '            <div class="hero-unit">',
     '                <h1>\'Allo, \'Allo!</h1>',
     '                <p>You now have</p>',
     '                <ul>'
@@ -322,17 +322,17 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
     this.mainJsFile = 'console.log(\'\\\'Allo \\\'Allo!\');';
   }
 
+
   // iterate over defaults and create content string
   defaults.forEach(function (el) {
     contentText.push('                    <li>' + el  +'</li>');
   });
 
+
   contentText = contentText.concat([
     '                </ul>',
     '                <p>installed.</p>',
     '                <h3>Enjoy coding! - Yeoman</h3>',
-    '            </div>',
-    '        </div>',
     ''
   ]);
 
