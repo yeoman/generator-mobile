@@ -69,6 +69,11 @@ AppGenerator.prototype.askFor = function askFor() {
     name: 'fullscreenAPI',
     message: 'Would you like to include boilerplate for the Fullscreen API?',
     default: false
+  },{
+    type: 'confirm',
+    name: 'saucelabs',
+    message: 'Would you like to set-up a SauceLabs task to run automated tests?',
+    default: false
   }];
 
 
@@ -338,6 +343,14 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
 
   // append the default content
   this.indexFile = this.indexFile.replace('<!--yeoman-welcome-->', contentText.join('\n'));
+};
+
+AppGenerator.prototype.addSaucelabs = function gruntfile() {
+  if(!saucelabs) {
+    return;
+  }
+
+
 };
 
 AppGenerator.prototype.app = function app() {

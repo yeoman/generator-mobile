@@ -366,6 +366,11 @@ module.exports = function (grunt) {
         'usemin'
     ]);
 
+    <% if (includeRequireJS) { %>
+    grunt.registerTask('saucelabs', [
+        'build',
+    ]);<% } %>
+
     grunt.registerTask('default', [
         'jshint',
         'test',
