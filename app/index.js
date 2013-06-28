@@ -61,8 +61,13 @@ AppGenerator.prototype.askFor = function askFor() {
     default: false
   },{
     type: 'confirm',
+    name: 'webpSupport',
+    message: 'Would you like to convert your images to WebP?',
+    default: false
+  },{
+    type: 'confirm',
     name: 'asyncLocalStorage',
-    message: 'Would you like to include a polyfill for localStorage?',
+    message: 'Would you like to include a polyfill for async localStorage?',
     default: false
   },{
     type: 'confirm',
@@ -92,6 +97,7 @@ AppGenerator.prototype.askFor = function askFor() {
     this.fullscreenAPI = props.fullscreenAPI;
     this.saucelabs = props.saucelabs;
     this.browserstack =  props.browserstack;
+    this.webpSupport = props.webpSupport;
 
     cb();
   }.bind(this));

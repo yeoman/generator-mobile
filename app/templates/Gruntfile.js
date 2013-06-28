@@ -343,7 +343,8 @@ module.exports = function (grunt) {
             all: {
                 rjsConfig: '<%%= yeoman.app %>/scripts/main.js'
             }
-        }<% } %><% if (saucelabs) { %>,
+        }<% } %>
+        <% if (saucelabs) { %>,
         shell: {
             saucelabstests: {
                 command: 'node ./test/saucelabs/test.js <%%= saucelabs.username %> <%%= saucelabs.apikey %>'
@@ -365,7 +366,7 @@ module.exports = function (grunt) {
             'clean:server',
             'concurrent:server',
             'connect:livereload',
-            'open',
+            'open:server',
             'watch'
         ]);
     });
