@@ -22,8 +22,14 @@ module.exports = function (grunt) {
         dist: 'dist'
     };
 
+    var saucelabsConfig = {
+        username: '<username>',
+        apikey: '<apikey>'
+    };
+
     grunt.initConfig({
         yeoman: yeomanConfig,
+        saucelabs: saucelabsConfig,
         watch: {
             coffee: {
                 files: ['<%%= yeoman.app %>/scripts/{,*/}*.coffee'],
@@ -325,6 +331,16 @@ module.exports = function (grunt) {
             all: {
                 rjsConfig: '<%%= yeoman.app %>/scripts/main.js'
             }
+        }<% } %><% if (saucelabs) { %>,
+        shell: {
+            saucelabstests: {
+                command: 'node ./test/saucelabs/test.js <%%= saucelabs.username %> <%%= saucelabs.apikey %>'
+            },
+            options: {
+               stdout: true,
+               stderr: true,
+               failOnError: true
+            }
         }<% } %>
     });
 
@@ -363,14 +379,16 @@ module.exports = function (grunt) {
         'usemin'
     ]);
 
-    <% if (includeRequireJS) { %>
-    grunt.registerTask('saucelabs', [
-        'build',
-    ]);<% } %>
-
     grunt.registerTask('default', [
         'jshint',
         'test',
         'build'
-    ]);
+    ]);<% if (saucelabs) { %>
+
+    grunt.registerTask('saucelabs', [
+        'clean:server',
+        'concurrent:server',
+        'connect:livereload',
+        'shell:saucelabstests'
+    ]);<% } %>
 };

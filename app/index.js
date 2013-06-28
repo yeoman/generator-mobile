@@ -86,6 +86,7 @@ AppGenerator.prototype.askFor = function askFor() {
     this.fastclickChoice = props.fastclickChoice;
     this.asyncLocalStorage = props.asyncLocalStorage;
     this.fullscreenAPI = props.fullscreenAPI;
+    this.saucelabs = props.saucelabs;
 
     cb();
   }.bind(this));
@@ -195,7 +196,7 @@ AppGenerator.prototype.fullscreen = function fullscreen() {
 AppGenerator.prototype.storage = function storage() {
   if(this.asyncLocalStorage){
     this.copy('async.localStorage.js', 'app/scripts/async.localStorage.js');
-    this.copy('async.localStorage.examples.js', 'app/scripts/async.localStorage.examples.js');   
+    this.copy('async.localStorage.examples.js', 'app/scripts/async.localStorage.examples.js');
   }
 
 };
@@ -291,7 +292,7 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
   // prepare default content text
   var defaults = ['HTML5 Boilerplate'];
 
-  
+
   var contentText = [
     '                <h1>\'Allo, \'Allo!</h1>',
     '                <p>You now have</p>',
@@ -337,7 +338,7 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
 
 
   if(this.asyncLocalStorage){
-    this.indexFile = this.appendScripts(this.indexFile, 
+    this.indexFile = this.appendScripts(this.indexFile,
       'scripts/async-local-storage.js', [
       'scripts/async.localStorage.js',
       'scripts/async.localStorage.examples.js'
@@ -359,7 +360,7 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
     ]);
     defaults.push('FastClick');
   }
-  
+
   // iterate over defaults and create content string
   defaults.forEach(function (el) {
     contentText.push('                    <li>' + el  +'</li>');
@@ -379,11 +380,20 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
 };
 
 AppGenerator.prototype.addSaucelabs = function gruntfile() {
-  if(!saucelabs) {
+  if(!this.saucelabs) {
     return;
   }
 
+  var filesToCopy = [
+    'license.html',
+    'NOTICE.txt',
+    'Sauce-Connect.jar',
+    'test.js'
+  ];
 
+  for(var i = 0; i < filesToCopy.length; i++) {
+    this.copy('test/saucelabs/'+filesToCopy[i], 'test/saucelabs/'+filesToCopy[i]);
+  }
 };
 
 AppGenerator.prototype.app = function app() {
