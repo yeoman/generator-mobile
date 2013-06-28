@@ -74,6 +74,10 @@ AppGenerator.prototype.askFor = function askFor() {
     name: 'saucelabs',
     message: 'Would you like to set-up a SauceLabs task to run automated tests?',
     default: false
+  },{
+    type:'confirm',
+    name:'browserstack',
+    message: 'Would you like to use BrowserStack for device testing?'
   }];
 
 
@@ -87,6 +91,7 @@ AppGenerator.prototype.askFor = function askFor() {
     this.asyncLocalStorage = props.asyncLocalStorage;
     this.fullscreenAPI = props.fullscreenAPI;
     this.saucelabs = props.saucelabs;
+    this.browserstack =  props.browserstack;
 
     cb();
   }.bind(this));

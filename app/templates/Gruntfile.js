@@ -96,6 +96,18 @@ module.exports = function (grunt) {
             server: {
                 path: 'http://localhost:<%%= connect.options.port %>'
             }
+<% if (browserstack) { %>
+            ,
+            nexus4:{
+                path: 'http://www.browserstack.com/start#os=android&os_version=4.2&device=LG+Nexus+4&speed=1&start=true&url=http://rnikitin.github.io/examples/jumbotron/'
+            },
+            nexus7:{
+                path: 'http://www.browserstack.com/start#os=android&os_version=4.1&device=Google+Nexus+7&speed=1&start=true&url=http://rnikitin.github.io/examples/jumbotron/'
+            },
+            iphone5:{
+                path: 'http://www.browserstack.com/start#os=ios&os_version=6.0&device=iPhone+5&speed=1&start=true&url=http://rnikitin.github.io/examples/jumbotron/'
+            }
+<% } %>
         },
         clean: {
             dist: {
