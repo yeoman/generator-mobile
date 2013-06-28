@@ -44,7 +44,7 @@ var configurations = [
     browserName: 'ipad',
     version: '6',
     platform: 'OS X 10.8',
-    name: "Yeoman Test - iPad-locahost:9000"
+    name: "Yeoman Test - iPad"
   }
 ];
 
