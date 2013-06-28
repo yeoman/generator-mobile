@@ -41,11 +41,6 @@ AppGenerator.prototype.askFor = function askFor() {
 
   var prompts = [
   {
-    type: 'confirm',
-    name: 'includeRequireJS',
-    message: 'Would you like to include RequireJS (for AMD support)?',
-    default: true
-  }, {
     name: 'frameworkChoice',
     message: 'Would you like to include a mobile-first UI framework?\n    1: Twitter Bootstrap\n    2: PureCSS\n    3: TopCoat\n    4: Foundation\n    0: No Framework\n',
     default: 0
@@ -54,6 +49,11 @@ AppGenerator.prototype.askFor = function askFor() {
     name: 'layoutChoice',
     message: 'Would you like to include some layout boilerplate for this framework?',
     default: false
+  }, {
+    type: 'confirm',
+    name: 'includeRequireJS',
+    message: 'Would you like to include RequireJS (for AMD support)?',
+    default: true
   },{
     type: 'confirm',
     name: 'fastclickChoice',
