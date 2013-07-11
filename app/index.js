@@ -76,6 +76,11 @@ AppGenerator.prototype.askFor = function askFor() {
     default: false
   },{
     type: 'confirm',
+    name: 'modernizrTask',
+    message: 'Would you like builds to only include Modernizr feature-detects you actually use?',
+    default: false
+  },{
+    type: 'confirm',
     name: 'saucelabs',
     message: 'Would you like to set-up a SauceLabs task to run automated tests?',
     default: false
@@ -98,6 +103,7 @@ AppGenerator.prototype.askFor = function askFor() {
     this.saucelabs = props.saucelabs;
     this.browserstack =  props.browserstack;
     this.webpSupport = props.webpSupport;
+    this.modernizrTask = props.modernizrTask;
 
     cb();
   }.bind(this));
