@@ -47,7 +47,7 @@ AppGenerator.prototype.askFor = function askFor() {
   },{
     type: 'confirm',
     name: 'layoutChoice',
-    message: 'Would you like to include some layout boilerplate for this framework?',
+    message: 'Would you like to include layout boilerplate for your selection?',
     default: false
   }, {
     type: 'confirm',
@@ -57,7 +57,7 @@ AppGenerator.prototype.askFor = function askFor() {
   },{
     type: 'confirm',
     name: 'fastclickChoice',
-    message: 'Would you like to include FastClick to remove click delays in touch UIs?',
+    message: 'Would you like to remove click delays in touch UIs (eg iOS)?',
     default: false
   },{
     type: 'confirm',
@@ -77,7 +77,7 @@ AppGenerator.prototype.askFor = function askFor() {
   },{
     type: 'confirm',
     name: 'modernizrTask',
-    message: 'Would you like builds to only include Modernizr feature-detects you actually use?',
+    message: 'Should builds only include Modernizr feature-detects you actually use?',
     default: false
   },{
     type: 'confirm',
