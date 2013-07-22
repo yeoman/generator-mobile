@@ -27,13 +27,15 @@
     "cheerio": "~0.10.8"
   },
   "peerDependencies": {
-    "generator-mocha": "~0.1.1"
+    "generator-mocha": "~0.1.1",
+    "yo": ">=1.0.0-rc.1.1"
   },
   "devDependencies": {
     "mocha": "~1.9.0"
   },
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=0.8.0",
+    "npm": ">=1.2.10"
   },
   "licenses": [
     {
