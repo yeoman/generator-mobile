@@ -98,12 +98,12 @@ AppGenerator.prototype.askFor = function askFor() {
   },{
     type:'confirm',
     name:'screenshots',
-    message: 'Would you like to take screenshots of your site at various sizes?'
+    message: 'Would you like to take screenshots of your site at various sizes?',
     default: true
   },{
     type:'confirm',
     name:'browserstack',
-    message: 'Would you like to use BrowserStack for device testing?'
+    message: 'Would you like to use BrowserStack for device testing?',
     default: false
   }];
 
