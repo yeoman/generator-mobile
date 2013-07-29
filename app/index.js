@@ -45,6 +45,9 @@ AppGenerator.prototype.askFor = function askFor() {
     name: 'frameworkChoice',
     message: 'Would you like to include a mobile-first UI framework?',
     choices: [{
+      name: 'No Framework',
+      value: 'noframework'
+    }, {
       name: 'Twitter Bootstrap',
       value: 'bootstrap'
     }, {
@@ -56,9 +59,6 @@ AppGenerator.prototype.askFor = function askFor() {
     }, {
       name: 'Foundation',
       value: 'foundation'
-    }, {
-      name: 'No Framework',
-      value: 'noframework'
     }]
   },{
     type: 'confirm',
@@ -96,11 +96,6 @@ AppGenerator.prototype.askFor = function askFor() {
     message: 'Should builds only include Modernizr feature-detects you actually use?',
     default: false
   },{
-    type: 'confirm',
-    name: 'saucelabs',
-    message: 'Would you like to set-up a SauceLabs task to run automated tests?',
-    default: false
-  },{
     type:'confirm',
     name:'browserstack',
     message: 'Would you like to use BrowserStack for device testing?'
@@ -121,7 +116,6 @@ AppGenerator.prototype.askFor = function askFor() {
     this.fastclickChoice = props.fastclickChoice;
     this.asyncLocalStorage = props.asyncLocalStorage;
     this.fullscreenAPI = props.fullscreenAPI;
-    this.saucelabs = props.saucelabs;
     this.browserstack =  props.browserstack;
     this.webpSupport = props.webpSupport;
     this.modernizrTask = props.modernizrTask;
@@ -265,20 +259,19 @@ AppGenerator.prototype.addScreenshots = function screenshots() {
     var width = Math.ceil(device.width / device.density);
     var height = Math.ceil(device.height / device.density);
 
-    var identifier = width;// Only width matters since screenshot is of full height
+    // Only width matters since screenshot is of full height
+    var identifier = width;// +'x'+height;
     if(typeof skipList[identifier] !== 'undefined') {
       continue;
     }
 
     skipList[identifier] = {};
 
-    this.viewports += '\''+width+'x'+height+'\',\n';
-
+    this.viewports += '\''+width+'x'+height+'\',';
     this.viewports += '\''+height+'x'+width+'\'';
+
     if((i+1) < devices.length) {
-      this.viewports += ',\n';
-    } else {
-      this.viewports += '\n';
+      this.viewports += ',';
     }
   }
 
@@ -534,25 +527,6 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
   // append the default content
   this.indexFile = this.indexFile.replace('<!--yeoman-welcome-->', contentText.join('\n'));
 };
-
-AppGenerator.prototype.addSaucelabs = function gruntfile() {
-  if(!this.saucelabs) {
-    return;
-  }
-
-  var filesToCopy = [
-    'license.html',
-    'NOTICE.txt',
-    'Sauce-Connect.jar',
-    'test.js'
-  ];
-
-  for(var i = 0; i < filesToCopy.length; i++) {
-    this.copy('test/saucelabs/'+filesToCopy[i], 'test/saucelabs/'+filesToCopy[i]);
-  }
-};
-
-
 
 AppGenerator.prototype.app = function app() {
   this.mkdir('app');

@@ -22,16 +22,9 @@ module.exports = function (grunt) {
         dist: 'dist'
     };
 
-    // TODO: Make this conditional
-    var saucelabsConfig = {
-        username: '<username>',
-        apikey: '<apikey>'
-    };
-
     grunt.initConfig({
         yeoman: yeomanConfig,
         // TODO: Make this conditional
-        saucelabs: saucelabsConfig,
         watch: {
             coffee: {
                 files: ['<%%= yeoman.app %>/scripts/{,*/}*.coffee'],
@@ -56,8 +49,7 @@ module.exports = function (grunt) {
                     '<%%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
             },
-        },
-        <% if (screenshots) { %>
+        },<% if (screenshots) { %>
         autoshot: {
             default_options: {
               options: {
@@ -413,17 +405,6 @@ module.exports = function (grunt) {
                 rjsConfig: '<%%= yeoman.app %>/scripts/main.js'
             }
         }<% } %>
-        <% if (saucelabs) { %>,
-        shell: {
-            saucelabstests: {
-                command: 'node ./test/saucelabs/test.js <%%= saucelabs.username %> <%%= saucelabs.apikey %>'
-            },
-            options: {
-               stdout: true,
-               stderr: true,
-               failOnError: true
-            }
-        }<% } %>
     });
 
     grunt.registerTask('server', function (target) {
@@ -465,15 +446,8 @@ module.exports = function (grunt) {
         'jshint',
         'test',
         'build'
-    ]);<% if (saucelabs) { %>
-
-    grunt.registerTask('saucelabs', [
-        'clean:server',
-        'concurrent:server',
-        'connect:livereload',
-        'shell:saucelabstests'
-    ]);<% }%><% if(screenshots) {%>
-
+    ]);
+    <% if(screenshots) {%>
     grunt.registerTask('screenshots', [
         'clean:server',
         'concurrent:server',
