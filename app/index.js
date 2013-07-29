@@ -443,9 +443,14 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
   // prepare default content text
   var defaults = ['HTML5 Boilerplate'];
 
+  var titleClass = '';
+
+  if(this.frameworkSelected == 'pure') {
+    titleClass = 'splash-head';
+  }
 
   var contentText = [
-    '                <h1>\'Allo, \'Allo!</h1>',
+    '                <h1 class=\''+titleClass+'\'>\'Allo, \'Allo!</h1>',
     '                <p>You now have</p>',
     '                <ul>'
   ];
