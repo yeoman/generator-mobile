@@ -171,7 +171,47 @@ AppGenerator.prototype.pure = function pure() {
 
 AppGenerator.prototype.topcoat = function topcoat() {
   if(this.frameworkSelected == 'topcoat') {
-    this.copy('layouts/topcoat/css/topcoat-mobile-light.css', 'app/styles/vendor/topcoat/topcoat-min.css');
+    this.copy('layouts/topcoat/css/topcoat-mobile-dark.min.css', 'app/styles/vendor/topcoat/css/topcoat-mobile-dark.min.css');
+    this.copy('layouts/topcoat/css/topcoat-mobile-light.min.css', 'app/styles/vendor/topcoat/css/topcoat-mobile-light.min.css');
+
+    var filesToMove = [
+      'avatar.png',
+      'bg_dark.png',
+      'breadcrumb.png',
+      'checkbox_checked_dark.png',
+      'checkbox_checked.png',
+      'checkbox_unchecked_dark.png',
+      'checkbox_unchecked.png',
+      'checkmark_bw.svg',
+      'dark-combo-box-bg.png',
+      'dark-combo-box-bg2x.png',
+      'dark-grips.png',
+      'dark-sprites2x.png',
+      'dialog-zone-bg.png',
+      'drop-down-triangle-dark.png',
+      'drop-down-triangle.png',
+      'hamburger_bw.svg',
+      'hamburger_dark.svg',
+      'hamburger_light.svg',
+      'light-combo-box-bg.png',
+      'light-combo-box-bg2x.png',
+      'light-grips.png',
+      'light-sprites2x.png',
+      'pop-up-triangle-dark.png',
+      'pop-up-triangle.png',
+      'search_bw.svg',
+      'search_dark.svg',
+      'search_light.svg',
+      'search-bg.png',
+      'search-bg2x.png',
+      'search.svg',
+      'spinner.png',
+      'spinner2x.png'
+    ];
+
+    for(var i = 0; i < filesToMove.length; i++) {
+      this.copy('layouts/topcoat/img/'+filesToMove[i], 'app/styles/vendor/topcoat/img/'+filesToMove[i]);
+    }
   }
 }
 
@@ -306,8 +346,7 @@ AppGenerator.prototype.addLayout = function gruntfile() {
 
     }else if(this.frameworkSelected == 'topcoat'){
 
-      //TODO: Get a Topcoat boilerplate
-      //this.readFileAsString(path.join(this.sourceRoot(), 'layouts/bootstrap/index.html');
+      layoutStr = this.readFileAsString(path.join(this.sourceRoot(), 'layouts/topcoat/index.html'));
 
     }else if(this.frameworkSelected == 'foundation'){
 
@@ -483,6 +522,11 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
       'styles/vendor/pure/pure-min.css'
       ]);
     defaults.push('PureCSS');
+  } else if(this.frameworkSelected == 'topcoat') {
+    this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/topcoat/css/topcoat-mobile-light.min.css', [
+      'styles/vendor/topcoat/css/topcoat-mobile-light.min.css'
+      ]);
+    defaults.push('Topcoat');
   }
 
   if (this.includeRequireJS) {
