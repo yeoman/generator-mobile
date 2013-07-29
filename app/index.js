@@ -217,7 +217,7 @@ AppGenerator.prototype.topcoat = function topcoat() {
 
 AppGenerator.prototype.foundation = function foundation() {
   if(this.frameworkSelected == 'foundation') {
-    this.copy('layouts/foundation/stylesheets/foundation.min.css', 'app/styles/vendor/foundation/foundation-min.css');
+    this.copy('layouts/foundation/stylesheets/foundation.min.css', 'app/styles/vendor/foundation/stylesheets/foundation-min.css');
   }
 }
 
@@ -527,6 +527,11 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
       'styles/vendor/topcoat/css/topcoat-mobile-light.min.css'
       ]);
     defaults.push('Topcoat');
+  } else if(this.frameworkSelected == 'foundation') {
+    this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/foundation/stylesheets/foundation-min.css', [
+      'styles/vendor/foundation/stylesheets/foundation-min.css'
+      ]);
+    defaults.push('Foundation');
   }
 
   if (this.includeRequireJS) {
