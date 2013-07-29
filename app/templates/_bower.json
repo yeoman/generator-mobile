@@ -1,9 +1,9 @@
 {
   "name": "<%= _.slugify(appname) %>",
   "version": "0.0.0",
-  "dependencies": {<% if (frameworkChoice == 1) { %>
-    "bootstrap": "git://github.com/twitter/bootstrap.git",<% } %><% if (frameworkChoice == 2) { %>
-    "pure": "~0.2.0",<% } %><% if (frameworkChoice == 3) { %>
+  "dependencies": {<% if (frameworkSelected == 'bootstrap') { %>
+    "bootstrap": "git://github.com/twitter/bootstrap.git",<% } %><% if (frameworkSelected == 'pure') { %>
+    "pure": "~0.2.0",<% } %><% if (frameworkSelected == 'topcoat') { %>
     "topcoat": "~0.4.1",<% } %><% if (includeRequireJS) { %>
     "requirejs": "~2.1.4",<% } %>
     "modernizr": "~2.6.2",

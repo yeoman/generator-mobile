@@ -41,9 +41,25 @@ AppGenerator.prototype.askFor = function askFor() {
 
   var prompts = [
   {
+    type: 'list',
     name: 'frameworkChoice',
-    message: 'Would you like to include a mobile-first UI framework?\n    1: Twitter Bootstrap\n    2: PureCSS\n    3: TopCoat\n    4: Foundation\n    0: No Framework\n',
-    default: 0
+    message: 'Would you like to include a mobile-first UI framework?',
+    choices: [{
+      name: 'Twitter Bootstrap',
+      value: 'bootstrap'
+    }, {
+      name: 'PureCSS',
+      value: 'pure'
+    }, {
+      name: 'TopCoat',
+      value: 'topcoat'
+    }, {
+      name: 'Foundation',
+      value: 'foundation'
+    }, {
+      name: 'No Framework',
+      value: 'noframework'
+    }]
   },{
     type: 'confirm',
     name: 'layoutChoice',
@@ -88,6 +104,10 @@ AppGenerator.prototype.askFor = function askFor() {
     type:'confirm',
     name:'browserstack',
     message: 'Would you like to use BrowserStack for device testing?'
+  },{
+    type:'confirm',
+    name:'screenshots',
+    message: 'Would you like to take screenshots of your site at various sizes?'
   }];
 
 
@@ -95,7 +115,8 @@ AppGenerator.prototype.askFor = function askFor() {
     // manually deal with the response, get back and store the results.
     // we change a bit this way of doing to automatically do this in the self.prompt() method.
     this.includeRequireJS = props.includeRequireJS;
-    this.frameworkChoice = props.frameworkChoice;
+    this.screenshots = props.screenshots;
+    this.frameworkSelected = getFrameworkChoice(props);
     this.layoutChoice = props.layoutChoice;
     this.fastclickChoice = props.fastclickChoice;
     this.asyncLocalStorage = props.asyncLocalStorage;
@@ -109,6 +130,30 @@ AppGenerator.prototype.askFor = function askFor() {
   }.bind(this));
 };
 
+function getFrameworkChoice(props) {
+  var choices = props.frameworkChoice;
+
+  if(choices.indexOf('bootstrap') !== -1) {
+    return 'bootstrap';
+  }
+  
+  if(choices.indexOf('pure') !== -1) {
+    return 'pure';
+  }
+
+  if(choices.indexOf('topcoat') !== -1) {
+    return 'topcoat';
+  }
+
+  if(choices.indexOf('foundation') !== -1) {
+    return 'foundation';
+  }
+
+  if(choices.indexOf('noframework') !== -1) {
+    return 'noframework';
+  }
+}
+
 // ---------------------------------------------------------------
 // Mobile-first UI Frameworks
 // ---------------------------------------------------------------
@@ -116,33 +161,128 @@ AppGenerator.prototype.askFor = function askFor() {
 // TODO: Don't use pre-minified versions of these deps
 
 AppGenerator.prototype.bootstrapJs = function bootstrapJs() {
-  if(this.frameworkChoice == 1) {
-    this.frameworkSelected = 'bootstrap';
+  if(this.frameworkSelected == 'bootstrap') {
     this.copy('layouts/bootstrap/assets/css/bootstrap.css', 'app/styles/vendor/bootstrap/bootstrap.css');
     this.copy('layouts/bootstrap/assets/js/bootstrap.min.js', 'app/scripts/vendor/bootstrap/bootstrap.js');
   }
 }
 
 AppGenerator.prototype.pure = function pure() {
-  if(this.frameworkChoice == 2) {
-    this.frameworkSelected = 'pure';
+  if(this.frameworkSelected == 'pure') {
     this.copy('layouts/pure/stylesheets/pure-min.css', 'app/styles/vendor/pure/pure-min.css');
   }
 }
 
 AppGenerator.prototype.topcoat = function topcoat() {
-  if(this.frameworkChoice == 3) {
-    this.frameworkSelected = 'topcoat';
+  if(this.frameworkSelected == 'topcoat') {
     this.copy('layouts/topcoat/css/topcoat-mobile-light.css', 'app/styles/vendor/topcoat/topcoat-min.css');
   }
 }
 
 AppGenerator.prototype.foundation = function foundation() {
-  if(this.frameworkChoice == 4) {
-    this.frameworkSelected = 'foundation';
+  if(this.frameworkSelected == 'foundation') {
     this.copy('layouts/foundation/stylesheets/foundation.min.css', 'app/styles/vendor/foundation/foundation-min.css');
   }
 }
+
+// ----------------------------------------------------------------
+// Testing
+// ----------------------------------------------------------------
+
+AppGenerator.prototype.addScreenshots = function screenshots() {
+  if(!this.screenshots) {
+    return;
+  }
+
+  var devices = [
+    {
+      name: 'G1',
+      width: 320,
+      height: 480,
+      density: 1
+    }, {
+      name: 'Nexus S',
+      width: 480,
+      height: 800,
+      density: 1.5
+    }, {
+      name: 'Nexus 4',
+      width: 768,
+      height: 1280,
+      density: 2
+    }, {
+      name: 'Nexus 7 Orig.',
+      width: 800,
+      height: 1280,
+      density: 1.33
+    }, {
+      name: 'Nexus 7 2.0',
+      width: 1200,
+      height: 1920,
+      density: 2
+    }, {
+      name: 'Xoom',
+      width: 800,
+      height: 1280,
+      density: 1
+    }, {
+      name: 'Nexus 10',
+      width: 1600,
+      height: 2560,
+      density: 2
+    }, {
+      name: 'iPhone 3GS',
+      width: 320,
+      height: 480,
+      density: 1
+    }, {
+      name: 'iPhone 4 / 4S',
+      width: 640,
+      height: 960,
+      density: 2
+    }, {
+      name: 'iPhone 5',
+      width: 640,
+      height: 1136,
+      density: 2
+    }, {
+      name: 'iPad 1 & 2',
+      width: 768,
+      height: 1024,
+      density: 1
+    }, {
+      name: 'iPad 3 & 4',
+      width: 1536,
+      height: 2048,
+      density: 2
+    }
+  ];
+
+  var skipList = {};
+  this.viewports = '';
+  for(var i = 0; i < devices.length; i++) {
+    var device = devices[i];
+    var width = Math.ceil(device.width / device.density);
+    var height = Math.ceil(device.height / device.density);
+
+    var identifier = width;// Only width matters since screenshot is of full height
+    if(typeof skipList[identifier] !== 'undefined') {
+      continue;
+    }
+
+    skipList[identifier] = {};
+
+    this.viewports += '\''+width+'x'+height+'\',\n';
+
+    this.viewports += '\''+height+'x'+width+'\'';
+    if((i+1) < devices.length) {
+      this.viewports += ',\n';
+    } else {
+      this.viewports += '\n';
+    }
+  }
+
+}; 
 
 
 // ----------------------------------------------------------------
@@ -152,8 +292,7 @@ AppGenerator.prototype.foundation = function foundation() {
 AppGenerator.prototype.addLayout = function gruntfile() {
   var layoutStr = "<!--yeoman-welcome-->";
 
-  if(this.layoutChoice && this.frameworkChoice) {
-
+  if(this.layoutChoice && this.frameworkSelected) {
     console.log(this.frameworkSelected +' was chosen');
 
     // a framework was chosen
@@ -252,7 +391,7 @@ AppGenerator.prototype.mainStylesheet = function mainStylesheet() {
 AppGenerator.prototype.requirejs = function requirejs() {
   var requiredScripts = ['app', 'jquery'];
   var bootstrapPath;
-  if(this.frameworkChoice == 1) {
+  if(this.frameworkSelected == 'bootstrap') {
     requiredScripts.push('bootstrap');
     bootstrapPath = ',\n        bootstrap: \'vendor/bootstrap/bootstrap\'\n    },';
   } else {
@@ -331,7 +470,7 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
     });
   }
 
-  if(this.frameworkChoice == 1) {
+  if(this.frameworkSelected == 'bootstrap') {
     // Add Twitter Bootstrap scripts
     this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/bootstrap.css', [
       'styles/vendor/bootstrap/bootstrap.css'
@@ -339,7 +478,7 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
 
     defaults.push('Twitter Bootstrap 3');
 
-  } else if(this.frameworkChoice == 2) {
+  } else if(this.frameworkSelected == 'pure') {
     this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/pure.min.css', [
       'styles/vendor/pure/pure-min.css'
       ]);
@@ -412,6 +551,8 @@ AppGenerator.prototype.addSaucelabs = function gruntfile() {
     this.copy('test/saucelabs/'+filesToCopy[i], 'test/saucelabs/'+filesToCopy[i]);
   }
 };
+
+
 
 AppGenerator.prototype.app = function app() {
   this.mkdir('app');

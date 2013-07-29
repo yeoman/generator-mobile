@@ -55,8 +55,22 @@ module.exports = function (grunt) {
                     '{.tmp,<%%= yeoman.app %>}/scripts/{,*/}*.js',
                     '<%%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
-            }
+            },
         },
+        <% if (screenshots) { %>
+        autoshot: {
+            default_options: {
+              options: {
+                // necessary config
+                path: 'screenshots/',
+                filename: '',
+                type: 'PNG',
+                // optional config, must set either remote or local
+                remote: 'http://localhost:9000/',
+                viewport: [<%= viewports %>] 
+              },
+            },
+          },<% } %>
         connect: {
             options: {
                 port: 9000,
@@ -67,9 +81,9 @@ module.exports = function (grunt) {
                 options: {
                     middleware: function (connect) {
                         return [
+                            lrSnippet,
                             mountFolder(connect, '.tmp'),
-                            mountFolder(connect, yeomanConfig.app),
-                            lrSnippet
+                            mountFolder(connect, yeomanConfig.app)
                         ];
                     }
                 }
@@ -458,5 +472,13 @@ module.exports = function (grunt) {
         'concurrent:server',
         'connect:livereload',
         'shell:saucelabstests'
-    ]);<% } %>
+    ]);<% }%><% if(screenshots) {%>
+
+    grunt.registerTask('screenshots', [
+        'clean:server',
+        'concurrent:server',
+        'connect:livereload',
+        'autoshot'
+    ]);
+    <% } %>
 };
