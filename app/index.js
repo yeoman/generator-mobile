@@ -97,12 +97,14 @@ AppGenerator.prototype.askFor = function askFor() {
     default: false
   },{
     type:'confirm',
-    name:'browserstack',
-    message: 'Would you like to use BrowserStack for device testing?'
-  },{
-    type:'confirm',
     name:'screenshots',
     message: 'Would you like to take screenshots of your site at various sizes?'
+    default: true
+  },{
+    type:'confirm',
+    name:'browserstack',
+    message: 'Would you like to use BrowserStack for device testing?'
+    default: false
   }];
 
 
@@ -267,12 +269,12 @@ AppGenerator.prototype.addScreenshots = function screenshots() {
 
     skipList[identifier] = {};
 
-    this.viewports += '\''+width+'x'+height+'\',';
-    this.viewports += '\''+height+'x'+width+'\'';
-
-    if((i+1) < devices.length) {
+    if(i !== 0) {
       this.viewports += ',';
     }
+
+    this.viewports += '\''+width+'x'+height+'\',';
+    this.viewports += '\''+height+'x'+width+'\'';
   }
 
 }; 
