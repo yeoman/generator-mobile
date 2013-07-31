@@ -58,7 +58,7 @@ module.exports = function (grunt) {
                 filename: '',
                 type: 'PNG',
                 // optional config, must set either remote or local
-                remote: 'http://localhost:9000/',
+                remote: 'http://localhost:<%%= connect.options.port %>',
                 viewport: [<%= viewports %>] 
               },
             },
