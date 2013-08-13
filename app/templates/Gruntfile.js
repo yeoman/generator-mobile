@@ -13,6 +13,8 @@ var mountFolder = function (connect, dir) {
 // 'test/spec/**/*.js'
 
 module.exports = function (grunt) {
+    // show elapsed time at the end
+    require('time-grunt')(grunt);
     // load all grunt tasks
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
@@ -59,7 +61,7 @@ module.exports = function (grunt) {
                 type: 'PNG',
                 // optional config, must set either remote or local
                 remote: 'http://localhost:<%%= connect.options.port %>',
-                viewport: [<%= viewports %>] 
+                viewport: [<%= viewports %>]
               },
             },
           },<% } %>
