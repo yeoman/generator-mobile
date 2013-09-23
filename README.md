@@ -1,7 +1,7 @@
 generator-mobile
 ================
 
-A Yeoman generator for mobile-first web apps by Addy Osmani and Matt Gaunt.
+An experimental Yeoman generator for mobile-first web apps by Addy Osmani and Matt Gaunt. A good reference point for setting up a mobile web development workflow with [Grunt](http://gruntjs.com).
 
 ![](http://i.imgur.com/8nNZIg7.png)
 
