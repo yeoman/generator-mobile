@@ -54,7 +54,7 @@ A lot of the time we end up testing what an app looks like or how it behaves aft
 
 With it setup in your Gruntfile, change `hostname` > `localhost` to `0.0.0.0`. Run `grunt server` on a specific port. Perhaps `localhost:9000`, then open up `ifconfig` and search for `inet` to discover your computer's IP address (e.g `192.16.23.149`). You can now open up your IP followed by the port number on any device (e.g `192.16.23.149:9000`) and get LiveReload working any time you make a change to your source.
 
-![alt text](http://i.imgur.com/DUjdNzkl.gif "Live Reload Example")
+![alt text](http://i.imgur.com/lypd4xQ.gif "Live Reload Example")
 
 ## Device testing in the cloud
 
