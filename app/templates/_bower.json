@@ -2,7 +2,7 @@
   "name": "<%= _.slugify(appname) %>",
   "version": "0.0.0",
   "dependencies": {<% if (frameworkSelected == 'bootstrap') { %>
-    "bootstrap": "git://github.com/twitter/bootstrap.git",<% } %><% if (frameworkSelected == 'pure') { %>
+    "bootstrap": "~3.0.0",<% } %><% if (frameworkSelected == 'pure') { %>
     "pure": "~0.2.0",<% } %><% if (frameworkSelected == 'topcoat') { %>
     "topcoat": "~0.4.1",<% } %><% if (includeRequireJS) { %>
     "requirejs": "~2.1.4",<% } %>

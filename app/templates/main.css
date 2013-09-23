@@ -6,7 +6,7 @@ body {
 
 .hero-unit {
     margin: 0 auto;
-    width: 300px;
+    max-width: 300px;
     font-size: 18px;
     font-weight: 200;
     line-height: 30px;

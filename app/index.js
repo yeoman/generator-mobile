@@ -581,7 +581,11 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
 
 
   // append the default content
-  this.indexFile = this.indexFile.replace('<!--yeoman-welcome-->', contentText.join('\n'));
+  contentText = contentText.join('\n');
+  if(this.frameworkSelected == 'noframework') {
+    contentText = '<div class="hero-unit">\n' + contentText+'</div>\n';
+  }
+  this.indexFile = this.indexFile.replace('<!--yeoman-welcome-->', contentText);
 };
 
 AppGenerator.prototype.app = function app() {
