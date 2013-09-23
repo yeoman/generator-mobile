@@ -9,15 +9,15 @@ A Yeoman generator for mobile-first web apps by Addy Osmani and Matt Gaunt.
 
 All optional via prompts:
 
-* Scaffold support for Bootstrap 3, TopCoat, Foundation and Pure
+* Scaffold support for [Bootstrap 3](http://getbootstrap.com), [TopCoat](http://topcoat.io), [Zurb Foundation](http://foundation.zurb.com/) and [Pure](http://purecss.io/)
 * Generates responsive images for `srcset`
 * Generates screenshots of your site at different viewport sizes
-* Uses BrowserStack for cloud device testing
-* Includes FastClick to avoid iOS touch delays
+* Uses [BrowserStack](http://browserstack.com) for cloud device testing
+* Includes [FastClick](https://github.com/ftlabs/fastclick) to avoid iOS touch delays
 * Includes boilerplate for FullScreen API
 * Includes only the Modernizr feature detects your projects uses
 * Converts images to WebP
-* Includes a polyfill for async. localStorage
+* Includes a polyfill for [async. localStorage](https://github.com/slightlyoff/async-local-storage)
 
 
 ## Getting Started
@@ -97,6 +97,8 @@ While we decided not to include them as part of this generator's workflow, you m
 
 ## What other problems are you looking at?
 
-Optimising CSS at build time is the next set of challenges we're focusing on. In particular, how to remove [unused CSS](https://github.com/addyosmani/grunt-uncss) in your project's stylesheets during build-time and how to automate the inlining of critical-path CSS to improve the time-to-glass experience of your homepage.
+Advanced CSS optimization at build time is the next set of challenges we're focusing on. In particular, how to automate the inlining of critical-path CSS to improve the time-to-glass experience of your homepage and removing [unused CSS](https://github.com/addyosmani/grunt-uncss) in your project's stylesheets during build-time.
+
+We are also looking at how we can improve the development of mobile web apps targeting tools like Cordova through related projects like [generator-cordova](https://github.com/dangeross/generator-cordova).
 
 
