@@ -1,10 +1,32 @@
 generator-mobile
 ================
 
-A yeoman generator for mobile-first web apps. See the [wiki](https://github.com/yeoman/generator-mobile/wiki/Proposal) for
-our proposal on what this generator should offer.
+A Yeoman generator for mobile-first web apps by Addy Osmani and Matt Gaunt.
 
-A project by Addy Osmani and Matt Gaunt.
+## Features
+
+All optional via prompts:
+
+* Scaffold support for Bootstrap 3, TopCoat, Foundation and Pure
+* Generates responsive images for `srcset`
+* Generates screenshots of your site at different viewport sizes
+* Uses BrowserStack for cloud device testing
+* Includes FastClick to avoid iOS touch delays
+* Includes boilerplate for FullScreen API
+* Includes only the Modernizr feature detects your projects uses
+* Converts images to WebP
+* Includes a polyfill for async. localStorage
+
+
+## Getting Started
+
+- Install: `npm install -g generator-mobile`
+- Run: `yo mobile`
+- Perform a build: `grunt`
+- Run local server: `grunt server`
+- Take screenshots: `grunt screenshots`
+- Run in BrowserStack: `grunt open [nexus4 | nexus7 | iphone5]`
+
 
 ## Why a mobile web-app generator?
 
@@ -30,8 +52,6 @@ With it setup in your Gruntfile, change `hostname` > `localhost` to `0.0.0.0`. R
 
 ![alt text](http://i.imgur.com/DUjdNzkl.gif "Live Reload Example")
 
-![alt text](http://i.imgur.com/qBMKtGul.gif "Live Reload Across Devices Example")
-
 ## Device testing in the cloud
 
 BrowserStack have a large catalog of setups available for mobile device testing and are fairly easy to use. You select an operating system, select your browser version and device type, select a URL to browser and it will spin up a hosted virtual machine that you can interact with. You also get access to the most common browser developer tools such as Chrome DevTools and Firebug.
@@ -55,6 +75,8 @@ Consider this generator a reference point for how to improve your mobile web dev
 * [grunt-concurrent](https://npmjs.org/package/grunt-concurrent) for concurrently running tasks to shorten down build times
 
 We also make use of some simple, but helpful configurations to tasks like grunt-contrib-watch for [syncronised cross-device livereloading](http://blog.mattbailey.co/post/50337824984/grunt-synchronised-testing-between-browsers-devices).
+
+![alt text](http://i.imgur.com/qBMKtGul.gif "Live Reload Across Devices Example")
 
 ## What other problems are you looking at?
 
