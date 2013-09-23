@@ -66,5 +66,7 @@ Getting Started
 - Run: `yo mobile`
 - Perform a build: `grunt`
 - Run local server: `grunt server`
-- Take screenshots: `grunt screenshots`
 - Run in BrowserStack: `grunt open [nexus4 | nexus7 | iphone5]`
+- Take screenshots: `grunt screenshots`
+
+![alt text](http://i.imgur.com/OAbqaZf.png "Screenshots Example")
