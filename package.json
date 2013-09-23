@@ -1,6 +1,6 @@
 {
   "name": "generator-mobile",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Mobile generator for scaffolding out a mobile-first webapp",
   "keywords": [
     "yeoman-generator",
