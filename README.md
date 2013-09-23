@@ -6,6 +6,14 @@ our proposal on what this generator should offer.
 
 A project by Addy Osmani and Matt Gaunt.
 
+## Why a mobile web-app generator?
+
+Increasingly the device our users choose to access the web is not a laptop or desktop, but rather a mobile device or tablet. A different mindset is required when developing for these devices as we need to think in terms of finite resources. With the mobile web development landscape being so fragmented, we wanted to see how we could simplify this using Grunt.
+
+`generator-mobile` doesn't claim to the best solution for mobile web development tooling, but we do include solutions for many of the pain-points developers commonly run into when targeting the mobile web. Cross-device testing, target-device screenshots, optimising builds - these are just a few of the problems we include reference solutions for via Grunt tasks.
+
+You can either look at the Gruntfile we generate for a few interesting ideas or just use the generator out of the box to get them for free.
+
 ## Mobile-first framework scaffolding
 
 When initially working on your app, you may find yourself searching for a boilerplate to use for your prototypes. A number of UI frameworks with a mobile focus have appeared over the past few years including Twitter Bootstrap 3, Foundation, Pure and TopCoat - some of which have invested a lot of time into improving their rendering performance for mobile devices.
@@ -40,3 +48,7 @@ Consider this generator a reference point for how to improve your mobile web dev
 * [grunt-concurrent](https://npmjs.org/package/grunt-concurrent) for concurrently running tasks to shorten down build times
 
 We also make use of some simple, but helpful configurations to tasks like grunt-contrib-watch for [syncronised cross-device livereloading](http://blog.mattbailey.co/post/50337824984/grunt-synchronised-testing-between-browsers-devices).
+
+## What other problems are you looking at?
+
+Optimising CSS at build time is the next set of challenges we're focusing on. In particular, how to remove unused CSS in your project's stylesheets during build-time and how to automate the inlining of critical-path CSS to improve the time-to-glass experience of your homepage.
