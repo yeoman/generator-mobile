@@ -83,6 +83,18 @@ We also make use of some simple, but helpful configurations to tasks like grunt-
 
 ![alt text](http://i.imgur.com/qBMKtGul.gif "Live Reload Across Devices Example")
 
+## Not included, but suggested
+
+While we decided not to include them as part of this generator's workflow, you may also find the following Grunt tasks helpful during mobile web development:
+
+* [grunt-pagespeed](https://github.com/jrcryer/grunt-pagespeed) - uses Google's PageSpeed service to run a number of different speed tests against your page for mobile or desktop.
+* [grunt-montage](https://github.com/globaldev/grunt-montage) and [grunt-spritesheet](https://github.com/nicholasstephan/grunt-spritesheet) - generates a CSS sprite sheet out of individual PNGs with support for multiple sprites per CSS file
+* [grunt-zopfli](https://github.com/mathiasbynens/grunt-zopfli) - compress files using the Zopfli compression scheme
+* [grunt-stripmq](https://github.com/jtangelder/grunt-stripmq) - generates fallback versions of mobile-first stylesheets
+* [grunt-manifest](https://github.com/gunta/grunt-manifest) - generates appcache manifests
+
 ## What other problems are you looking at?
 
-Optimising CSS at build time is the next set of challenges we're focusing on. In particular, how to remove unused CSS in your project's stylesheets during build-time and how to automate the inlining of critical-path CSS to improve the time-to-glass experience of your homepage.
+Optimising CSS at build time is the next set of challenges we're focusing on. In particular, how to remove [unused CSS](https://github.com/addyosmani/grunt-uncss) in your project's stylesheets during build-time and how to automate the inlining of critical-path CSS to improve the time-to-glass experience of your homepage.
+
+
