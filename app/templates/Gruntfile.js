@@ -65,6 +65,30 @@ module.exports = function (grunt) {
               },
             },
           },<% } %>
+        <% if (responsiveImages) { %>
+        responsive_images: {
+            dev: {
+                options: {
+                    sizes: [
+                        {
+                            width: 320,
+                        },
+                        {
+                            width: 640
+                        },
+                        {
+                            width: 1024
+                        }
+                    ]
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%%= yeoman.app %>/images',
+                    src: '{,*/}*.{png,jpg,jpeg}',
+                    dest: '<%%= yeoman.dist %>/images'
+                }]
+            }
+        },<% } %>
         connect: {
             options: {
                 port: 9000,
@@ -444,7 +468,8 @@ module.exports = function (grunt) {
         'useminPrepare',
         'concurrent:dist',<% if (includeRequireJS) { %>
         'requirejs',<% } %>
-        'cssmin',
+        'cssmin',<% if (responsiveImages) { %>
+        'responsive_images:dev',<% } %>
         'concat',
         'uglify',
         'copy',

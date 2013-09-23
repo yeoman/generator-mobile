@@ -30,7 +30,8 @@
     "time-grunt": "~0.1.1",
     "grunt-webp": "~0.0.1"<% if (modernizrTask) {  %>,
     "grunt-modernizr": "~0.3.0"<% } %><% if (screenshots) {  %>,
-    "grunt-autoshot": "~0.0.2"<% } %>
+    "grunt-autoshot": "~0.0.2"<% } %><% if (responsiveImages) {  %>,
+    "grunt-responsive-images": "~0.0.3"<% } %>
   },
   "engines": {
     "node": ">=0.8.0"

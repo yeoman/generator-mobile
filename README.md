@@ -1,10 +1,32 @@
 generator-mobile
 ================
 
-A yeoman generator for mobile-first web apps. See the [wiki](https://github.com/yeoman/generator-mobile/wiki/Proposal) for
-our proposal on what this generator should offer.
+A Yeoman generator for mobile-first web apps by Addy Osmani and Matt Gaunt.
 
-A project by Addy Osmani and Matt Gaunt.
+## Features
+
+All optional via prompts:
+
+* Scaffold support for Bootstrap 3, TopCoat, Foundation and Pure
+* Generates responsive images for `srcset`
+* Generates screenshots of your site at different viewport sizes
+* Uses BrowserStack for cloud device testing
+* Includes FastClick to avoid iOS touch delays
+* Includes boilerplate for FullScreen API
+* Includes only the Modernizr feature detects your projects uses
+* Converts images to WebP
+* Includes a polyfill for async. localStorage
+
+
+## Getting Started
+
+- Install: `npm install -g generator-mobile`
+- Run: `yo mobile`
+- Perform a build: `grunt`
+- Run local server: `grunt server`
+- Take screenshots: `grunt screenshots`
+- Run in BrowserStack: `grunt open [nexus4 | nexus7 | iphone5]`
+
 
 ## Why a mobile web-app generator?
 
@@ -60,11 +82,4 @@ We also make use of some simple, but helpful configurations to tasks like grunt-
 
 Optimising CSS at build time is the next set of challenges we're focusing on. In particular, how to remove unused CSS in your project's stylesheets during build-time and how to automate the inlining of critical-path CSS to improve the time-to-glass experience of your homepage.
 
-Getting Started
-===============
-- Install: `npm install -g generator-mobile`
-- Run: `yo mobile`
-- Perform a build: `grunt`
-- Run local server: `grunt server`
-- Take screenshots: `grunt screenshots`
-- Run in BrowserStack: `grunt open [nexus4 | nexus7 | iphone5]`
+

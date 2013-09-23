@@ -67,14 +67,29 @@ AppGenerator.prototype.askFor = function askFor() {
     default: false
   }, {
     type: 'confirm',
-    name: 'includeRequireJS',
-    message: 'Would you like to include RequireJS (for AMD support)?',
-    default: true
+    name: 'responsiveImages',
+    message: 'Would you like to generate multi-resolution images for srcset?',
+    default: false
   },{
     type: 'confirm',
     name: 'fastclickChoice',
     message: 'Would you like to remove click delays in touch UIs (eg iOS)?',
     default: false
+  },{
+    type:'confirm',
+    name:'screenshots',
+    message: 'Would you like screenshots of your site at various viewport sizes?',
+    default: true
+  },{
+    type:'confirm',
+    name:'browserstack',
+    message: 'Would you like to use BrowserStack for device testing?',
+    default: false
+  },{
+    type: 'confirm',
+    name: 'includeRequireJS',
+    message: 'Would you like to include RequireJS (for AMD support)?',
+    default: true
   },{
     type: 'confirm',
     name: 'webpSupport',
@@ -95,16 +110,6 @@ AppGenerator.prototype.askFor = function askFor() {
     name: 'modernizrTask',
     message: 'Should builds only include Modernizr feature-detects you actually use?',
     default: false
-  },{
-    type:'confirm',
-    name:'screenshots',
-    message: 'Would you like to take screenshots of your site at various sizes?',
-    default: true
-  },{
-    type:'confirm',
-    name:'browserstack',
-    message: 'Would you like to use BrowserStack for device testing?',
-    default: false
   }];
 
 
@@ -121,6 +126,7 @@ AppGenerator.prototype.askFor = function askFor() {
     this.browserstack =  props.browserstack;
     this.webpSupport = props.webpSupport;
     this.modernizrTask = props.modernizrTask;
+    this.responsiveImages = props.responsiveImages;
 
     cb();
   }.bind(this));
