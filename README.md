@@ -81,7 +81,7 @@ Consider this generator a reference point for how to improve your mobile web dev
 
 We also make use of some simple, but helpful configurations to tasks like grunt-contrib-watch for [syncronised cross-device livereloading](http://blog.mattbailey.co/post/50337824984/grunt-synchronised-testing-between-browsers-devices).
 
-![alt text](http://i.imgur.com/qBMKtGul.gif "Live Reload Across Devices Example")
+![alt text](https://dl.dropboxusercontent.com/u/3250770/live-reload-animated.gif "Live Reload Across Devices Example")
 
 ## Not included, but suggested
 
