@@ -20,11 +20,17 @@ When initially working on your app, you may find yourself searching for a boiler
 
 When you run `yo mobile` we give you the choice to scaffold out a new application using any of the four options above, writing some boilerplate layout for you in the process.
 
+![alt text](http://i.imgur.com/QreXs0rl.jpg "Mobile First Frameworks")
+
 ## Synchronised cross-device live reloading
 
 A lot of the time we end up testing what an app looks like or how it behaves after we've created a version for desktop, hacking away at our breakpoints until they look good. Instead, wouldn't it be better if you had a real-time view of what your page looks like on all your devices *while* you code? You can thanks to some small changes in configuration you can make to `connect` (which we do for you as a part of this generator).
 
 With it setup in your Gruntfile, change `hostname` > `localhost` to `0.0.0.0`. Run `grunt server` on a specific port. Perhaps `localhost:9000`, then open up `ifconfig` and search for `inet` to discover your computer's IP address (e.g `192.16.23.149`). You can now open up your IP followed by the port number on any device (e.g `192.16.23.149:9000`) and get LiveReload working any time you make a change to your source.
+
+![alt text](http://i.imgur.com/DUjdNzkl.gif "Live Reload Example")
+
+![alt text](http://i.imgur.com/qBMKtGul.gif "Live Reload Across Devices Example")
 
 ## Device testing in the cloud
 
@@ -34,6 +40,7 @@ There are Grunt tasks available for firing new emulators up using BrowserStack s
 
 `yo mobile` offers this via our prompts if you would like to use it.
 
+![alt text](http://i.imgur.com/ptpnQVR.gif "Browser Stack Demo")
 
 ## Grunt tasks
 
@@ -52,3 +59,12 @@ We also make use of some simple, but helpful configurations to tasks like grunt-
 ## What other problems are you looking at?
 
 Optimising CSS at build time is the next set of challenges we're focusing on. In particular, how to remove unused CSS in your project's stylesheets during build-time and how to automate the inlining of critical-path CSS to improve the time-to-glass experience of your homepage.
+
+Getting Started
+===============
+- Install: `npm install -g generator-mobile`
+- Run: `yo mobile`
+- Perform a build: `grunt`
+- Run local server: `grunt server`
+- Take screenshots: `grunt screenshots`
+- Run in BrowserStack: `grunt open [nexus4 | nexus7 | iphone5]`
