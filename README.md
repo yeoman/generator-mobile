@@ -3,6 +3,8 @@ generator-mobile
 
 A Yeoman generator for mobile-first web apps by Addy Osmani and Matt Gaunt.
 
+![](http://i.imgur.com/8nNZIg7.png)
+
 ## Features
 
 All optional via prompts:
@@ -68,6 +70,7 @@ There are Grunt tasks available for firing new emulators up using BrowserStack s
 
 Consider this generator a reference point for how to improve your mobile web development workflow when using Grunt.  Some of the tasks we include (and highly recommend) include:
 
+* [grunt-responsive-images](https://npmjs.org/package/grunt-responsive-images) for generating multi-resolution images at predefined widths. For use with `srcset` or a responsive imaging strategy like [Imager.js](https://github.com/BBC-News/Imager.js/)
 * [grunt-autoshot](https://npmjs.org/package/grunt-autoshot) for generating screenshots of your site at different viewport sizes
 * [grunt-modernizr](https://npmjs.org/package/grunt-modernizr) for generating lean Modernizr builds based on the feature detects you actually use
 * [grunt-svgmin](https://npmjs.org/package/grunt-svgmin) for minmizing your SVG files
