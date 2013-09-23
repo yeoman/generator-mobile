@@ -29,6 +29,8 @@ All optional via prompts:
 - Take screenshots: `grunt screenshots`
 - Run in BrowserStack: `grunt open [nexus4 | nexus7 | iphone5]`
 
+![alt text](http://i.imgur.com/OAbqaZf.png "Screenshots Example")
+
 
 ## Why a mobile web-app generator?
 
@@ -84,14 +86,3 @@ We also make use of some simple, but helpful configurations to tasks like grunt-
 ## What other problems are you looking at?
 
 Optimising CSS at build time is the next set of challenges we're focusing on. In particular, how to remove unused CSS in your project's stylesheets during build-time and how to automate the inlining of critical-path CSS to improve the time-to-glass experience of your homepage.
-
-Getting Started
-===============
-- Install: `npm install -g generator-mobile`
-- Run: `yo mobile`
-- Perform a build: `grunt`
-- Run local server: `grunt server`
-- Run in BrowserStack: `grunt open [nexus4 | nexus7 | iphone5]`
-- Take screenshots: `grunt screenshots`
-
-![alt text](http://i.imgur.com/OAbqaZf.png "Screenshots Example")
