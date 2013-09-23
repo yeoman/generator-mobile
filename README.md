@@ -93,6 +93,8 @@ While we decided not to include them as part of this generator's workflow, you m
 * [grunt-stripmq](https://github.com/jtangelder/grunt-stripmq) - generates fallback versions of mobile-first stylesheets
 * [grunt-manifest](https://github.com/gunta/grunt-manifest) - generates appcache manifests
 
+![](http://i.imgur.com/LBkkq61.png)
+
 ## What other problems are you looking at?
 
 Optimising CSS at build time is the next set of challenges we're focusing on. In particular, how to remove [unused CSS](https://github.com/addyosmani/grunt-uncss) in your project's stylesheets during build-time and how to automate the inlining of critical-path CSS to improve the time-to-glass experience of your homepage.
