@@ -64,7 +64,7 @@ module.exports = function (grunt) {
                     viewport: [<%= viewports %>]
                 }
             }
-          },<% } %>
+        },<% } %>
         <% if (responsiveImages) { %>
         responsive_images: {
             dev: {
