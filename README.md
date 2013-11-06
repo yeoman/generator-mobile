@@ -60,7 +60,7 @@ With it setup in your Gruntfile, change `hostname` > `localhost` to `0.0.0.0`. R
 
 BrowserStack have a large catalog of setups available for mobile device testing and are fairly easy to use. You select an operating system, select your browser version and device type, select a URL to browser and it will spin up a hosted virtual machine that you can interact with. You also get access to the most common browser developer tools such as Chrome DevTools and Firebug.
 
-There are Grunt tasks available for firing new emulators up using BrowserStack such as grunt-browserstack In our experience however it’s usually just easier to use grunt-open to open up your browser window for you then navigate to the browserstack site with the device/OS you want to test. 
+There are Grunt tasks available for firing new emulators up using BrowserStack such as grunt-browserstack In our experience however it’s usually just easier to use grunt-open to open up your browser window for you then navigate to the browserstack site with the device/OS you want to test.
 
 `yo mobile` offers this via our prompts if you would like to use it.
 
@@ -78,6 +78,7 @@ Consider this generator a reference point for how to improve your mobile web dev
 * [grunt-open](https://npmjs.org/package/grunt-open) for launching a browser window with BrowserStack using specific device/browser settings. We found this to be more usable than grunt-browserstack in practice.
 * [grunt-webp](https://npmjs.org/package/grunt-webp) for encoding images as WebP
 * [grunt-concurrent](https://npmjs.org/package/grunt-concurrent) for concurrently running tasks to shorten down build times
+* [grunt-notify](https://npmjs.org/package/grunt-notify) for desktop notifications when Grunt has errors
 
 We also make use of some simple, but helpful configurations to tasks like grunt-contrib-watch for [syncronised cross-device livereloading](http://blog.mattbailey.co/post/50337824984/grunt-synchronised-testing-between-browsers-devices).
 
