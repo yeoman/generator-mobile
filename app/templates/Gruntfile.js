@@ -16,7 +16,7 @@ module.exports = function (grunt) {
     // show elapsed time at the end
     require('time-grunt')(grunt);
     // load all grunt tasks
-    require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+    require('load-grunt-tasks')(grunt);
 
     // configurable paths
     var yeomanConfig = {
@@ -50,21 +50,21 @@ module.exports = function (grunt) {
                     '{.tmp,<%%= yeoman.app %>}/scripts/{,*/}*.js',
                     '<%%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
-            },
+            }
         },<% if (screenshots) { %>
         autoshot: {
-            default_options: {
-              options: {
-                // necessary config
-                path: 'screenshots/',
-                filename: '',
-                type: 'PNG',
-                // optional config, must set either remote or local
-                remote: 'http://localhost:<%%= connect.options.port %>',
-                viewport: [<%= viewports %>]
-              },
-            },
-          },<% } %>
+            defaultOptions: {
+                options: {
+                    // necessary config
+                    path: 'screenshots/',
+                    filename: '',
+                    type: 'PNG',
+                    // optional config, must set either remote or local
+                    remote: 'http://localhost:<%%= connect.options.port %>',
+                    viewport: [<%= viewports %>]
+                }
+            }
+        },<% } %>
         <% if (responsiveImages) { %>
         responsive_images: {
             dev: {
@@ -158,7 +158,8 @@ module.exports = function (grunt) {
         },
         jshint: {
             options: {
-                jshintrc: '.jshintrc'
+                jshintrc: '.jshintrc',
+                reporter: require('jshint-stylish')
             },
             all: [
                 'Gruntfile.js',
