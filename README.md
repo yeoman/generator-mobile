@@ -78,6 +78,8 @@ Consider this generator a reference point for how to improve your mobile web dev
 * [grunt-open](https://npmjs.org/package/grunt-open) for launching a browser window with BrowserStack using specific device/browser settings. We found this to be more usable than grunt-browserstack in practice.
 * [grunt-webp](https://npmjs.org/package/grunt-webp) for encoding images as WebP
 * [grunt-concurrent](https://npmjs.org/package/grunt-concurrent) for concurrently running tasks to shorten down build times
+* [grunt-notify](https://npmjs.org/package/grunt-notify) for desktop notifications when Grunt has errors
+
 
 We also make use of some simple, but helpful configurations to tasks like grunt-contrib-watch for [syncronised cross-device livereloading](http://blog.mattbailey.co/post/50337824984/grunt-synchronised-testing-between-browsers-devices).
 
