@@ -1,7 +1,6 @@
 'use strict';
 var util = require('util');
 var path = require('path');
-var spawn = require('child_process').spawn;
 var yeoman = require('yeoman-generator');
 
 
