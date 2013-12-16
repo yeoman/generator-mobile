@@ -103,3 +103,7 @@ Advanced CSS optimization at build time is the next set of challenges we're focu
 We are also looking at how we can improve the development of mobile web apps targeting tools like Cordova through related projects like [generator-cordova](https://github.com/dangeross/generator-cordova).
 
 
+## License
+
+[BSD license](http://opensource.org/licenses/bsd-license.php)
+Copyright (c) Google
