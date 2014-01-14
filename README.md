@@ -24,7 +24,7 @@ All optional via prompts:
 - Install: `npm install -g generator-mobile`
 - Run: `yo mobile`
 - Perform a build: `grunt`
-- Run local server: `grunt server`
+- Run local server: `grunt serve`
 - Take screenshots: `grunt screenshots`
 - Run in BrowserStack: `grunt open [nexus4 | nexus7 | iphone5]`
 
@@ -51,7 +51,7 @@ When you run `yo mobile` we give you the choice to scaffold out a new applicatio
 
 A lot of the time we end up testing what an app looks like or how it behaves after we've created a version for desktop, hacking away at our breakpoints until they look good. Instead, wouldn't it be better if you had a real-time view of what your page looks like on all your devices *while* you code? You can thanks to some small changes in configuration you can make to `connect` (which we do for you as a part of this generator).
 
-With it setup in your Gruntfile, change `hostname` > `localhost` to `0.0.0.0`. Run `grunt server` on a specific port. Perhaps `localhost:9000`, then open up `ifconfig | grep inet` and search for `inet` to discover your computer's IP address (e.g `192.16.23.149`). You can now open up your IP followed by the port number on any device (e.g `192.16.23.149:9000`) and get LiveReload working any time you make a change to your source.
+With it setup in your Gruntfile, change `hostname` > `localhost` to `0.0.0.0`. Run `grunt serve` on a specific port. Perhaps `localhost:9000`, then open up `ifconfig | grep inet` and search for `inet` to discover your computer's IP address (e.g `192.16.23.149`). You can now open up your IP followed by the port number on any device (e.g `192.16.23.149:9000`) and get LiveReload working any time you make a change to your source.
 
 ![alt text](http://i.imgur.com/lypd4xQ.gif "Live Reload Example")
 
