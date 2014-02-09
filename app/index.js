@@ -21,11 +21,6 @@ var AppGenerator = module.exports = function Appgenerator(args, options, config)
   this.indexFile = this.readFileAsString(path.join(this.sourceRoot(), 'index.html'));
   this.mainJsFile = '';
   this.mainCoffeeFile = 'console.log "\'Allo from CoffeeScript!"';
-
-  this.on('end', function () {
-    this.installDependencies({ skipInstall: options['skip-install'] });
-  });
-
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 };
 
@@ -601,4 +596,17 @@ AppGenerator.prototype.app = function app() {
   this.write('app/index.html', this.indexFile);
   this.write('app/scripts/main.js', this.mainJsFile);
   this.write('app/scripts/hello.coffee', this.mainCoffeeFile);
+};
+
+AppGenerator.prototype.install = function () {
+  if (this.options['skip-install']) {
+    return;
+  }
+
+  var done = this.async();
+  this.installDependencies({
+    skipMessage: this.options['skip-install-message'],
+    skipInstall: this.options['skip-install'],
+    callback: done
+  });
 };
