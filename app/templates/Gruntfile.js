@@ -53,18 +53,19 @@ module.exports = function (grunt) {
             }
         },<% if (screenshots) { %>
         autoshot: {
-            defaultOptions: {
+            dist: {
                 options: {
-                    // necessary config
-                    path: 'screenshots/',
-                    filename: '',
-                    type: 'PNG',
-                    // optional config, must set either remote or local
-                    remote: 'http://localhost:<%%= connect.options.port %>',
+                    path: '<%= yeoman.dist %>/screenshots/',
+                    remote : {
+                        files: [
+                            { src: 'http://localhost:<%= connect.options.port %>', dest: 'app.jpg'}
+                        ]
+                    },
                     viewport: [<%= viewports %>]
                 }
             }
-        },<% } %>
+        },
+        <% } %>
         <% if (responsiveImages) { %>
         responsive_images: {
             dev: {
