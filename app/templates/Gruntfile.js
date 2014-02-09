@@ -58,14 +58,13 @@ module.exports = function (grunt) {
                     path: '<%= yeoman.dist %>/screenshots/',
                     remote : {
                         files: [
-                            { src: 'http://localhost:<%= connect.options.port %>', dest: 'app.jpg'}
+                            { src: 'http://localhost:<%%= connect.options.port %>', dest: 'app.jpg'}
                         ]
                     },
                     viewport: [<%= viewports %>]
                 }
             }
-        },
-        <% } %>
+        },<% } %>
         <% if (responsiveImages) { %>
         responsive_images: {
             dev: {
