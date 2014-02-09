@@ -157,6 +157,28 @@ module.exports = function (grunt) {
             },
             server: '.tmp'
         },
+        browser_sync: {
+            dev: {
+                bsFiles: {
+                    src : '<%%= yeoman.app %>/styles/style.css'
+                },
+                options: {
+                    watchTask: false,
+                    debugInfo: true,
+                    // Change to 0.0.0.0 to access externally
+                    host: 'http://localhost:<%%= connect.options.port %>',
+                    server: {
+                        baseDir: '<%%= yeoman.app %>'
+                    },
+                    ghostMode: {
+                        clicks: true,
+                        scroll: true,
+                        links: true,
+                        forms: true
+                    }
+                }
+            }
+        },
         jshint: {
             options: {
                 jshintrc: '.jshintrc',
