@@ -42,7 +42,7 @@ AppGenerator.prototype.askFor = function askFor() {
       name: 'No Framework',
       value: 'noframework'
     }, {
-      name: 'Twitter Bootstrap',
+      name: 'Bootstrap',
       value: 'bootstrap'
     }, {
       name: 'PureCSS',
@@ -510,12 +510,12 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
   }
 
   if(this.frameworkSelected == 'bootstrap') {
-    // Add Twitter Bootstrap scripts
+    // Add Bootstrap scripts
     this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/bootstrap.css', [
       'styles/vendor/bootstrap/bootstrap.css'
     ]);
 
-    defaults.push('Twitter Bootstrap 3');
+    defaults.push('Bootstrap 3');
 
   } else if(this.frameworkSelected == 'pure') {
     this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/pure.min.css', [
