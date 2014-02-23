@@ -41,7 +41,7 @@ You can either look at the Gruntfile we generate for a few interesting ideas or 
 
 ## Mobile-first framework scaffolding
 
-When initially working on your app, you may find yourself searching for a boilerplate to use for your prototypes. A number of UI frameworks with a mobile focus have appeared over the past few years including Twitter Bootstrap 3, Foundation, Pure and TopCoat - some of which have invested a lot of time into improving their rendering performance for mobile devices.
+When initially working on your app, you may find yourself searching for a boilerplate to use for your prototypes. A number of UI frameworks with a mobile focus have appeared over the past few years including Bootstrap 3, Foundation, Pure and TopCoat - some of which have invested a lot of time into improving their rendering performance for mobile devices.
 
 When you run `yo mobile` we give you the choice to scaffold out a new application using any of the four options above, writing some boilerplate layout for you in the process.
 
