@@ -50,21 +50,29 @@ module.exports = function (grunt) {
                     '{.tmp,<%%= yeoman.app %>}/scripts/{,*/}*.js',
                     '<%%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
-            },
+            }
         },<% if (screenshots) { %>
         autoshot: {
-            default_options: {
-              options: {
-                // necessary config
-                path: 'screenshots/',
-                filename: '',
-                type: 'PNG',
-                // optional config, must set either remote or local
-                remote: 'http://localhost:<%%= connect.options.port %>',
-                viewport: [<%= viewports %>]
-              },
-            },
-          },<% } %>
+            defaultOptions: {
+                options: {
+                    // necessary config
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    path: './test/screenshots/',
+=======
+                    path: 'screenshots/',
+>>>>>>> parent of 546657c... update screenshots directory
+=======
+                    path: './test/screenshots/',
+>>>>>>> 42d5d32b59a62b40de54458ff08213823ec55668
+                    filename: '',
+                    type: 'PNG',
+                    // optional config, must set either remote or local
+                    remote: 'http://localhost:<%%= connect.options.port %>',
+                    viewport: [<%= viewports %>]
+                }
+            }
+        },<% } %>
         <% if (responsiveImages) { %>
         responsive_images: {
             dev: {
