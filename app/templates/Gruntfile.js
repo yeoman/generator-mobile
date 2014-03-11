@@ -56,15 +56,7 @@ module.exports = function (grunt) {
             defaultOptions: {
                 options: {
                     // necessary config
-<<<<<<< HEAD
-<<<<<<< HEAD
                     path: './test/screenshots/',
-=======
-                    path: 'screenshots/',
->>>>>>> parent of 546657c... update screenshots directory
-=======
-                    path: './test/screenshots/',
->>>>>>> 42d5d32b59a62b40de54458ff08213823ec55668
                     filename: '',
                     type: 'PNG',
                     // optional config, must set either remote or local
