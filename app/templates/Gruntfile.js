@@ -56,7 +56,7 @@ module.exports = function (grunt) {
             defaultOptions: {
                 options: {
                     // necessary config
-                    path: 'screenshots/',
+                    path: '.test/screenshots/',
                     filename: '',
                     type: 'PNG',
                     // optional config, must set either remote or local
