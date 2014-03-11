@@ -28,6 +28,7 @@
     "load-grunt-tasks": "~0.2.0",
     "connect-livereload": "~0.1.4",
     "time-grunt": "~0.1.1",
+    "jshint-stylish": "~0.1.3",
     "grunt-webp": "~0.0.1"<% if (modernizrTask) {  %>,
     "grunt-modernizr": "~0.3.0"<% } %><% if (screenshots) {  %>,
     "grunt-autoshot": "~0.0.2"<% } %><% if (responsiveImages) {  %>,
