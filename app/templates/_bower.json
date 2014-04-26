@@ -5,7 +5,8 @@
     "bootstrap": "~3.0.0",<% } %><% if (frameworkSelected == 'pure') { %>
     "pure": "~0.2.0",<% } %><% if (frameworkSelected == 'topcoat') { %>
     "topcoat": "~0.4.1",<% } %><% if (includeRequireJS) { %>
-    "requirejs": "~2.1.4",<% } %>
+    "requirejs": "~2.1.4",<% } %><% if (frameworkSelected == 'foundation') { %>
+    "foundation": "~4",<% } %>
     "modernizr": "~2.6.2",
     "jquery": "~1.9.1"
   },
