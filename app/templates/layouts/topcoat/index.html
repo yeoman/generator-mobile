@@ -1,6 +1,63 @@
+<style type="text/css">
+  #navbar
+  {
+    position: fixed;
+    width: 100%;
+    background-color: rgba(100, 100, 100, .95);
+    top: 0px;
+    height: 3.6em;
+  }
+  #navbar ul
+  {
+    list-style-type: none;
+    text-align: center;
+  }
+  #navbar li
+  {
+    display: inline;
+    margin-left: -5px;
+  }
+  #navbar li a
+  {
+    text-decoration: none;
+    color: #fff;
+    text-shadow: 2px 2px 2px #000;
+    padding: 1.3em 4em;
+
+  }
+  #navbar li a:hover
+  {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  #navfix
+  {
+      margin-top: 50px;
+  }
+  a.anchor
+  {
+    display: block;
+    position: relative;
+    top: 20px;
+    padding-bottom: 55px;
+    visibility: hidden;
+  }
+</style>
+
+<nav id="navbar">
+  <ul>
+    <li><a href="#button_link">Buttons</a></li>
+    <li><a href="#list_link">Lists</a></li>
+    <li><a href="#navigation_link">Navigation Bar</a></li>
+    <li><a href="#input_link">Text Input</a></li>
+  </ul>
+</nav>
+<div id="navfix">
 <!--yeoman-welcome-->
 
+<p>This page shows some examples of the available controls that the <a href="http://topcoat.io">Topcoat framework</a> offers.</p>
+
 <div id="content" class="max-width">
+          <a class="anchor" id="button_link"></a>
           <article id="button" class="component">
             <header>
               <h2>Button</h2>
@@ -16,7 +73,7 @@
             <section class="component"><a class="topcoat-button--quiet">Button</a>
 <a class="topcoat-button--quiet is-active">Button</a>
 <a class="topcoat-button--quiet is-disabled">Button</a></section>
-            
+
           </article>
           <article id="large-button" class="component">
             <header>
@@ -25,7 +82,7 @@
             <section class="component"><a class="topcoat-button--large">Button</a>
 <a class="topcoat-button--large is-active">Button</a>
 <a class="topcoat-button--large is-disabled">Button</a></section>
-            
+
           </article>
           <article id="large-quietbutton" class="component">
             <header>
@@ -34,7 +91,7 @@
             <section class="component"><a class="topcoat-button--large--quiet">Button</a>
 <a class="topcoat-button--large--quiet is-active">Button</a>
 <a class="topcoat-button--large--quiet is-disabled">Button</a></section>
-            
+
           </article>
           <article id="call-toaction button" class="component">
             <header>
@@ -43,7 +100,7 @@
             <section class="component"><a class="topcoat-button--cta">Button</a>
 <a class="topcoat-button--cta is-active">Button</a>
 <a class="topcoat-button--cta is-disabled">Button</a></section>
-            
+
           </article>
           <article id="large-callto action button" class="component">
             <header>
@@ -52,7 +109,7 @@
             <section class="component"><a class="topcoat-button--large--cta">Button</a>
 <a class="topcoat-button--large--cta is-active">Button</a>
 <a class="topcoat-button--large--cta is-disabled">Button</a></section>
-            
+
           </article>
           <article id="icon-button" class="component">
             <header>
@@ -69,7 +126,7 @@
 <a class="topcoat-icon-button is-disabled">
 <span class="topcoat-icon topcoat-icon--menu-stack"></span>
 </a></section>
-            
+
           </article>
           <article id="quiet-iconbutton" class="component">
             <header>
@@ -86,7 +143,7 @@
 <a class="topcoat-icon-button--quiet is-disabled">
 <span class="topcoat-icon topcoat-icon--menu-stack"></span>
 </a></section>
-            
+
           </article>
           <article id="large-iconbutton" class="component">
             <header>
@@ -103,7 +160,7 @@
 <a class="topcoat-icon-button--large is-disabled">
 <span class="topcoat-icon--large topcoat-icon--menu-stack"></span>
 </a></section>
-            
+
           </article>
           <article id="large-quieticon button" class="component">
             <header>
@@ -120,8 +177,9 @@
 <a class="topcoat-icon-button--large--quiet is-disabled">
 <span class="topcoat-icon--large topcoat-icon--menu-stack"></span>
 </a></section>
-            
+
           </article>
+          <a class="anchor" id="list_link"></a>
           <article id="list" class="component">
             <header>
               <h2>List</h2>
@@ -140,8 +198,9 @@ Item
 </li>
 </ul>
 </div></section>
-            
+
           </article>
+          <a class="anchor" id="navigation_link"></a>
           <article id="navigation-bar" class="component">
             <header>
               <h2>Navigation Bar</h2>
@@ -161,15 +220,16 @@ Item
 </a>
 </div>
 </div></section>
-            
+
           </article>
+          <a class="anchor" id="input_link"></a>
           <article id="search-input" class="component">
             <header>
               <h2>Search Input</h2>
             </header>
             <section class="component"><input type="search" value="" placeholder="search" class="topcoat-search-input">
 <input type="search is-disabled" value="" placeholder="search" class="topcoat-search-input"></section>
-            
+
           </article>
           <article id="large-searchinput" class="component">
             <header>
@@ -177,7 +237,7 @@ Item
             </header>
             <section class="component"><input type="search" value="" placeholder="search" class="topcoat-search-input--large">
 <input type="search" value="" placeholder="search" class="topcoat-search-input--large .is-disabled"></section>
-            
+
           </article>
           <article id="text-input" class="component">
             <header>
@@ -185,7 +245,7 @@ Item
             </header>
             <section class="component"><input type="text" class="topcoat-text-input" value="" placeholder="text">
 <input type="text" class="topcoat-text-input is-disabled" value="" placeholder="text"></section>
-            
+
           </article>
           <article id="large-textinput" class="component">
             <header>
@@ -193,19 +253,14 @@ Item
             </header>
             <section class="component"><input type="text" class="topcoat-text-input--large" value="" placeholder="text">
 <input type="text" class="topcoat-text-input--large is-disabled" value="" placeholder="text"></section>
-            
+
           </article>
           <article id="topcoat-textarea" class="component">
             <header>
               <h2>TopCoat Textarea</h2>
             </header>
             <section class="component"><textarea class="topcoat-textarea" rows="6" cols="36" placeholder="Textarea"></textarea></section>
-            
-          </article>
-          <article id="topcoat-largetextarea" class="component">
-            <header>
-              <h2>Topcoat Large Textarea</h2>
-            </header>
-            <section class="component"></section>
+
           </article>
         </div>
+    </div>
