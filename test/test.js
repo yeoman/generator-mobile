@@ -57,73 +57,25 @@ describe('mobile generator test', function () {
   });
 
   describe('frameworks', function () {
-    var expected = {
-      bootstrap: [
-        'app/styles/vendor/bootstrap/bootstrap.css',
-        'app/scripts/vendor/bootstrap/bootstrap.js'
-      ],
-
-      foundation: [
-        'app/styles/vendor/foundation/stylesheets/foundation-min.css'
-      ],
-
-      purecss: [
-        'app/styles/vendor/pure/pure-min.css'
-      ],
-
-      topcoat: [
-        'app/styles/vendor/topcoat/css/topcoat-mobile-dark.min.css',
-        'app/styles/vendor/topcoat/css/topcoat-mobile-light.min.css',
-        'app/styles/vendor/topcoat/img/avatar.png',
-        'app/styles/vendor/topcoat/img/bg_dark.png',
-        'app/styles/vendor/topcoat/img/breadcrumb.png',
-        'app/styles/vendor/topcoat/img/checkbox_checked_dark.png',
-        'app/styles/vendor/topcoat/img/checkbox_checked.png',
-        'app/styles/vendor/topcoat/img/checkbox_unchecked_dark.png',
-        'app/styles/vendor/topcoat/img/checkbox_unchecked.png',
-        'app/styles/vendor/topcoat/img/checkmark_bw.svg',
-        'app/styles/vendor/topcoat/img/dark-combo-box-bg.png',
-        'app/styles/vendor/topcoat/img/dark-combo-box-bg2x.png',
-        'app/styles/vendor/topcoat/img/dark-grips.png',
-        'app/styles/vendor/topcoat/img/dark-sprites2x.png',
-        'app/styles/vendor/topcoat/img/dialog-zone-bg.png',
-        'app/styles/vendor/topcoat/img/drop-down-triangle-dark.png',
-        'app/styles/vendor/topcoat/img/drop-down-triangle.png',
-        'app/styles/vendor/topcoat/img/hamburger_bw.svg',
-        'app/styles/vendor/topcoat/img/hamburger_dark.svg',
-        'app/styles/vendor/topcoat/img/hamburger_light.svg',
-        'app/styles/vendor/topcoat/img/light-combo-box-bg.png',
-        'app/styles/vendor/topcoat/img/light-combo-box-bg2x.png',
-        'app/styles/vendor/topcoat/img/light-grips.png',
-        'app/styles/vendor/topcoat/img/light-sprites2x.png',
-        'app/styles/vendor/topcoat/img/pop-up-triangle-dark.png',
-        'app/styles/vendor/topcoat/img/pop-up-triangle.png',
-        'app/styles/vendor/topcoat/img/search_bw.svg',
-        'app/styles/vendor/topcoat/img/search_dark.svg',
-        'app/styles/vendor/topcoat/img/search_light.svg',
-        'app/styles/vendor/topcoat/img/search-bg.png',
-        'app/styles/vendor/topcoat/img/search-bg2x.png',
-        'app/styles/vendor/topcoat/img/search.svg',
-        'app/styles/vendor/topcoat/img/spinner.png',
-        'app/styles/vendor/topcoat/img/spinner2x.png'
-      ]
-    };
 
     describe('Bootstrap', function () {
       var mockPromptOptions = {
         frameworkChoice: 'bootstrap'
       };
 
-      it('creates Bootstrap files', runAndAssertCreatedFiles(mockPromptOptions, expected.bootstrap));
       it('adds `bootstrap` as a Bower dependency', runAndAssertFileContent(mockPromptOptions, [
         [ 'bower.json', /"bootstrap"/ ]
       ]));
     });
 
     describe('Foundation', function () {
-      it('creates Foundation files', runAndAssertCreatedFiles({
+      var mockPromptOptions = {
         frameworkChoice: 'foundation'
-      }, expected.foundation));
+      };
+
+      it('adds `foundation` as a Bower dependency', runAndAssertFileContent(mockPromptOptions, [
+        [ 'bower.json', /"foundation"/ ]
+      ]));
     });
 
     describe('PureCSS', function () {
@@ -131,7 +83,6 @@ describe('mobile generator test', function () {
         frameworkChoice: 'purecss'
       };
 
-      it('creates PureCSS files', runAndAssertCreatedFiles(mockPromptOptions, expected.purecss));
       it('adds `bootstrap` as a Bower dependency', runAndAssertFileContent(mockPromptOptions, [
         [ 'bower.json', /"pure"/ ]
       ]));
@@ -142,7 +93,6 @@ describe('mobile generator test', function () {
         frameworkChoice: 'topcoat'
       };
 
-      it('creates Topcoat files', runAndAssertCreatedFiles(mockPromptOptions, expected.topcoat));
       it('adds `bootstrap` as a Bower dependency', runAndAssertFileContent(mockPromptOptions, [
         [ 'bower.json', /"topcoat"/ ]
       ]));

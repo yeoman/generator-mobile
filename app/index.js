@@ -132,7 +132,7 @@ function getFrameworkChoice(props) {
   if(choices.indexOf('bootstrap') !== -1) {
     return 'bootstrap';
   }
-  
+
   if(choices.indexOf('pure') !== -1) {
     return 'pure';
   }
@@ -147,77 +147,6 @@ function getFrameworkChoice(props) {
 
   if(choices.indexOf('noframework') !== -1) {
     return 'noframework';
-  }
-}
-
-// ---------------------------------------------------------------
-// Mobile-first UI Frameworks
-// ---------------------------------------------------------------
-// TODO: Use Bower for pulling all of these deps in
-// TODO: Don't use pre-minified versions of these deps
-
-AppGenerator.prototype.bootstrapJs = function bootstrapJs() {
-  if(this.frameworkSelected == 'bootstrap') {
-    this.copy('layouts/bootstrap/assets/css/bootstrap.css', 'app/styles/vendor/bootstrap/bootstrap.css');
-    this.copy('layouts/bootstrap/assets/js/bootstrap.min.js', 'app/scripts/vendor/bootstrap/bootstrap.js');
-  }
-}
-
-AppGenerator.prototype.pure = function pure() {
-  if(this.frameworkSelected == 'pure') {
-    this.copy('layouts/pure/stylesheets/pure-min.css', 'app/styles/vendor/pure/pure-min.css');
-  }
-}
-
-AppGenerator.prototype.topcoat = function topcoat() {
-  if(this.frameworkSelected == 'topcoat') {
-    this.copy('layouts/topcoat/css/topcoat-mobile-dark.min.css', 'app/styles/vendor/topcoat/css/topcoat-mobile-dark.min.css');
-    this.copy('layouts/topcoat/css/topcoat-mobile-light.min.css', 'app/styles/vendor/topcoat/css/topcoat-mobile-light.min.css');
-
-    var filesToMove = [
-      'avatar.png',
-      'bg_dark.png',
-      'breadcrumb.png',
-      'checkbox_checked_dark.png',
-      'checkbox_checked.png',
-      'checkbox_unchecked_dark.png',
-      'checkbox_unchecked.png',
-      'checkmark_bw.svg',
-      'dark-combo-box-bg.png',
-      'dark-combo-box-bg2x.png',
-      'dark-grips.png',
-      'dark-sprites2x.png',
-      'dialog-zone-bg.png',
-      'drop-down-triangle-dark.png',
-      'drop-down-triangle.png',
-      'hamburger_bw.svg',
-      'hamburger_dark.svg',
-      'hamburger_light.svg',
-      'light-combo-box-bg.png',
-      'light-combo-box-bg2x.png',
-      'light-grips.png',
-      'light-sprites2x.png',
-      'pop-up-triangle-dark.png',
-      'pop-up-triangle.png',
-      'search_bw.svg',
-      'search_dark.svg',
-      'search_light.svg',
-      'search-bg.png',
-      'search-bg2x.png',
-      'search.svg',
-      'spinner.png',
-      'spinner2x.png'
-    ];
-
-    for(var i = 0; i < filesToMove.length; i++) {
-      this.copy('layouts/topcoat/img/'+filesToMove[i], 'app/styles/vendor/topcoat/img/'+filesToMove[i]);
-    }
-  }
-}
-
-AppGenerator.prototype.foundation = function foundation() {
-  if(this.frameworkSelected == 'foundation') {
-    this.copy('layouts/foundation/stylesheets/foundation.min.css', 'app/styles/vendor/foundation/stylesheets/foundation-min.css');
   }
 }
 
@@ -317,7 +246,7 @@ AppGenerator.prototype.addScreenshots = function screenshots() {
     this.viewports += '\''+height+'x'+width+'\'';
   }
 
-}; 
+};
 
 
 // ----------------------------------------------------------------
@@ -335,6 +264,7 @@ AppGenerator.prototype.addLayout = function gruntfile() {
       this.copy('layouts/bootstrap/assets/js/application.js', 'app/scripts/application.js');
       this.copy('layouts/bootstrap/assets/js/holder/holder.js', 'app/scripts/holder.js');
       layoutStr = this.readFileAsString(path.join(this.sourceRoot(), 'layouts/bootstrap/index.html'));
+
 
     }else if(this.frameworkSelected == 'pure'){
 
@@ -511,25 +441,25 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
 
   if(this.frameworkSelected == 'bootstrap') {
     // Add Bootstrap scripts
-    this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/bootstrap.css', [
-      'styles/vendor/bootstrap/bootstrap.css'
-    ]);
+      this.indexFile = this.appendStyles(this.indexFile, 'bower_components/bootstrap/dist/css/bootstrap.css', [
+        'bower_components/bootstrap/dist/css/bootstrap.css'
+      ]);
 
     defaults.push('Bootstrap 3');
 
   } else if(this.frameworkSelected == 'pure') {
-    this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/pure.min.css', [
-      'styles/vendor/pure/pure-min.css'
+      this.indexFile = this.appendStyles(this.indexFile, 'bower_components/pure/pure.css', [
+        'bower_components/pure/pure.css'
       ]);
     defaults.push('PureCSS');
   } else if(this.frameworkSelected == 'topcoat') {
-    this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/topcoat/css/topcoat-mobile-light.min.css', [
-      'styles/vendor/topcoat/css/topcoat-mobile-light.min.css'
+      this.indexFile = this.appendStyles(this.indexFile, 'bower_components/topcoat/release/css/topcoat-mobile-light.css', [
+        'bower_components/topcoat/release/css/topcoat-mobile-light.css'
       ]);
     defaults.push('Topcoat');
   } else if(this.frameworkSelected == 'foundation') {
-    this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/foundation/stylesheets/foundation-min.css', [
-      'styles/vendor/foundation/stylesheets/foundation-min.css'
+      this.indexFile = this.appendStyles(this.indexFile, 'bower_components/foundation/css/foundation.css', [
+        'bower_components/foundation/scss/foundation.css'
       ]);
     defaults.push('Foundation');
   }
