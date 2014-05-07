@@ -19,7 +19,6 @@ var AppGenerator = module.exports = function Appgenerator(args, options, config)
   this.hookFor('test-framework', { as: 'app' });
 
   this.indexFile = this.readFileAsString(path.join(this.sourceRoot(), 'index.html'));
-  this.mainJsFile = '';
   this.mainCoffeeFile = 'console.log "\'Allo from CoffeeScript!"';
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 };
@@ -298,14 +297,6 @@ AppGenerator.prototype.packageJSON = function packageJSON() {
   this.template('_package.json', 'package.json');
 };
 
-AppGenerator.prototype.fastclick = function fastclick() {
-  if(this.fastclickChoice){
-    this.copy('fastclick.js', 'app/scripts/fastclick.js');
-    this.copy('fastclick.example.js', 'app/scripts/fastclick.example.js');
-  }
-};
-
-
 AppGenerator.prototype.fullscreen = function fullscreen() {
   if(this.fullscreenAPI){
     this.copy('fullscreensnippet.js', 'app/scripts/fullscreensnippet.js');
@@ -320,7 +311,6 @@ AppGenerator.prototype.storage = function storage() {
   }
 
 };
-
 
 AppGenerator.prototype.git = function git() {
   this.copy('gitignore', '.gitignore');
@@ -353,25 +343,7 @@ AppGenerator.prototype.mainStylesheet = function mainStylesheet() {
 
 // TODO(mklabs): to be put in a subgenerator like rjs:app
 AppGenerator.prototype.requirejs = function requirejs() {
-  var requiredScripts = ['app', 'jquery'];
-  var bootstrapPath;
-  if(this.frameworkSelected == 'bootstrap') {
-    requiredScripts.push('bootstrap');
-    bootstrapPath = ',\n        bootstrap: \'vendor/bootstrap/bootstrap\'\n    },';
-  } else {
-    bootstrapPath = '    },';
-  }
-
   if (this.includeRequireJS) {
-    var requiredScriptsString = '[';
-    for(var i = 0; i < requiredScripts.length; i++) {
-      requiredScriptsString += '\''+requiredScripts[i]+'\'';
-      if((i+1) < requiredScripts.length) {
-        requiredScriptsString += ', ';
-      }
-    }
-    requiredScriptsString += ']';
-
     this.indexFile = this.appendScripts(this.indexFile, 'scripts/main.js', ['bower_components/requirejs/require.js'], {
       'data-main': 'scripts/main'
     });
@@ -384,27 +356,6 @@ AppGenerator.prototype.requirejs = function requirejs() {
       '    return \'\\\'Allo \\\'Allo!\';',
       '});'
     ].join('\n'));
-
-    this.mainJsFile = [
-      'require.config({',
-      '    paths: {',
-      '        jquery: \'../bower_components/jquery/jquery\'',
-      bootstrapPath,
-      '    shim: {',
-      '        bootstrap: {',
-      '            deps: [\'jquery\'],',
-      '            exports: \'jquery\'',
-      '        }',
-      '    }',
-      '});',
-      '',
-      'require(' + requiredScriptsString + ', function (app, $) {',
-      '    \'use strict\';',
-      '    // use app here',
-      '    console.log(app);',
-      '    console.log(\'Running jQuery %s\', $().jquery);',
-      '});'
-    ].join('\n');
   }
 };
 
@@ -441,24 +392,24 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
 
   if(this.frameworkSelected == 'bootstrap') {
     // Add Bootstrap scripts
-      this.indexFile = this.appendStyles(this.indexFile, 'bower_components/bootstrap/dist/css/bootstrap.css', [
+      this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/bootstrap.css', [
         'bower_components/bootstrap/dist/css/bootstrap.css'
       ]);
 
     defaults.push('Bootstrap 3');
 
   } else if(this.frameworkSelected == 'pure') {
-      this.indexFile = this.appendStyles(this.indexFile, 'bower_components/pure/pure.css', [
+      this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/pure.css', [
         'bower_components/pure/pure.css'
       ]);
     defaults.push('PureCSS');
   } else if(this.frameworkSelected == 'topcoat') {
-      this.indexFile = this.appendStyles(this.indexFile, 'bower_components/topcoat/release/css/topcoat-mobile-light.css', [
+      this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/topcoat-mobile-light.css', [
         'bower_components/topcoat/release/css/topcoat-mobile-light.css'
       ]);
     defaults.push('Topcoat');
   } else if(this.frameworkSelected == 'foundation') {
-      this.indexFile = this.appendStyles(this.indexFile, 'bower_components/foundation/css/foundation.css', [
+      this.indexFile = this.appendStyles(this.indexFile, 'styles/vendor/foundation.css', [
         'bower_components/foundation/scss/foundation.css'
       ]);
     defaults.push('Foundation');
@@ -466,11 +417,7 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
 
   if (this.includeRequireJS) {
     defaults.push('RequireJS');
-  } else {
-    this.mainJsFile = 'console.log(\'\\\'Allo \\\'Allo!\');';
   }
-
-
 
   if(this.asyncLocalStorage){
     this.indexFile = this.appendScripts(this.indexFile,
@@ -489,10 +436,13 @@ AppGenerator.prototype.writeIndex = function writeIndex() {
   }
 
   if(this.fastclickChoice){
-    this.indexFile = this.appendScripts(this.indexFile, 'scripts/fastclick.js', [
-      'scripts/fastclick.js',
-      'scripts/fastclick.example.js'
-    ]);
+    if (!this.includeRequireJS) {
+      // Do not append fastclick script if using requirejs,
+      // it will throw a mismatched anonymous define module error
+      this.indexFile = this.appendScripts(this.indexFile, 'scripts/fastclick.js', [
+        'bower_components/fastclick/lib/fastclick.js',
+      ]);
+    }
     defaults.push('FastClick');
   }
 
@@ -524,8 +474,8 @@ AppGenerator.prototype.app = function app() {
   this.mkdir('app/styles');
   this.mkdir('app/images');
   this.write('app/index.html', this.indexFile);
-  this.write('app/scripts/main.js', this.mainJsFile);
   this.write('app/scripts/hello.coffee', this.mainCoffeeFile);
+  this.template('_main.js', 'app/scripts/main.js');
 };
 
 AppGenerator.prototype.install = function () {
