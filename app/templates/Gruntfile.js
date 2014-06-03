@@ -497,8 +497,10 @@ module.exports = function (grunt) {
         'requirejs',<% } %>
         'cssmin',<% if (responsiveImages) { %>
         'responsive_images:dev',<% } %>
-        'concat',
-        'uglify',
+        /* Since usemin does both concat and uglify tasks, there's no sense in
+         * calling commented out functions. */
+        /* 'concat',
+        'uglify', */
         'copy',
         'rev',
         'usemin'
