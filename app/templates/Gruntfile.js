@@ -55,7 +55,7 @@ module.exports = function (grunt) {
         autoshot: {
             dist: {
                 options: {
-                    path: '<%= yeoman.dist %>/screenshots/',
+                    path: '<%%= yeoman.dist %>/screenshots/',
                     remote : {
                         files: [
                             { src: 'http://localhost:<%%= connect.options.port %>', dest: 'app.jpg'}
