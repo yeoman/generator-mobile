@@ -80,7 +80,7 @@ Consider this generator a reference point for how to improve your mobile web dev
 * [grunt-notify](https://npmjs.org/package/grunt-notify) for desktop notifications when Grunt has errors
 
 
-We also make use of some simple, but helpful configurations to tasks like grunt-contrib-watch for [syncronised cross-device livereloading](http://blog.mattbailey.co/post/50337824984/grunt-synchronised-testing-between-browsers-devices).
+We also make use of some simple, but helpful configurations to tasks like grunt-contrib-watch for [syncronised cross-device livereloading](http://mattbailey.io/grunt-synchronised-testing-between-browsers-devices/).
 
 ![alt text](http://i.imgur.com/qBMKtGul.gif "Live Reload Across Devices Example")
 
