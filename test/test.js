@@ -51,6 +51,13 @@ describe('mobile generator test', function () {
     });
   }
 
+  function runAndAssertNoFileContent(mockPromptOptions, expected) {
+    return run(mockPromptOptions, function (done) {
+      assert.noFileContent(expected);
+      done();
+    });
+  }
+
   it('the generator can be required without throwing', function () {
     // not testing the actual run of generators yet
     this.app = require('../app');
@@ -83,7 +90,7 @@ describe('mobile generator test', function () {
         frameworkChoice: 'purecss'
       };
 
-      it('adds `bootstrap` as a Bower dependency', runAndAssertFileContent(mockPromptOptions, [
+      it('adds `pure` as a Bower dependency', runAndAssertFileContent(mockPromptOptions, [
         [ 'bower.json', /"pure"/ ]
       ]));
     });
@@ -93,7 +100,7 @@ describe('mobile generator test', function () {
         frameworkChoice: 'topcoat'
       };
 
-      it('adds `bootstrap` as a Bower dependency', runAndAssertFileContent(mockPromptOptions, [
+      it('adds `topcoat` as a Bower dependency', runAndAssertFileContent(mockPromptOptions, [
         [ 'bower.json', /"topcoat"/ ]
       ]));
     });
@@ -132,13 +139,43 @@ describe('mobile generator test', function () {
   });
 
   describe('remove click delays', function () {
-    it('creates expected files', runAndAssertCreatedFiles({
+    it('adds fastclick as a bower dependency', runAndAssertFileContent({
       frameworkChoice: 'noframework',
       fastclickChoice: true
     }, [
-      'app/scripts/fastclick.js',
-      'app/scripts/fastclick.example.js'
+      [ 'bower.json', /"fastclick"/ ]
     ]));
+
+    it('attaches FastClick to the document body', runAndAssertFileContent({
+      frameworkChoice: 'noframework',
+      fastclickChoice: true
+    }, [
+      [ 'app/scripts/main.js', /FastClick\.attach\(document\.body\);/ ]
+    ]));
+
+    it('appends fastclick script to index.html', runAndAssertFileContent({
+      frameworkChoice: 'noframework',
+      fastclickChoice: true
+    }, [
+      [ 'app/index.html', /<!-- build:js scripts\/fastclick.js -->/ ]
+    ]));
+
+    describe('when using RequireJS', function () {
+      var mockPromptOptions = {
+        frameworkChoice: 'noframework',
+        fastclickChoice: true,
+        includeRequireJS: true
+      };
+
+      it('does not append fastclick script to index.html', runAndAssertNoFileContent(mockPromptOptions, [
+          [ 'app/index.html', /<!-- build:js scripts\/fastclick.js -->/ ]
+      ]));
+
+      it('lazy loads fastclick script', runAndAssertFileContent(mockPromptOptions, [
+      [ 'app/scripts/main.js', /fastclick: '..\/bower_components\/fastclick\/lib\/fastclick'/ ],
+      [ 'app/scripts/main.js', /FastClick\.attach\(document\.body\);/ ]
+      ]));
+    });
   });
 
   describe('screenshots', function () {

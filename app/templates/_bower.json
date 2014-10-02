@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "dependencies": {<% if (frameworkSelected == 'bootstrap') { %>
     "bootstrap": "~3.0.0",<% } %><% if (frameworkSelected == 'pure') { %>
-    "pure": "~0.2.0",<% } %><% if (frameworkSelected == 'topcoat') { %>
-    "topcoat": "~0.4.1",<% } %><% if (includeRequireJS) { %>
-    "requirejs": "~2.1.4",<% } %><% if (frameworkSelected == 'foundation') { %>
-    "foundation": "~4",<% } %>
+    "pure": "~0.4.2",<% } %><% if (frameworkSelected == 'topcoat') { %>
+    "topcoat": "~0.4.1",<% } %><% if (frameworkSelected == 'foundation') { %>
+    "foundation": "~4",<% } %><% if (includeRequireJS) { %>
+    "requirejs": "~2.1.4",<% } %><% if (fastclickChoice) { %>
+    "fastclick": "~1.0.1",<% } %>
     "modernizr": "~2.6.2",
     "jquery": "~1.9.1"
   },
