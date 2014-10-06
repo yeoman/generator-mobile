@@ -388,8 +388,7 @@ AppGenerator.prototype.requirejs = function requirejs() {
     this.mainJsFile = [
       'require.config({',
       '    paths: {',
-      '        jquery: \'../bower_components/jquery/jquery\'',
-      bootstrapPath,
+      '        jquery: \'../bower_components/jquery/jquery\'' + bootstrapPath,
       '    shim: {',
       '        bootstrap: {',
       '            deps: [\'jquery\'],',
