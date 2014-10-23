@@ -72,7 +72,7 @@ Consider this generator a reference point for how to improve your mobile web dev
 * [grunt-responsive-images](https://npmjs.org/package/grunt-responsive-images) for generating multi-resolution images at predefined widths. For use with `srcset` or a responsive imaging strategy like [Imager.js](https://github.com/BBC-News/Imager.js/)
 * [grunt-autoshot](https://npmjs.org/package/grunt-autoshot) for generating screenshots of your site at different viewport sizes
 * [grunt-modernizr](https://npmjs.org/package/grunt-modernizr) for generating lean Modernizr builds based on the feature detects you actually use
-* [grunt-svgmin](https://npmjs.org/package/grunt-svgmin) for minmizing your SVG files
+* [grunt-svgmin](https://npmjs.org/package/grunt-svgmin) for minimizing your SVG files
 * [grunt-contrib-imagemin](https://npmjs.org/package/grunt-contrib-imagemin) for keeping your image files optimized. With the size of the average page being 1.5MB, most of it being images, keeping your image filesizes down is super-important.
 * [grunt-open](https://npmjs.org/package/grunt-open) for launching a browser window with BrowserStack using specific device/browser settings. We found this to be more usable than grunt-browserstack in practice.
 * [grunt-webp](https://npmjs.org/package/grunt-webp) for encoding images as WebP
