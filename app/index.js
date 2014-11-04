@@ -183,8 +183,16 @@ var MobileGenerator = yeoman.generators.Base.extend({
     }
   },
 
-  end: function () {
-    //this.installDependencies();
+  install: function () {
+    if (!this.options['skip-install']) {
+      this.log.write()
+        .info("I'm all done. Running " + chalk.yellow('npm install') +
+              " for you to install the required dependencies. " +
+              "If this fails, try running the command yourself.")
+        .info(chalk.yellow('This might take a few moments'))
+        .write();
+      this.npmInstall();
+    }
   }
 });
 
