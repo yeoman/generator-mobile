@@ -109,12 +109,12 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
         checks.on('done', done);
 
         checks.on('passed', function (res) {
-          self.checks[res.what] = true;
+          self.checks[res.what] = {data: res.data};
           self.verbose && self.log.ok(res.what + ' ' + (res.result || ''));
         });
 
         checks.on('failed', function (res) {
-          self.checks[res.what] = false;
+          self.checks[res.what] = {data: res.data, error: res.error};
           self.messages.push(res.error.message);
           self.log.error(res.error.message);
         });
@@ -262,7 +262,7 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
         this.dest.write(path.join('app', 'CNAME'), this.prompts.siteHost);
       }
 
-      if (!this.checks.git)
+      if (this.checks.git.error)
         return;
 
       var log = !this.quiet && this.log,
@@ -296,7 +296,7 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
     },
 
     git: function () {
-      if (!this.checks.git)
+      if (!this.checks.git || this.checks.git.error)
         return;
 
       var self = this, done = this.async(),
