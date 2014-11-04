@@ -171,7 +171,9 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
       var filepath = path.join(this.destinationRoot(), 'package.json'),
           pkg = JSON.parse(this.readFileAsString(filepath));
 
-      pkg.name = this.prompts.siteName || 'replace me';
+      pkg.name = (this.prompts.siteName || 'replace me')
+        .replace(/[^0-9a-z_\-]/ig, '-')
+        .replace(/-+/g, '-');
       pkg.version = '0.0.0';
       pkg.description = this.prompts.siteDescription;
       pkg.homepage = this.prompts.siteUrl;

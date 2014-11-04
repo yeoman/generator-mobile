@@ -60,7 +60,7 @@ describe('mobile:app', function () {
 
     it('configures package.json', function () {
       var pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-      assert.equal(pkg.name, answers.siteName);
+      assert.equal(pkg.name, 'Test-site');
       assert.equal(pkg.description, answers.siteDescription);
       assert.equal(pkg.homepage, answers.siteUrl);
       assert.equal(pkg.version, '0.0.0');
