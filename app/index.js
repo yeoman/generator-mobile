@@ -116,37 +116,31 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
       // server-config
       var cfg = hosting.config(this.prompts.hostingChoice);
       if (cfg) {
-        gulpfile = gulpfile.replace(/['"].*apache-server-configs.*['"]/m, "'" + cfg.filename + "'");
+        gulpfile = gulpfile.replace(/['"].*apache-server-configs.*['"]/m, "'app/" + cfg.filename + "'");
       } else {
         gulpfile = gulpfile.replace(/^.*apache-server-configs.*$/m, '');
-      }
-
-      // gulp deploy task
-      var deployfile = hosting.deployTaskFilename(this.hostingChoice, this.deployChoice);
-      if (deployfile) {
-        gulpfile += '\n\n' + this.engine(this.read(deployfile), this.prompts);
       }
 
       this.writeFileFromString(gulpfile, filepath);
     },
 
-    serverconfig: function () {
-      if (!hosting.isSupported(this.prompts.hostingChoice))
-        return;
+    // serverconfig: function () {
+    //   if (!hosting.isSupported(this.prompts.hostingChoice))
+    //     return;
 
-      this.verbose && this.log.info('Fetching server config');
+    //   this.verbose && this.log.info('Fetching server config');
 
-      var done = this.async();
-      hosting.fetchConfig(this.prompts.hostingChoice, function (err, cfg, content) {
-        if (!err) {
-          // TODO: adjust Project ID if it is GAE
-          this.dest.write(path.join('app', cfg.filename), content);
-        } else {
-          this.log.error(err);
-        }
-        done();
-      }.bind(this));
-    },
+    //   var done = this.async();
+    //   hosting.fetchConfig(this.prompts.hostingChoice, function (err, cfg, content) {
+    //     if (!err) {
+    //       // TODO: adjust Project ID if it is GAE
+    //       this.dest.write(path.join('app', cfg.filename), content);
+    //     } else {
+    //       this.log.error(err);
+    //     }
+    //     done();
+    //   }.bind(this));
+    // },
 
     // git: function () {
     //   var log = !this.quiet && this.log,
@@ -228,7 +222,30 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
       }
 
       this.writeFileFromString(content, index);
+    },
+
+    // --------------------- hosting / deployment tasks ---------------------
+
+    gcloud: function () {
+      if (this.prompts.hostingChoice !== 'gae')
+        return;
+
+      this.dest.mkdir('.gcloud');
+      this.template('gcloud-properties', path.join('.gcloud', 'properties'));
+      this.template('deploy_gae.js', path.join('tasks', 'deploy.js'));
+
+      var done = this.async();
+      hosting.fetchConfig('gae', function (err, cfg, content) {
+        if (!err) {
+          content = content.replace(/^(application:\s+).*$/m, '$1' + this.prompts.gcloudProjectId);
+          this.dest.write(path.join('app', cfg.filename), content);
+        } else {
+          this.log.error(err);
+        }
+        done();
+      }.bind(this));
     }
+
   },
 
   install: function () {

@@ -3,9 +3,10 @@
 var fs = require('fs');
 var exec = require('child_process').exec;
 var path = require('path');
+var nock = require('nock');
 var assert = require('yeoman-generator').assert;
 var helpers = require('yeoman-generator').test;
-var nock = require('nock');
+var testUtil = require('./util');
 
 describe('mobile:app', function () {
 
@@ -21,26 +22,8 @@ describe('mobile:app', function () {
     };
 
     before(function (done) {
-      nock.disableNetConnect();
-
-      nock('https://api.github.com')
-        .get('/repos/google/web-starter-kit/releases')
-        .reply(200, [{tag_name: 'v2.5.2'}]);
-
-      nock('https://github.com')
-        .filteringPath(/archive\/.*/, 'archive/zip')
-        .get('/google/web-starter-kit/archive/zip')
-        .replyWithFile(200, path.join(__dirname, 'data', 'wsk-0.5.2.zip'));
-
-      helpers.run(path.join( __dirname, '../app'))
-        .inDir(path.join( __dirname, 'tmp'))
-        .withOptions({'skip-install': true, 'quiet': true})
-        .withPrompt(answers)
-        .on('end', function () {
-          nock.cleanAll()
-          nock.enableNetConnect()
-          done();
-        });
+      testUtil.mockGitHub();
+      testUtil.runGenerator(answers, done);
     });
 
     it('downloads and unpackes zipped wsk', function () {

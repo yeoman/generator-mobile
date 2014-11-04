@@ -135,8 +135,8 @@ function questions(defaults) {
     {
       message: ('What Project ID shall we use?\n  '+
                 '(you can see all your projects on https://cloud.google.com/console)\n '),
-      name: 'gaeProjectId',
-      default: defaults.gaeProjectId,
+      name: 'gcloudProjectId',
+      default: defaults.gcloudProjectId,
       validate: function (v) {
         return v ? true : 'need a Project ID';
       },
