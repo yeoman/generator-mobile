@@ -1,5 +1,6 @@
 'use strict';
 
+var exec = require('child_process').exec;
 var path = require('path');
 var util = require('util');
 var yeoman = require('yeoman-generator');
@@ -146,9 +147,22 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
       }.bind(this));
     },
 
-    git: function() {
-      // TODO: all things git, including dist/ if needed (hostingChoice)
-    },
+    // git: function() {
+    //   var log = !this.quiet && this.log,
+    //       done = this.async();
+    //   exec('git --version', function (err) {
+    //     if (err) {
+    //       // TODO: remember to notify user and describe manual steps
+    //       done();
+    //       return;
+    //     }
+    //     // TODO: add dist/ if needed (hostingChoice)
+    //     exec('git init && git add . && git commit -m "Initial import"', function (err, stdout) {
+    //       log && log.write().info(stdout);
+    //       done();
+    //     });
+    //   }.bind(this));
+    // },
 
     packagejson: function() {
       this.verbose && this.log.info('Configuring package.json');
@@ -159,7 +173,7 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
       pkg.name = this.prompts.siteName || 'replace me';
       pkg.version = '0.0.0';
       pkg.description = this.prompts.siteDescription;
-      pkg.homepage = this.siteUrl;
+      pkg.homepage = this.prompts.siteUrl;
       pkg.main = 'app/index.html';
       delete pkg.devDependencies['apache-server-configs'];
 
@@ -174,10 +188,10 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
 
       manifest.name = this.prompts.siteName;
       manifest.description = this.prompts.siteDescription;
-      if (manifest.locales.en) {
-        manifest.locales.en.name = this.prompts.siteName;
-        manifest.locales.en.description = this.prompts.siteDescription;
-      }
+      manifest.locales = manifest.locales || {};
+      manifest.locales.en = manifest.locales.en || {};
+      manifest.locales.en.name = this.prompts.siteName;
+      manifest.locales.en.description = this.prompts.siteDescription;
 
       this.writeFileFromString(JSON.stringify(manifest, null, 2), filepath);
     },
