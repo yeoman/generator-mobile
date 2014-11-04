@@ -96,6 +96,12 @@ describe('mobile:app', function () {
       assert.fileContent('.gitignore', /^dist\/?$/m);
     });
 
+    // TODO: remove on the next WSK release
+    it('temporary replaces "clean" task', function () {
+      var t = "^gulp\\.task\\('clean', del\\.bind\\(null, \\['\\.tmp', 'dist/\\*', '!dist/\\.git'\\]\\)\\);$";
+      assert.fileContent('gulpfile.js', new RegExp(t, 'm'));
+    });
+
     if (/^win/.test(process.platform)) {
       xit('initializes local git repo (skip on Windows)');
     } else {

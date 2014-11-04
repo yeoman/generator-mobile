@@ -144,6 +144,11 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
         gulpfile = gulpfile.replace(/^.*apache-server-configs.*$/m, '');
       }
 
+      // TODO: remove this and the corresponding test on the next WSK release
+      gulpfile = gulpfile.replace(
+        /^gulp\.task\('clean', del\.bind\(null, \['\.tmp', 'dist'\]\)\);$/m,
+        "gulp.task('clean', del.bind(null, ['.tmp', 'dist/*', '!dist/.git']));");
+
       this.writeFileFromString(gulpfile, filepath);
     },
 
