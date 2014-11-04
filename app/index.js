@@ -234,8 +234,8 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
   install: function () {
     if (!this.skipInstall) {
       this.verbose && this.log.write()
-        .info("I'm all done. Running " + chalk.yellow('npm install') +
-              " for you to install the required dependencies. " +
+        .info("Running " + chalk.yellow('npm install') + " " +
+              "to install the required dependencies. " +
               "If this fails, try running the command yourself.")
         .info(chalk.yellow('This might take a few moments'))
         .write();
