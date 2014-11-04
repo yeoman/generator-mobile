@@ -11,6 +11,7 @@ var chalk = require('chalk');
 var prompt = require('./prompt');
 var download = require('./download');
 var hosting = require('./hosting');
+var deps = require('./deps');
 
 
 var MobileGenerator = module.exports = yeoman.generators.Base.extend({
@@ -41,6 +42,12 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
 
     // load package
     this.pkg = require('../package.json');
+
+    // info/error/warning messages during the generation process
+    this.messages = [];
+
+    // dependencies checks;
+    this.checks = {};
   },
 
   prompting: function () {
@@ -68,35 +75,49 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
   },
 
   configuring: function () {
-    var log = this.log,
-        verbose = this.verbose,
-        dest = this.destinationRoot(),
+    var self = this,
         done = this.async();
 
-    verbose && log.write().info('Getting latest WSK release version ...');
+    this.verbose && this.log.write().info('Getting latest WSK release version ...');
 
     download({extract: true, strip: 1}, function (err, downloader, url, ver) {
       if (err) {
-        log.error(err);
-        return;
+        self.log.error(err);
+        process.exit(1);
       }
 
-      if (verbose) {
-        log.info('Found release %s', ver.tag_name)
+      if (self.verbose) {
+        self.log.info('Found release %s', ver.tag_name)
            .info('Fetching %s ...', url)
            .info(chalk.yellow('This might take a few moments'));
         downloader.use(function (res) {
-          res.on('data', function () { log.write('.') });
+          res.on('data', function () { self.log.write('.') }) ;
         });
       }
 
-      downloader.dest(dest).run(function (err) {
+      downloader.dest(self.destinationRoot()).run(function (err) {
         if (err) {
-          log.write().error(err).write();
-        } else {
-          verbose && log.write().ok('Done').write();
+          self.log.write().error(err).write();
+          process.exit(1);
         }
-        done();
+
+        if (self.verbose) {
+          self.log.write().ok('Done').info('Checking dependencies ...');
+        }
+
+        var checks = deps.checkAll(self.prompts);
+        checks.on('done', done);
+
+        checks.on('passed', function (res) {
+          self.checks[res.what] = true;
+          self.verbose && self.log.ok(res.what + ' ' + (res.result || ''));
+        });
+
+        checks.on('failed', function (res) {
+          self.checks[res.what] = false;
+          self.messages.push(res.error.message);
+          self.log.error(res.error.message);
+        });
       });
 
     });
@@ -241,26 +262,22 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
         this.dest.write(path.join('app', 'CNAME'), this.prompts.siteHost);
       }
 
+      if (!this.checks.git)
+        return;
+
       var log = !this.quiet && this.log,
           done = this.async();
 
-      exec('git --version', function (err) {
-        if (err) {
-          // TODO: remember to notify user and describe manual steps
-          done();
-          return;
-        }
-        var cmd = [
-          'git init .',
-          'git checkout -b ' + this.prompts.githubBranch,
-          'git commit --allow-empty -m "Initial empty commit"',
-          'git remote add origin git@github.com:' + this.prompts.githubTarget
-        ];
-        exec(cmd.join(' && '), {cwd: path.join('dist')}, function (err, stdout) {
-          log && log.write().info(stdout);
-          done();
-        });
-      }.bind(this));
+      var cmd = [
+        'git init .',
+        'git checkout -b ' + this.prompts.githubBranch,
+        'git commit --allow-empty -m "Initial empty commit"',
+        'git remote add origin git@github.com:' + this.prompts.githubTarget
+      ];
+      exec(cmd.join(' && '), {cwd: path.join('dist')}, function (err, stdout) {
+        log && log.write().info(stdout);
+        done();
+      });
     }
 
   },
@@ -279,6 +296,9 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
     },
 
     git: function () {
+      if (!this.checks.git)
+        return;
+
       var self = this, done = this.async(),
           cmd = ['git init', 'git add .'],
           gitignore = this.readFileAsString('.gitignore');
@@ -300,6 +320,19 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
         self.verbose && self.log.write().info(stdout);
         done();
       });
+    }
+  },
+
+  end: function () {
+    if (this.messages.length === 0) {
+      this.verbose && this.log.write().ok('You are all set now. Happy coding!');
+      return;
+    }
+
+    this.log.write().error('There were some errors during the process:').write();
+
+    for (var i = 0, m; m = this.messages[i]; i++) {
+      this.log.write((i + 1) + ' ' + m);
     }
   }
 });
