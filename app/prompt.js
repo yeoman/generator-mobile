@@ -241,7 +241,7 @@ function questions(defaults) {
         return (v || '').replace(/["']/g, '');
       },
       when: function (answers) {
-        return answers.hostingChoice === 'github' && !isGitHub(answers.siteUrl);
+        return answers.hostingChoice === 'github';
       }
     },
 

@@ -51,17 +51,9 @@ describe('prompts module', function () {
     });
 
     it('knows when to ask the question', function () {
-      assert.equal(ghTarget.when({hostingChoice: 'other'}), false);
+      assert.equal(ghTarget.when({hostingChoice: 'gae'}), false);
       assert.equal(ghTarget.when({hostingChoice: null}), false);
       assert.equal(ghTarget.when({hostingChoice: 'github'}), true);
-      assert.equal(ghTarget.when({
-        hostingChoice: 'github',
-        siteUrl: 'http://owner.github.io'}),
-        false);
-      assert.equal(ghTarget.when({
-        hostingChoice: 'github',
-        siteUrl: 'http://www.example.org'}),
-        true);
     });
 
     it('infers default value from github.io siteUrl', function () {
