@@ -1,4 +1,4 @@
-# Generator Mobile [![Build Status](https://secure.travis-ci.org/yeoman/generator-jquery.svg?branch=wsk)](https://travis-ci.org/yeoman/generator-mobile) 
+# Generator Mobile [![Build Status](https://secure.travis-ci.org/yeoman/generator-mobile.svg?branch=wsk)](https://travis-ci.org/yeoman/generator-mobile) 
 
 A mobile first generator based on [Web Starter Kit](https://github.com/google/web-starter-kit).
 
