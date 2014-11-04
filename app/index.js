@@ -306,25 +306,17 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
       if (!this.checks.git || this.checks.git.error)
         return;
 
-      var self = this, done = this.async(),
-          cmd = ['git init', 'git add .'],
-          gitignore = this.readFileAsString('.gitignore');
-
-      try {
-        // test whether we have dist/ subrepo
-        fs.statSync(path.join(this.destinationRoot(), 'dist', '.git'));
-        // add it properly
-        cmd.push('git reset -- dist', 'git add dist/');
-        // exclude it from the .gitignore
-        gitignore = gitignore.replace(/^dist\/?[\r\n]/m, '');
-        this.writeFileFromString(gitignore, '.gitignore');
-      } catch (err) {}
-
-      cmd.push('git commit -m "Initial commit"');
+      var self = this,
+          done = this.async(),
+          cmd = [
+            'git init',
+            'git add .',
+            'git commit -m "Initial commit"'
+          ];
 
       exec(cmd.join(' && '), function (err, stdout) {
-        err && self.log.error()
-        self.verbose && self.log.write().info(stdout);
+        err && self.log.error(err)
+        self.verbose && self.log.write(stdout);
         done();
       });
     }

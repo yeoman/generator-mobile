@@ -102,17 +102,5 @@ describe('mobile:app', function () {
       assert.fileContent('gulpfile.js', new RegExp(t, 'm'));
     });
 
-    if (/^win/.test(process.platform)) {
-      xit('initializes local git repo (skip on Windows)');
-    } else {
-      xit('initializes local git repo', function (done) {
-        exec('git status', function (err, stdout, stderr) {
-          assert.ok(!err, err && err.toString());
-          assert.ok(/working directory clean/.test(stdout), stdout + stderr);
-          done();
-        });
-      });
-    }
-
   });
 });
