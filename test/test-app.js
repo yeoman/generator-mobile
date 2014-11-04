@@ -12,18 +12,16 @@ describe('mobile:app', function () {
 
   describe('default layout, no hosting', function () {
 
-    var answers = {
-      siteName: 'Test site',
-      siteDescription: 'Dummy description',
-      siteUrl: 'http://test.example.org',
-      layoutChoice: 'default',
-      gaTrackId: 'UA-12345-6',
-      hostingCat: 'none'
-    };
-
     before(function (done) {
       testUtil.mockGitHub();
-      testUtil.runGenerator(answers, done);
+      testUtil.runGenerator({
+        siteName: 'Test site',
+        siteDescription: 'Dummy description',
+        siteUrl: 'http://test.example.org',
+        layoutChoice: 'default',
+        gaTrackId: 'UA-12345-6',
+        hostingCat: 'none'
+      }, done);
     });
 
     it('downloads and unpackes zipped wsk', function () {
@@ -44,25 +42,25 @@ describe('mobile:app', function () {
 
     it('sets site description in index.html', function () {
       var r = '<meta\\s+name=["\']description["\']\\s+content=["\']' +
-              answers.siteDescription + '["\']';
+              'Dummy description["\']';
       assert.fileContent('app/index.html', new RegExp(r, 'm'));
     });
 
     it('sets site name in index.html', function () {
-      var r = '<title>' + answers.siteName + '</title>';
-      assert.fileContent('app/index.html', new RegExp(r, 'm'));
+      var t = '<title>Test site</title>';
+      assert.fileContent('app/index.html', new RegExp(t, 'm'));
     });
 
     it('configures Google Analytics', function () {
-      var r = "ga\\('create', '" + answers.gaTrackId + "'";
+      var r = "ga\\('create', 'UA-12345-6'";
       assert.fileContent('app/index.html', new RegExp(r, 'm'));
     });
 
     it('configures package.json', function () {
       var pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
       assert.equal(pkg.name, 'Test-site');
-      assert.equal(pkg.description, answers.siteDescription);
-      assert.equal(pkg.homepage, answers.siteUrl);
+      assert.equal(pkg.description, 'Dummy description');
+      assert.equal(pkg.homepage, 'http://test.example.org');
       assert.equal(pkg.version, '0.0.0');
       assert.equal(pkg.main, 'app/index.html');
       assert.ok(!('apache-server-configs' in pkg.devDependencies),
@@ -71,14 +69,14 @@ describe('mobile:app', function () {
 
     it('configures manifest.webapp', function () {
       var manifest = JSON.parse(fs.readFileSync('app/manifest.webapp', 'utf8'));
-      assert.equal(manifest.name, answers.siteName);
-      assert.equal(manifest.description, answers.siteDescription);
-      assert.equal(manifest.locales.en.name, answers.siteName);
-      assert.equal(manifest.locales.en.description, answers.siteDescription);
+      assert.equal(manifest.name, 'Test site');
+      assert.equal(manifest.description, 'Dummy description');
+      assert.equal(manifest.locales.en.name, 'Test site');
+      assert.equal(manifest.locales.en.description, 'Dummy description');
     });
 
     it('configures pagespeed', function () {
-      var r = 'pagespeed(?:.|\\s)+url:\\s*["\']' + answers.siteUrl + '["\']';
+      var r = 'pagespeed(?:.|\\s)+url:\\s*["\']http://test.example.org["\']';
       assert.fileContent('gulpfile.js', new RegExp(r, 'm'));
     });
 
