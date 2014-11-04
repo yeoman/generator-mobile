@@ -61,12 +61,12 @@ function questions(defaults) {
       name: 'gaTrackId',
       default: defaults.gaTrackId
     },
-    {
-      message: 'Use build system? (Gulp, Sass, etc.)',
-      name: 'shouldUseBuild',
-      type: 'confirm',
-      default: typeof defaults.shouldUseBuild == 'boolean' ? defaults.shouldUseBuild : true
-    },
+    // {
+    //   message: 'Use build system? (Gulp, Sass, etc.)',
+    //   name: 'shouldUseBuild',
+    //   type: 'confirm',
+    //   default: typeof defaults.shouldUseBuild == 'boolean' ? defaults.shouldUseBuild : true
+    // },
 
     // -------------- hosting providers ------------------
 
