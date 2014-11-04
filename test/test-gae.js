@@ -6,7 +6,7 @@ var assert = require('yeoman-generator').assert;
 var testUtil = require('./util');
 
 describe('mobile:app - GAE hosting', function () {
-  this.timeout(5000);
+  this.timeout(7000);
 
   before(function (done) {
     testUtil.mockGitHub();
