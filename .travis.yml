@@ -1,6 +1,9 @@
 language: node_js
 node_js:
   - '0.10'
+before_script:
+  - git config --global user.name "Travis-CI"
+  - git config --global user.email "dummy@example.org"
 before_install:
   - currentfolder=${PWD##*/}
   - if [ "$currentfolder" != 'generator-mobile' ]; then cd .. && eval "mv $currentfolder generator-mobile" && cd generator-mobile; fi
