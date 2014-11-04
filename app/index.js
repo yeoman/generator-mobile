@@ -67,7 +67,17 @@ var MobileGenerator = yeoman.generators.Base.extend({
 
   writing: {
     gulpfile: function () {
-      // TODO: tasks related to gulpfile (pagespeed, server-config, deploy)
+      // TODO: tasks related to gulpfile (server-config, deploy)
+      var filename = 'gulpfile.js',
+          gulpfile = this.dest.read(filename);
+
+      if (this.prompts.siteUrl) {
+        var repl = "$1url: '" + this.prompts.siteUrl + "'"
+        gulpfile = gulpfile.replace(/(pagespeed(?:.|\s)+)url:[^,]+/m, repl);
+      }
+
+      this.dest.delete(filename);
+      this.dest.write(filename, gulpfile);
     },
 
     packagejson: function() {
