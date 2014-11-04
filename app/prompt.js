@@ -1,10 +1,12 @@
 'use strict';
 
 var path = require('path');
+var iniparser = require('iniparser');
 
-
+// [match, host[:port], /path]
 var RE_URL = /^(?:https?:\/\/)?([a-z0-9\-_]+(?:\.[a-z0-9\-_]+)*(?::\d+)?)(\/.*)?$/i;
-var RE_GITHUB_TARGET = /^([a-z0-9][a-z0-9\-]*)(?:\/([a-z0-9_\-]+))?$/i;
+// "owner/repo" or "owner"
+var RE_GITHUB_TARGET = /^([a-z0-9][a-z0-9\-]*)(?:\/([a-z0-9_\-\.]+))?$/i;
 
 
 function extractDomain(url) {
@@ -14,6 +16,38 @@ function extractDomain(url) {
 
 function isGitHub(url) {
   return /.+\.github\.io$/i.test(extractDomain(url));
+}
+
+// populateMissing takes user answers and infers missing values
+// from other answers.
+function populateMissing(answers) {
+  if (!answers.siteUrl && answers.githubTarget) {
+    var gh = answers.githubTarget.match(RE_GITHUB_TARGET);
+    if (isGitHub(gh[2])) {
+      answers.siteUrl = 'https://' + gh[2];
+    } else {
+      answers.siteUrl = 'https://' + gh[1] + '.github.io/' + gh[2];
+    }
+  }
+
+  if (isGitHub(answers.siteUrl)) {
+    var match = answers.siteUrl.match(RE_URL);
+    answers.isGitHubProject = match[2] && match[2].length > 1;
+
+    if (!answers.githubTarget) {
+      var t = match[1].split('.')[0] + '/' + (answers.isGitHubProject ? match[2] : match[1]);
+      answers.githubTarget = t.replace(/\/\//g, '/');
+    }
+  }
+
+  if (answers.githubTarget) {
+    var gh = answers.githubTarget.match(RE_GITHUB_TARGET);
+    answers.githubBranch = gh[2] == gh[1] + '.github.io' ? 'master' : 'gh-pages';
+  }
+
+  if (answers.siteUrl) {
+    answers.siteHost = extractDomain(answers.siteUrl);
+  }
 }
 
 function questions(defaults) {
@@ -174,14 +208,42 @@ function questions(defaults) {
     {
       message: "GitHub username or owner/project",
       name: 'githubTarget',
-      default: defaults.githubTarget,
+      default: function (answers) {
+        if (defaults.githubTarget)
+          return defaults.githubTarget;
+
+        if (isGitHub(answers.siteUrl)) {
+          var match = answers.siteUrl.match(RE_URL),
+              name = match[1].split('.')[0],
+              p = match[2] && match[2].length > 1 ? match[2] : '/' + name + '.github.io';
+          return name + p;
+        }
+
+        var user;
+        try {
+          var gitcfg = iniparser.parseSync(path.join(process.env.HOME, '.gitconfig'));
+          user = gitcfg.github.user;
+        } catch (err) {
+          console.log(err);
+          user = process.env.USER || process.env.USERNAME;
+        }
+
+        var repo = extractDomain(answers.siteUrl) || (user + '.github.io');
+        return [user, repo].join('/');
+      },
       validate: function (v) {
         if (RE_GITHUB_TARGET.test(v))
           return true;
-        return "It's either 'owner' or 'owner/repo', without quotes";
+        return "It's either 'owner' or 'owner/repo'";
+      },
+      filter: function (v) {
+        if (v && v.indexOf('/') == -1) {
+          v += '/' + v + '.github.io';
+        }
+        return (v || '').replace(/["']/g, '');
       },
       when: function (answers) {
-        return answers.hostingChoice === 'github' && !answers.siteUrl;
+        return answers.hostingChoice === 'github' && !isGitHub(answers.siteUrl);
       }
     },
 
@@ -230,6 +292,7 @@ function questions(defaults) {
 
 module.exports = {
   questions: questions,
+  populateMissing: populateMissing,
   extractDomain: extractDomain,
   isGitHub: isGitHub
 };

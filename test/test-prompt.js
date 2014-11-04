@@ -20,4 +20,54 @@ describe('prompts module', function () {
     assert(prompt.isGitHub('http://owner.github.io/project'), 'http://owner.github.io/project');
     assert(!prompt.isGitHub('http://www.example.org'), 'http://www.example.org');
   });
+
+  describe('populateMissing', function () {
+    it('infers githubTarget from siteUrl', function () {
+      var a = {siteUrl: 'https://owner.github.io'};
+      prompt.populateMissing(a);
+      assert.equal(a.githubTarget, 'owner/owner.github.io');
+
+      a = {siteUrl: 'https://owner.github.io/repo'};
+      prompt.populateMissing(a);
+      assert.equal(a.githubTarget, 'owner/repo');
+    });
+
+    it('infers siteUrl from githubTarget', function () {
+      var a = {githubTarget: 'owner/repo'};
+      prompt.populateMissing(a);
+      assert.equal(a.siteUrl, 'https://owner.github.io/repo');
+
+      a = {githubTarget: 'owner/owner.github.io'};
+      prompt.populateMissing(a);
+      assert.equal(a.siteUrl, 'https://owner.github.io');
+    });
+
+    it('infers siteHost from siteUrl', function () {
+      var a = {siteUrl: 'http://www.example.org/path'};
+      prompt.populateMissing(a);
+      assert.equal(a.siteHost, 'www.example.org');
+    });
+
+    it('infers githubBranch', function () {
+      var a = {siteUrl: 'http://owner.github.io'};
+      prompt.populateMissing(a);
+      assert.equal(a.githubBranch, 'master');
+
+      a = {siteUrl: 'http://owner.github.io/repo'};
+      prompt.populateMissing(a);
+      assert.equal(a.githubBranch, 'gh-pages');
+
+      a = {githubTarget: 'owner/repo'};
+      prompt.populateMissing(a);
+      assert.equal(a.githubBranch, 'gh-pages');
+
+      a = {githubTarget: 'owner/owner.github.io'};
+      prompt.populateMissing(a);
+      assert.equal(a.githubBranch, 'master');
+
+      a = {siteUrl: 'http://www.example.org/path'};
+      prompt.populateMissing(a);
+      assert.equal(a.githubBranch, undefined);
+    });
+  });
 });

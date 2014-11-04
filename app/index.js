@@ -1,5 +1,6 @@
 'use strict';
 
+var fs = require('fs');
 var exec = require('child_process').exec;
 var path = require('path');
 var util = require('util');
@@ -48,6 +49,7 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
 
     var promptUser = function (defaults) {
       self.prompt(prompt.questions(defaults), function (answers) {
+        prompt.populateMissing(answers);
         if (!answers.confirmed) {
           promptUser(answers);
         } else {
@@ -142,23 +144,6 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
     //   }.bind(this));
     // },
 
-    // git: function () {
-    //   var log = !this.quiet && this.log,
-    //       done = this.async();
-    //   exec('git --version', function (err) {
-    //     if (err) {
-    //       // TODO: remember to notify user and describe manual steps
-    //       done();
-    //       return;
-    //     }
-    //     // TODO: add dist/ if needed (hostingChoice)
-    //     exec('git init && git add . && git commit -m "Initial import"', function (err, stdout) {
-    //       log && log.write().info(stdout);
-    //       done();
-    //     });
-    //   }.bind(this));
-    // },
-
     packagejson: function () {
       this.verbose && this.log.info('Configuring package.json');
 
@@ -244,19 +229,77 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
         }
         done();
       }.bind(this));
+    },
+
+    github: function () {
+      if (this.prompts.hostingChoice !== 'github')
+        return;
+
+      this.dest.mkdir('dist');
+      this.template('deploy_github.js', path.join('tasks', 'deploy.js'));
+      if (this.prompts.siteHost && !prompt.isGitHub(this.prompts.siteHost)) {
+        this.dest.write(path.join('app', 'CNAME'), this.prompts.siteHost);
+      }
+
+      var log = !this.quiet && this.log,
+          done = this.async();
+
+      exec('git --version', function (err) {
+        if (err) {
+          // TODO: remember to notify user and describe manual steps
+          done();
+          return;
+        }
+        var cmd = [
+          'git init .',
+          'git checkout -b ' + this.prompts.githubBranch,
+          'git commit --allow-empty -m "Initial empty commit"',
+          'git remote add origin git@github.com:' + this.prompts.githubTarget
+        ];
+        exec(cmd.join(' && '), {cwd: path.join('dist')}, function (err, stdout) {
+          log && log.write().info(stdout);
+          done();
+        });
+      }.bind(this));
     }
 
   },
 
-  install: function () {
-    if (!this.skipInstall) {
-      this.verbose && this.log.write()
-        .info("Running " + chalk.yellow('npm install') + " " +
-              "to install the required dependencies. " +
-              "If this fails, try running the command yourself.")
-        .info(chalk.yellow('This might take a few moments'))
-        .write();
-      this.npmInstall();
+  install: {
+    npminstall: function () {
+      if (!this.skipInstall) {
+        this.verbose && this.log.write()
+          .info("Running " + chalk.yellow('npm install') + " " +
+                "to install the required dependencies. " +
+                "If this fails, try running the command yourself.")
+          .info(chalk.yellow('This might take a few moments'))
+          .write();
+        this.npmInstall();
+      }
+    },
+
+    git: function () {
+      var self = this, done = this.async(),
+          cmd = ['git init', 'git add .'],
+          gitignore = this.readFileAsString('.gitignore');
+
+      try {
+        // test whether we have dist/ subrepo
+        fs.statSync(path.join(this.destinationRoot(), 'dist', '.git'));
+        // add it properly
+        cmd.push('git reset -- dist', 'git add dist/');
+        // exclude it from the .gitignore
+        gitignore = gitignore.replace(/^dist\/?[\r\n]/m, '');
+        this.writeFileFromString(gitignore, '.gitignore');
+      } catch (err) {}
+
+      cmd.push('git commit -m "Initial commit"');
+
+      exec(cmd.join(' && '), function (err, stdout) {
+        err && self.log.error()
+        self.verbose && self.log.write().info(stdout);
+        done();
+      });
     }
   }
 });
