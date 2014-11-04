@@ -222,11 +222,9 @@ function questions(defaults) {
         var user;
         try {
           var gitcfg = iniparser.parseSync(path.join(process.env.HOME, '.gitconfig'));
-          user = gitcfg.github.user;
-        } catch (err) {
-          console.log(err);
-          user = process.env.USER || process.env.USERNAME;
-        }
+          user = (gitcfg.github || {}).user;
+        } catch (err) {}
+        user = user || process.env.USER || process.env.USERNAME;
 
         var repo = extractDomain(answers.siteUrl) || (user + '.github.io');
         return [user, repo].join('/');
