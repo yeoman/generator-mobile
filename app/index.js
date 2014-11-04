@@ -11,8 +11,33 @@ var download = require('./download');
 var hosting = require('./hosting');
 
 
-var MobileGenerator = yeoman.generators.Base.extend({
-  initializing: function () {
+var MobileGenerator = module.exports = yeoman.generators.Base.extend({
+  constructor: function () {
+    yeoman.generators.Base.apply(this, arguments);
+
+    this.option('skip-welcome-message', {
+      desc: 'Skip welcome message',
+      type: Boolean,
+      defaults: false
+    });
+    this.skipWelcome = this.options['skip-welcome-message'];
+
+    this.option('skip-install', {
+      desc: "Do not install dependencies",
+      type: Boolean,
+      defaults: false
+    });
+    this.skipInstall = this.options['skip-install'];
+
+    this.option('quiet', {
+      desc: 'Be quiet; only errors will be shown',
+      type: Boolean,
+      defaults: false
+    })
+    this.quiet = this.options['quiet'];
+    this.verbose = !this.quiet;
+
+    // load package
     this.pkg = require('../package.json');
   },
 
@@ -32,43 +57,51 @@ var MobileGenerator = yeoman.generators.Base.extend({
       });
     };
 
-    this.log(yosay('Web Starter Kit generator'));
+    if (this.verbose && !this.skipWelcome) {
+      this.log(yosay('Web Starter Kit generator'));
+    }
+
     promptUser();
   },
 
   configuring: function () {
     var done = this.async(),
         dest = this.destinationRoot(),
-        log = this.log.write().info('Getting latest WSK release version ...');
+        log = this.log,
+        verbose = this.verbose;
 
-    var downloadProgress = function (res) {
-      res.on('data', function () { log.write('.') });
-    };
+    verbose && log.write().info('Getting latest WSK release version ...');
 
     download({extract: true, strip: 1}, function(err, d, url, release) {
       if (err) {
         log.error(err);
         return;
       }
-      log.info('Found release %s', release.tag_name)
+
+      verbose && log.info('Found release %s', release.tag_name)
          .info('Fetching %s ...', url)
          .info(chalk.yellow('This might take a few moments'));
-      d.dest(dest).use(downloadProgress);
+
+      d.dest(dest);
+      verbose && d.use(function(res) {
+        res.on('data', function () { log.write('.') });
+      });
+
       d.run(function(err) {
-        log.write();
         if (err) {
-          log.error(err).write();
+          log.write().error(err).write();
         } else {
-          log.ok('Done').write();
+          verbose && log.write().ok('Done').write();
         }
         done();
       });
+
     });
   },
 
   writing: {
     gulpfile: function () {
-      this.log.info('Configuring gulpfile.js');
+      this.verbose && this.log.info('Configuring gulpfile.js');
 
       var filepath = path.join(this.destinationRoot(), 'gulpfile.js'),
           gulpfile = this.readFileAsString(filepath);
@@ -101,7 +134,7 @@ var MobileGenerator = yeoman.generators.Base.extend({
         return;
 
       var done = this.async();
-      this.log.info('Fetching server config');
+      this.verbose && this.log.info('Fetching server config');
       hosting.fetchConfig(this.prompts.hostingChoice, function(err, cfg, content) {
         if (!err) {
           // TODO: adjust Project ID if it is GAE
@@ -118,7 +151,7 @@ var MobileGenerator = yeoman.generators.Base.extend({
     },
 
     packagejson: function() {
-      this.log.info('Configuring package.json');
+      this.verbose && this.log.info('Configuring package.json');
 
       var filepath = path.join(this.destinationRoot(), 'package.json'),
           pkg = JSON.parse(this.readFileAsString(filepath));
@@ -134,7 +167,7 @@ var MobileGenerator = yeoman.generators.Base.extend({
     },
 
     webmanifest: function() {
-      this.log.info('Configuring manifest.webapp');
+      this.verbose && this.log.info('Configuring manifest.webapp');
 
       var filepath = path.join(this.destinationRoot(), 'app', 'manifest.webapp'),
           manifest = JSON.parse(this.readFileAsString(filepath));
@@ -150,7 +183,7 @@ var MobileGenerator = yeoman.generators.Base.extend({
     },
 
     layout: function () {
-      this.log.info('Configuring layout and contents');
+      this.verbose && this.log.info('Configuring layout and contents');
 
       var basic = path.join(this.destinationRoot(), 'app', 'basic.html'),
           index = path.join(this.destinationRoot(), 'app', 'index.html'),
@@ -184,8 +217,8 @@ var MobileGenerator = yeoman.generators.Base.extend({
   },
 
   install: function () {
-    if (!this.options['skip-install']) {
-      this.log.write()
+    if (!this.skipInstall) {
+      this.verbose && this.log.write()
         .info("I'm all done. Running " + chalk.yellow('npm install') +
               " for you to install the required dependencies. " +
               "If this fails, try running the command yourself.")
@@ -195,6 +228,3 @@ var MobileGenerator = yeoman.generators.Base.extend({
     }
   }
 });
-
-
-module.exports = MobileGenerator;
