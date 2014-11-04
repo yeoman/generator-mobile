@@ -66,13 +66,26 @@ var MobileGenerator = yeoman.generators.Base.extend({
   },
 
   writing: {
-    build: function () {
-      // TODO: tasks related to gulpfile (pagespeed, deploy), package.json.
+    gulpfile: function () {
+      // TODO: tasks related to gulpfile (pagespeed, server-config, deploy)
+    },
+
+    packagejson: function() {
+      var filename = 'package.json',
+          pkg = this.dest.readJSON(filename);
+
+      pkg.name = this.prompts.siteName || 'replace me';
+      pkg.version = '0.0.0';
+      pkg.description = this.prompts.siteDescription;
+      pkg.homepage = this.siteUrl;
+      pkg.main = 'app/index.html';
+      delete pkg.devDependencies['apache-server-configs'];
+
+      this.dest.delete(filename);
+      this.dest.write(filename, JSON.stringify(pkg, null, 2));
     },
 
     layout: function () {
-      this.log.info('Setting up layout and HTML contents');
-
       var basic = path.join('app', 'basic.html'),
           index = path.join('app', 'index.html'),
           content;
