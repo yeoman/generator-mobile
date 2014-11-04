@@ -34,12 +34,12 @@ function questions(defaults) {
                 "hit enter to skip.\n "),
       name: 'siteUrl',
       default: defaults.siteUrl,
-      filter: function(url) {
+      filter: function (url) {
         if (url && url.substring(0, 4) !== 'http')
           url = 'http://' + url;
         return url;
       },
-      validate: function(url) {
+      validate: function (url) {
         if (!url || RE_URL.test(url))
           return true;
         return "That doesn't look like a valid URL"
@@ -81,7 +81,7 @@ function questions(defaults) {
         {value: 'none', name: "Nowhere, don't worry about it"}
       ],
       default: defaults.hostingCat || 'none',
-      when: function(answers) {
+      when: function (answers) {
         return !isGitHub(answers.siteUrl);
       }
     },
@@ -95,7 +95,7 @@ function questions(defaults) {
         {value: 'none', name: 'Other (not supported)'}
       ],
       default: defaults.hostingChoice || 'none',
-      when: function(answers) {
+      when: function (answers) {
         return answers.hostingCat === 'paas';
       }
     },
@@ -110,7 +110,7 @@ function questions(defaults) {
         {value: 'none', name: 'Other (not supported)'}
       ],
       default: defaults.hostingChoice || 'none',
-      when: function(answers) {
+      when: function (answers) {
         return answers.hostingCat === 'static';
       }
     },
@@ -125,7 +125,7 @@ function questions(defaults) {
         {value: 'other', name: 'Other (not supported'}
       ],
       default: defaults.hostingChoice || 'other',
-      when: function(answers) {
+      when: function (answers) {
         return answers.hostingCat === 'server';
       }
     },
@@ -137,10 +137,10 @@ function questions(defaults) {
                 '(you can see all your projects on https://cloud.google.com/console)\n '),
       name: 'gaeProjectId',
       default: defaults.gaeProjectId,
-      validate: function(v) {
+      validate: function (v) {
         return v ? true : 'need a Project ID';
       },
-      when: function(answers) {
+      when: function (answers) {
         return answers.hostingChoice === 'gae';
       }
     },
@@ -152,7 +152,7 @@ function questions(defaults) {
                 "(just hitting enter is OK, we'll create one for you)\n "),
       name: 'herokuApp',
       default: defaults.herokuApp,
-      when: function(answers) {
+      when: function (answers) {
         return answers.hostingChoice === 'heroku';
       }
     },
@@ -163,7 +163,7 @@ function questions(defaults) {
       message: "Site domain (e.g. www.example.org) or a bucket name",
       name: 'siteDomain',
       default: defaults.siteDomain,
-      when: function(answers) {
+      when: function (answers) {
         return ['gcs', 's3'].indexOf(answers.hostingChoice) >= 0 &&
                !answers.siteUrl;
       }
@@ -175,14 +175,13 @@ function questions(defaults) {
       message: "GitHub username or owner/project",
       name: 'githubTarget',
       default: defaults.githubTarget,
-      validate: function(v) {
+      validate: function (v) {
         if (RE_GITHUB_TARGET.test(v))
           return true;
         return "It's either 'owner' or 'owner/repo', without quotes";
       },
-      when: function(answers) {
-        return answers.hostingChoice === 'github' &&
-               !answers.siteUrl;
+      when: function (answers) {
+        return answers.hostingChoice === 'github' && !answers.siteUrl;
       }
     },
 
@@ -198,14 +197,14 @@ function questions(defaults) {
         {value: 'none', name: 'None of the above'}
       ],
       default: defaults.deployChoice || 'none',
-      when: function(answers) {
+      when: function (answers) {
         return answers.hostingCat === 'server';
       }
     },
     {
       message: 'Deployment URL (e.g. user@server:[path])',
       name: 'deployDest',
-      default: function(answers) {
+      default: function (answers) {
         if (defaults.deployDest)
           return defaults.deployDest;
         var user = process.env.USER || process.env.USERNAME;
@@ -215,7 +214,7 @@ function questions(defaults) {
           dest = user + '@' + host + ':' + (answers.siteName || '');
         return dest;
       },
-      when: function(answers) {
+      when: function (answers) {
         return answers.deployChoice && answers.deployChoice !== 'none';
       }
     },

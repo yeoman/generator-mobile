@@ -4,8 +4,8 @@
 var assert = require('yeoman-generator').assert;
 var prompt = require('../app/prompt');
 
-describe('prompts module', function() {
-  it('extracts domain from url', function() {
+describe('prompts module', function () {
+  it('extracts domain from url', function () {
     assert.equal(prompt.extractDomain('http://www.example.org'), 'www.example.org');
     assert.equal(prompt.extractDomain('https://www.example.org'), 'www.example.org');
     assert.equal(prompt.extractDomain('https://www.example.org/some/path'), 'www.example.org');
@@ -14,7 +14,7 @@ describe('prompts module', function() {
     assert.equal(prompt.extractDomain('example.org/some/page'), 'example.org');
   });
 
-  it('recognizes GitHub domain', function() {
+  it('recognizes GitHub domain', function () {
     assert(prompt.isGitHub('http://example.github.io'), 'http://example.github.io');
     assert(prompt.isGitHub('https://example.github.io'), 'https://example.github.io');
     assert(prompt.isGitHub('http://owner.github.io/project'), 'http://owner.github.io/project');

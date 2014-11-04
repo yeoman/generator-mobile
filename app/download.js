@@ -16,7 +16,7 @@ function getLatestRelease(cb) {
       'Accept': 'application/vnd.github.v3+json'
     }
   }
-  request(opts, function(err, res, body) {
+  request(opts, function (err, res, body) {
     if (err || res.statusCode != 200) {
       cb(err || new Error(body || 'web-starter-kit/releases replied with ' + res.statusCode));
       return;
@@ -34,7 +34,7 @@ function getLatestRelease(cb) {
 }
 
 function createDownloader(opts, cb) {
-  getLatestRelease(function(err, ver) {
+  getLatestRelease(function (err, ver) {
     if (err) {
       cb(err);
       return;

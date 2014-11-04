@@ -43,10 +43,10 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
   },
 
   prompting: function () {
-    var done = this.async(),
-        self = this;
+    var self = this,
+        done = this.async();
 
-    var promptUser = function(defaults) {
+    var promptUser = function (defaults) {
       self.prompt(prompt.questions(defaults), function (answers) {
         if (!answers.confirmed) {
           promptUser(answers);
@@ -66,29 +66,29 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
   },
 
   configuring: function () {
-    var done = this.async(),
+    var log = this.log,
+        verbose = this.verbose,
         dest = this.destinationRoot(),
-        log = this.log,
-        verbose = this.verbose;
+        done = this.async();
 
     verbose && log.write().info('Getting latest WSK release version ...');
 
-    download({extract: true, strip: 1}, function(err, d, url, release) {
+    download({extract: true, strip: 1}, function (err, downloader, url, ver) {
       if (err) {
         log.error(err);
         return;
       }
 
-      verbose && log.info('Found release %s', release.tag_name)
-         .info('Fetching %s ...', url)
-         .info(chalk.yellow('This might take a few moments'));
+      if (verbose) {
+        log.info('Found release %s', ver.tag_name)
+           .info('Fetching %s ...', url)
+           .info(chalk.yellow('This might take a few moments'));
+        downloader.use(function (res) {
+          res.on('data', function () { log.write('.') });
+        });
+      }
 
-      d.dest(dest);
-      verbose && d.use(function(res) {
-        res.on('data', function () { log.write('.') });
-      });
-
-      d.run(function(err) {
+      downloader.dest(dest).run(function (err) {
         if (err) {
           log.write().error(err).write();
         } else {
@@ -130,13 +130,14 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
       this.writeFileFromString(gulpfile, filepath);
     },
 
-    serverconfig: function() {
+    serverconfig: function () {
       if (!hosting.isSupported(this.prompts.hostingChoice))
         return;
 
-      var done = this.async();
       this.verbose && this.log.info('Fetching server config');
-      hosting.fetchConfig(this.prompts.hostingChoice, function(err, cfg, content) {
+
+      var done = this.async();
+      hosting.fetchConfig(this.prompts.hostingChoice, function (err, cfg, content) {
         if (!err) {
           // TODO: adjust Project ID if it is GAE
           this.dest.write(path.join('app', cfg.filename), content);
@@ -147,7 +148,7 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
       }.bind(this));
     },
 
-    // git: function() {
+    // git: function () {
     //   var log = !this.quiet && this.log,
     //       done = this.async();
     //   exec('git --version', function (err) {
@@ -164,7 +165,7 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
     //   }.bind(this));
     // },
 
-    packagejson: function() {
+    packagejson: function () {
       this.verbose && this.log.info('Configuring package.json');
 
       var filepath = path.join(this.destinationRoot(), 'package.json'),
@@ -180,7 +181,7 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
       this.writeFileFromString(JSON.stringify(pkg, null, 2), filepath);
     },
 
-    webmanifest: function() {
+    webmanifest: function () {
       this.verbose && this.log.info('Configuring manifest.webapp');
 
       var filepath = path.join(this.destinationRoot(), 'app', 'manifest.webapp'),
