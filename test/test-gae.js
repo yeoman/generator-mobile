@@ -6,20 +6,20 @@ var assert = require('yeoman-generator').assert;
 var testUtil = require('./util');
 
 describe('mobile:app - GAE hosting', function () {
-  var answers = {
-    hostingChoice: 'gae',
-    gcloudProjectId: 'my-cloud-project'
-  };
+  this.timeout(5000);
 
   before(function (done) {
     testUtil.mockGitHub();
-    testUtil.runGenerator(answers, done);
+    testUtil.runGenerator({
+      hostingChoice: 'gae',
+      gcloudProjectId: 'my-cloud-project'
+    }, done);
   });
 
   it('configures gcloud', function () {
     assert.file('.gcloud/properties');
 
-    var prop = '^\s*project\\s+=\\s+' + answers.gcloudProjectId + '$';
+    var prop = '^\s*project\\s+=\\s+my-cloud-project$';
     assert.fileContent('.gcloud/properties', new RegExp(prop, 'm'));
   });
 

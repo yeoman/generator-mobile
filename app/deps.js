@@ -17,9 +17,9 @@ function filterChecksFor(reqs) {
     checks.push(checkGit);
   }
 
-  // if (reqs.hostingChoice === 'gae') {
-  //   checks.push(checkGcloud);
-  // }
+  if (reqs.hostingChoice === 'gae') {
+    checks.push(checkGcloud);
+  }
 
   return checks;
 }
