@@ -114,9 +114,9 @@ function questions(defaults) {
         {value: 'server', name: 'Server (Apache, Nginx, etc.)'},
         {value: 'none', name: "Nowhere, don't worry about it"}
       ],
-      default: defaults.hostingCat || 'none',
-      when: function (answers) {
-        return !isGitHub(answers.siteUrl);
+      default: function (answers) {
+        return defaults.hostingCat ||
+        (isGitHub(answers.siteUrl) ? 'static' : 'none');
       }
     },
     {
@@ -143,7 +143,10 @@ function questions(defaults) {
         {value: 's3', name: 'Amazon AWS S3'},
         {value: 'none', name: 'Other (not supported)'}
       ],
-      default: defaults.hostingChoice || 'none',
+      default: function (answers) {
+        return defaults.hostingChoice ||
+               (isGitHub(answers.siteUrl) ? 'github' : 'none');
+      },
       when: function (answers) {
         return answers.hostingCat === 'static';
       }
