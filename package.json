@@ -1,12 +1,12 @@
 {
   "name": "generator-mobile",
-  "version": "2.0.0",
+  "version": "2.0.0-alpha1",
   "description": "Yeoman generator for mobile based on Web Starter Kit",
   "homepage": "https://github.com/yeoman/generator-mobile",
   "bugs": "https://github.com/yeoman/generator-mobile/issues",
   "license": "BSD",
   "main": "app/index.js",
-  "repository": "crhym3/generator-mobile",
+  "repository": "yeoman/generator-mobile",
   "author": "Chrome Developer Relations",
   "engines": {
     "node": ">=0.10.0"
