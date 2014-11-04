@@ -31,6 +31,7 @@ function checkAll(reqs) {
 function checkGit(callback) {
   exec("git config --get-regexp 'user\..*'", function (err, stdout) {
     if (err) {
+      err = new Error('Git: not configured (' + err.message + ')');
       callback('failed', {what: 'git', error: err});
       return;
     }
