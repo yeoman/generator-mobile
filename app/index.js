@@ -8,6 +8,7 @@ var chalk = require('chalk');
 
 var prompt = require('./prompt');
 var download = require('./download');
+var hosting = require('./hosting');
 
 
 var MobileGenerator = yeoman.generators.Base.extend({
@@ -67,17 +68,37 @@ var MobileGenerator = yeoman.generators.Base.extend({
 
   writing: {
     gulpfile: function () {
-      // TODO: tasks related to gulpfile (server-config, deploy)
       var filename = 'gulpfile.js',
           gulpfile = this.dest.read(filename);
 
+      // pagespeed
       if (this.prompts.siteUrl) {
         var repl = "$1url: '" + this.prompts.siteUrl + "'"
         gulpfile = gulpfile.replace(/(pagespeed(?:.|\s)+)url:[^,]+/m, repl);
       }
 
+      // server-config
+      var srvfile = hosting.configFilename(this.prompts.hostingChoice);
+      if (srvfile) {
+        gulpfile.replace(/['"].*apache-server-configs.*['"]/m, "'" + srvfile + "'");
+      } else {
+        gulpfile.replace(/^(.*apache-server-configs.*)$/m, '');
+      }
+
+      // gulp deploy task
+      var deployfile = hosting.deployTaskFilename(this.hostingChoice, this.deployChoice);
+      if (deployfile) {
+        gulpfile += '\n\n' + this.engine(this.read(deployfile), this.prompts);
+      }
+
+      // TODO: replace with this.writeFileFromString
       this.dest.delete(filename);
       this.dest.write(filename, gulpfile);
+    },
+
+    serverconfig: function() {
+      // TODO: fetch server config and store it in app/
+      // hosting.fetchConfig(this.prompts.hostingChoice, this.async());
     },
 
     packagejson: function() {
@@ -93,6 +114,22 @@ var MobileGenerator = yeoman.generators.Base.extend({
 
       this.dest.delete(filename);
       this.dest.write(filename, JSON.stringify(pkg, null, 2));
+    },
+
+    webmanifest: function() {
+      this.log.write('Configuring manifest.webapp');
+
+      var filepath = path.join(this.destinationRoot(), 'app', 'manifest.webapp'),
+          manifest = JSON.parse(this.readFileAsString(filepath));
+
+      manifest.name = this.prompts.siteName;
+      manifest.description = this.prompts.siteDescription;
+      if (manifest.locales.en) {
+        manifest.locales.en.name = this.prompts.siteName;
+        manifest.locales.en.description = this.prompts.siteDescription;
+      }
+
+      this.writeFileFromString(JSON.stringify(manifest, null, 2), filepath);
     },
 
     layout: function () {
