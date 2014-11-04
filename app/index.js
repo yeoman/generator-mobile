@@ -82,9 +82,9 @@ var MobileGenerator = yeoman.generators.Base.extend({
       // server-config
       var cfg = hosting.config(this.prompts.hostingChoice);
       if (cfg) {
-        gulpfile.replace(/['"].*apache-server-configs.*['"]/m, "'" + cfg.filename + "'");
+        gulpfile = gulpfile.replace(/['"].*apache-server-configs.*['"]/m, "'" + cfg.filename + "'");
       } else {
-        gulpfile.replace(/^.*apache-server-configs.*$/m, '');
+        gulpfile = gulpfile.replace(/^.*apache-server-configs.*$/m, '');
       }
 
       // gulp deploy task
