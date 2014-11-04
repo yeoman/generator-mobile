@@ -21,6 +21,58 @@ describe('prompts module', function () {
     assert(!prompt.isGitHub('http://www.example.org'), 'http://www.example.org');
   });
 
+  describe('githubTarget', function () {
+    var ghTarget;
+    before(function () {
+      for (var i = 0, qq = prompt.questions(), q; q = qq[i]; i++) {
+        if (q.name == 'githubTarget') {
+          ghTarget = q;
+          break;
+        }
+      }
+      !ghTarget && assert.fail('Could not find "githubTarget" question');
+    });
+
+    it('validates input', function () {
+      assert.equal(ghTarget.validate('owner/repo'), true, 'owner/repo');
+      assert.equal(ghTarget.validate('owner/www.example.org'), true, 'owner/repo');
+      assert.equal(ghTarget.validate('owner/owner.github.io'), true, 'owner/repo');
+      assert.equal(ghTarget.validate('owner'), true, 'owner');
+      assert.equal(typeof ghTarget.validate('in.val.id'), 'string', 'in.val.id');
+    });
+
+    it('filters input', function () {
+      assert.equal(ghTarget.filter('owner/repo'), 'owner/repo');
+      assert.equal(ghTarget.filter('"owner/repo"'), 'owner/repo');
+      assert.equal(ghTarget.filter("'owner/repo'"), 'owner/repo');
+      assert.equal(ghTarget.filter(''), '');
+      assert.equal(ghTarget.filter(null), '');
+      assert.equal(ghTarget.filter(undefined), '');
+    });
+
+    it('knows when to ask the question', function () {
+      assert.equal(ghTarget.when({hostingChoice: 'other'}), false);
+      assert.equal(ghTarget.when({hostingChoice: null}), false);
+      assert.equal(ghTarget.when({hostingChoice: 'github'}), true);
+      assert.equal(ghTarget.when({
+        hostingChoice: 'github',
+        siteUrl: 'http://owner.github.io'}),
+        false);
+      assert.equal(ghTarget.when({
+        hostingChoice: 'github',
+        siteUrl: 'http://www.example.org'}),
+        true);
+    });
+
+    it('infers default value from github.io siteUrl', function () {
+      assert.equal(ghTarget.default({siteUrl: 'http://owner.github.io/repo'}),
+        'owner/repo');
+      assert.equal(ghTarget.default({siteUrl: 'http://owner.github.io'}),
+        'owner/owner.github.io');
+    });
+
+  });
+
   describe('populateMissing', function () {
     it('infers githubTarget from siteUrl', function () {
       var a = {siteUrl: 'https://owner.github.io'};

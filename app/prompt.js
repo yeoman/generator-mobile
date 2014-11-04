@@ -227,7 +227,7 @@ function questions(defaults) {
         user = user || process.env.USER || process.env.USERNAME;
 
         var repo = extractDomain(answers.siteUrl) || (user + '.github.io');
-        return [user, repo].join('/');
+        return user && repo ? [user, repo].join('/') : '';
       },
       validate: function (v) {
         if (RE_GITHUB_TARGET.test(v))
