@@ -104,12 +104,17 @@ var MobileGenerator = yeoman.generators.Base.extend({
       this.log.info('Fetching server config');
       hosting.fetchConfig(this.prompts.hostingChoice, function(err, cfg, content) {
         if (!err) {
+          // TODO: adjust Project ID if it is GAE
           this.dest.write(path.join('app', cfg.filename), content);
         } else {
           this.log.error(err);
         }
         done();
       }.bind(this));
+    },
+
+    git: function() {
+      // TODO: all things git, including dist/ if needed (hostingChoice)
     },
 
     packagejson: function() {
