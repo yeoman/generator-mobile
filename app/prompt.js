@@ -137,6 +137,9 @@ function questions(defaults) {
                 '(you can see all your projects on https://cloud.google.com/console)\n '),
       name: 'gaeProjectId',
       default: defaults.gaeProjectId,
+      validate: function(v) {
+        return v ? true : 'need a Project ID';
+      },
       when: function(answers) {
         return answers.hostingChoice === 'gae';
       }
