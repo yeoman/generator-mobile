@@ -17,21 +17,34 @@ function getLatestRelease(cb) {
     }
   }
   request(opts, function(err, res, body) {
+    if (err || res.statusCode != 200) {
+      cb(err || new Error(body || 'web-starter-kit/releases replied with ' + res.statusCode));
+      return;
+    }
     var release = {tag_name: ''};
     for (var i = 0, r; r = body[i]; i++) {
       if (release.tag_name < r.tag_name)
         release = r
     }
-    cb(release);
+    if (!release.tag_name) {
+      err = new Error('could not fetch WSK release version');
+    }
+    cb(err, release);
   })
 }
 
 function createDownloader(opts, cb) {
-  getLatestRelease(function(r){
-    var url = WSK_ZIP_URL + r.tag_name + '.zip';
-    cb(new Download(opts).get(url), url, r);
+  getLatestRelease(function(err, ver) {
+    if (err) {
+      cb(err);
+      return;
+    }
+    var url = WSK_ZIP_URL + ver.tag_name + '.zip';
+    cb(null, new Download(opts).get(url), url, ver);
   });
 }
 
 
 module.exports = createDownloader;
+module.exports.WSK_RELEASES_URL = WSK_RELEASES_URL;
+module.exports.WSK_ZIP_URL = WSK_ZIP_URL;

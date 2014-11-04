@@ -6,7 +6,7 @@ var yosay = require('yosay');
 var chalk = require('chalk');
 
 var prompt = require('./prompt');
-var downloader = require('./download');
+var download = require('./download');
 
 
 var MobileGenerator = yeoman.generators.Base.extend({
@@ -45,7 +45,11 @@ var MobileGenerator = yeoman.generators.Base.extend({
         res.on('data', function () { log.write('.') });
       };
 
-      downloader({extract: true, strip: 1}, function(d, url, release) {
+      download({extract: true, strip: 1}, function(err, d, url, release) {
+        if (err) {
+          log.error(err);
+          return;
+        }
         log.info('Found release %s', release.tag_name)
            .info('Fetching %s ...', url)
            .info(chalk.yellow('This might take a few moments'));

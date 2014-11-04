@@ -36,7 +36,8 @@
     "request": "^2.46.0"
   },
   "devDependencies": {
-    "mocha": "*"
+    "mocha": "*",
+    "nock": "^0.48.2"
   },
   "peerDependencies": {
     "yo": ">=1.0.0"

@@ -227,5 +227,7 @@ function questions(defaults) {
 
 
 module.exports = {
-  questions: questions
+  questions: questions,
+  extractDomain: extractDomain,
+  isGitHub: isGitHub
 };
