@@ -31,6 +31,7 @@ describe('download module', function() {
       .reply(400, 'bad request');
 
     download({}, function(err) {
+      assert(err);
       assert.equal(err.toString(), 'Error: bad request');
       done();
     });
