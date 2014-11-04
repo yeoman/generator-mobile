@@ -68,8 +68,10 @@ var MobileGenerator = yeoman.generators.Base.extend({
 
   writing: {
     gulpfile: function () {
-      var filename = 'gulpfile.js',
-          gulpfile = this.dest.read(filename);
+      this.log.info('Configuring gulpfile.js');
+
+      var filepath = path.join(this.destinationRoot(), 'gulpfile.js'),
+          gulpfile = this.readFileAsString(filepath);
 
       // pagespeed
       if (this.prompts.siteUrl) {
@@ -78,11 +80,11 @@ var MobileGenerator = yeoman.generators.Base.extend({
       }
 
       // server-config
-      var srvfile = hosting.configFilename(this.prompts.hostingChoice);
-      if (srvfile) {
-        gulpfile.replace(/['"].*apache-server-configs.*['"]/m, "'" + srvfile + "'");
+      var cfg = hosting.config(this.prompts.hostingChoice);
+      if (cfg) {
+        gulpfile.replace(/['"].*apache-server-configs.*['"]/m, "'" + cfg.filename + "'");
       } else {
-        gulpfile.replace(/^(.*apache-server-configs.*)$/m, '');
+        gulpfile.replace(/^.*apache-server-configs.*$/m, '');
       }
 
       // gulp deploy task
@@ -91,19 +93,30 @@ var MobileGenerator = yeoman.generators.Base.extend({
         gulpfile += '\n\n' + this.engine(this.read(deployfile), this.prompts);
       }
 
-      // TODO: replace with this.writeFileFromString
-      this.dest.delete(filename);
-      this.dest.write(filename, gulpfile);
+      this.writeFileFromString(gulpfile, filepath);
     },
 
     serverconfig: function() {
-      // TODO: fetch server config and store it in app/
-      // hosting.fetchConfig(this.prompts.hostingChoice, this.async());
+      if (!hosting.isSupported(this.prompts.hostingChoice))
+        return;
+
+      var done = this.async();
+      this.log.info('Fetching server config');
+      hosting.fetchConfig(this.prompts.hostingChoice, function(err, cfg, content) {
+        if (!err) {
+          this.dest.write(path.join('app', cfg.filename), content);
+        } else {
+          this.log.error(err);
+        }
+        done();
+      }.bind(this));
     },
 
     packagejson: function() {
-      var filename = 'package.json',
-          pkg = this.dest.readJSON(filename);
+      this.log.info('Configuring package.json');
+
+      var filepath = path.join(this.destinationRoot(), 'package.json'),
+          pkg = JSON.parse(this.readFileAsString(filepath));
 
       pkg.name = this.prompts.siteName || 'replace me';
       pkg.version = '0.0.0';
@@ -112,12 +125,11 @@ var MobileGenerator = yeoman.generators.Base.extend({
       pkg.main = 'app/index.html';
       delete pkg.devDependencies['apache-server-configs'];
 
-      this.dest.delete(filename);
-      this.dest.write(filename, JSON.stringify(pkg, null, 2));
+      this.writeFileFromString(JSON.stringify(pkg, null, 2), filepath);
     },
 
     webmanifest: function() {
-      this.log.write('Configuring manifest.webapp');
+      this.log.info('Configuring manifest.webapp');
 
       var filepath = path.join(this.destinationRoot(), 'app', 'manifest.webapp'),
           manifest = JSON.parse(this.readFileAsString(filepath));
@@ -133,19 +145,19 @@ var MobileGenerator = yeoman.generators.Base.extend({
     },
 
     layout: function () {
-      var basic = path.join('app', 'basic.html'),
-          index = path.join('app', 'index.html'),
+      this.log.info('Configuring layout and contents');
+
+      var basic = path.join(this.destinationRoot(), 'app', 'basic.html'),
+          index = path.join(this.destinationRoot(), 'app', 'index.html'),
           content;
 
       // Layout
       if (this.prompts.layoutChoice === 'default') {
-        content = this.dest.read(index);
+        content = this.read(index);
       } else if (this.prompts.layoutChoice === 'ie8') {
-        content = this.dest.read(basic);
+        content = this.read(basic);
       }
-
       this.dest.delete(basic);
-      this.dest.delete(index);
 
       // Google Analytics
       if (this.prompts.gaTrackId) {
@@ -162,7 +174,7 @@ var MobileGenerator = yeoman.generators.Base.extend({
         content = content.replace(/(<meta\s+name=["']description["']\s+content=["']).*(["'])/, repl);
       }
 
-      this.dest.write(index, content);
+      this.writeFileFromString(content, index);
     }
   },
 
