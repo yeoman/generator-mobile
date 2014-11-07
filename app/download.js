@@ -1,8 +1,11 @@
+'use strict';
+
 var request = require('request');
 var Download = require('download');
 
 var WSK_RELEASES_URL = 'https://api.github.com/repos/google/web-starter-kit/releases';
 var WSK_ZIP_URL = 'https://github.com/google/web-starter-kit/archive/';
+
 
 function getLatestRelease(cb) {
   var opts = {
@@ -29,5 +32,6 @@ function createDownloader(opts, cb) {
     cb(new Download(opts).get(url), url, r);
   });
 }
+
 
 module.exports = createDownloader;
