@@ -1,10 +1,11 @@
 'use strict';
+
 var util = require('util');
-var path = require('path');
 var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
 var chalk = require('chalk');
 
+var prompts = require('./prompts');
 var downloader = require('./download');
 
 
@@ -18,26 +19,19 @@ var MobileGenerator = yeoman.generators.Base.extend({
 
     this.log(yosay('Web Starter Kit generator'));
 
-    // var prompts = [{
-    //   type: 'confirm',
-    //   name: 'someOption',
-    //   message: 'Would you like to enable this option?',
-    //   default: true
-    // }];
+    this.prompt(prompts, function (answers) {
+      this.layoutChoice = answers.layoutChoice;
+      this.siteName = answers.siteName;
+      this.siteDescription = answers.siteDescription;
+      this.shouldUseGA = answers.shouldUseGA;
 
-    // this.prompt(prompts, function (props) {
-    //   this.someOption = props.someOption;
-
-    //   done();
-    // }.bind(this));
-    done();
+      done();
+    }.bind(this));
   },
 
   writing: {
     app: function () {
-
-      // var url = 'https://github.com/google/web-starter-kit/archive/v0.5.2.zip';
-      var dest = this.destinationRoot(); // + '/test'
+      var dest = this.destinationRoot();
 
       var log = this.log.write()
         .info('Getting latest WSK release version ...');
@@ -47,14 +41,14 @@ var MobileGenerator = yeoman.generators.Base.extend({
       };
 
       downloader({extract: true, strip: 1}, function(d, url, release) {
-        log
-          .info('Found release %s', release.tag_name)
-          .info('Fetching %s ...', url)
-          .info(chalk.yellow('This might take a few moments'));
+        log.info('Found release %s', release.tag_name)
+           .info('Fetching %s ...', url)
+           .info(chalk.yellow('This might take a few moments'));
         d.dest(dest).use(downloadProgress);
         d.run(function(err) {
           if (err) {
             log.write().error(err).write();
+            return;
           }
           log.write().ok('Done').write();
         });
@@ -71,5 +65,6 @@ var MobileGenerator = yeoman.generators.Base.extend({
     //this.installDependencies();
   }
 });
+
 
 module.exports = MobileGenerator;
