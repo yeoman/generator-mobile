@@ -5,7 +5,7 @@ var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
 var chalk = require('chalk');
 
-var prompts = require('./prompts');
+var prompt = require('./prompt');
 var downloader = require('./download');
 
 
@@ -15,18 +15,23 @@ var MobileGenerator = yeoman.generators.Base.extend({
   },
 
   prompting: function () {
-    var done = this.async();
+    var done = this.async(),
+        self = this;
+
+    var promptUser = function(defaults) {
+      self.prompt(prompt.questions(defaults), function (answers) {
+        if (!answers.confirmed) {
+          promptUser(answers);
+        } else {
+          delete answers['confirmed'];
+          self.opts = answers;
+          done();
+        }
+      });
+    };
 
     this.log(yosay('Web Starter Kit generator'));
-
-    this.prompt(prompts, function (answers) {
-      this.layoutChoice = answers.layoutChoice;
-      this.siteName = answers.siteName;
-      this.siteDescription = answers.siteDescription;
-      this.shouldUseGA = answers.shouldUseGA;
-
-      done();
-    }.bind(this));
+    promptUser();
   },
 
   writing: {
