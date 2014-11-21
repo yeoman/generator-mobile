@@ -25,7 +25,7 @@ Supported hosting and deployment strategy options:
 
 You will need [NodeJS](http://nodejs.org/), [npm](https://www.npmjs.org/) and [yeoman](http://yeoman.io/) installed.
 
-1. Install this generator with `npm install -g yeoman/generator-mobile`
+1. Install this generator with `npm install -g yeoman/generator-mobile#wsk`.
 2. Run `yo mobile`. The generator will ask you a few questions about the site you want to build.
 3. The latest release will be fetched from Web Starker Kit repo and adjusted accordingly to your answers.
 4. Build the site as usual using the instructions on the [WSK repo](https://github.com/google/web-starter-kit#quickstart) skipping the download and dependencies install steps.
