@@ -35,6 +35,7 @@ describe('mobile:app - GitHub hosting', function () {
 
     it('has "gulp deploy" task', function () {
       assert.fileContent('tasks/deploy.js', /gulp\.task\('deploy'/);
+      assert.fileContent('tasks/deploy.js', /'push', '-u', 'origin', 'gh-pages'/m);
     });
 
     it('has no CNAME file', function () {
@@ -105,6 +106,11 @@ describe('mobile:app - GitHub hosting', function () {
       assert.noFile('app/CNAME');
     });
 
+    it('has "gulp deploy" task', function () {
+      assert.fileContent('tasks/deploy.js', /gulp\.task\('deploy'/);
+      assert.fileContent('tasks/deploy.js', /'push', '-u', 'origin', 'master'/m);
+    });
+
     it('initalizes master branch in dist/.git', function (done) {
       if (checkGit.error) {
         console.warn(chalk.yellow('skip because of git check: ' + checkGit.error));
@@ -123,32 +129,50 @@ describe('mobile:app - GitHub hosting', function () {
 
   describe('custom domain', function () {
 
-    it('creates a CNAME for an owner', function (done) {
-      var answers = {
-        hostingChoice: 'github',
-        siteUrl: 'http://www.example.org',
-        githubTarget: 'owner/owner.github.io'
-      };
-      testUtil.mockGitHub();
-      testUtil.runGenerator(answers, function () {
-        var content = fs.readFileSync('app/CNAME', 'utf8');
-        assert.textEqual(content, 'www.example.org')
-        done()
+    describe('for a user/org', function () {
+
+      before(function (done) {
+        testUtil.mockGitHub();
+        testUtil.runGenerator({
+          hostingChoice: 'github',
+          siteUrl: 'http://www.example.org',
+          githubTarget: 'owner/owner.github.io'
+        }, done);
       });
+
+      it('creates a CNAME for an owner', function () {
+        var content = fs.readFileSync('app/CNAME', 'utf8');
+        assert.textEqual(content, 'www.example.org');
+      });
+
+      it('deploys to correct branch', function () {
+        assert.fileContent('tasks/deploy.js', /gulp\.task\('deploy'/);
+        assert.fileContent('tasks/deploy.js', /'push', '-u', 'origin', 'master'/m);
+      });
+
     });
 
-    it('creates a CNAME for repo with domain name', function (done) {
-      var answers = {
-        hostingChoice: 'github',
-        siteUrl: 'http://www.example.org',
-        githubTarget: 'owner/www.example.org'
-      };
-      testUtil.mockGitHub();
-      testUtil.runGenerator(answers, function () {
-        var content = fs.readFileSync('app/CNAME', 'utf8');
-        assert.textEqual(content, 'www.example.org')
-        done()
+    describe('as a repo', function () {
+
+      before(function (done) {
+        testUtil.mockGitHub();
+        testUtil.runGenerator({
+          hostingChoice: 'github',
+          siteUrl: 'http://www.example.org',
+          githubTarget: 'owner/www.example.org'
+        }, done);
       });
+
+      it('creates a CNAME for repo with domain name', function () {
+        var content = fs.readFileSync('app/CNAME', 'utf8');
+        assert.textEqual(content, 'www.example.org');
+      });
+
+      it('deploys to correct branch', function () {
+        assert.fileContent('tasks/deploy.js', /gulp\.task\('deploy'/);
+        assert.fileContent('tasks/deploy.js', /'push', '-u', 'origin', 'gh-pages'/m);
+      });
+
     });
 
   });  // describe custom domain

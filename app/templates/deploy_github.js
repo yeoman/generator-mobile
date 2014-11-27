@@ -7,7 +7,7 @@ var gulp = require('gulp');
 
 // Deployment to GitHub using git.
 gulp.task('deploy', function (done) {
-  var args = ['push'];
+  var args = ['push', '-u', 'origin', '<%= prompts.githubBranch %>'];
   if (process.argv.length > 3) {
     args.push.apply(args, process.argv.slice(3));
   }
