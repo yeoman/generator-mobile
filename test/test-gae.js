@@ -30,6 +30,7 @@ describe('mobile:app - GAE hosting', function () {
 
   it('has "gulp deploy" task', function () {
     assert.fileContent('tasks/deploy.js', /gulp\.task\('deploy'/);
+    assert.fileContent('tasks/deploy.js', /'app', 'deploy', 'dist'/);
   });
 
 });
