@@ -13,11 +13,12 @@ What the generator does when using 'deploy to GAE' option is the following:
    to `app/app.yaml`.
 3. Modifies `app/app.yaml` to use correct Project ID, the one you specified.
 
-Whenever you want to publish a new version of the site, 
-run `gulp` (the `default` task is to create a new production build), and then
+Whenever you want to publish a new version of the site, simply run
 `gulp deploy`.
 
-Behind the scenes, `gulp deploy` executes `gcloud preview app deploy ./dist`.
+Behind the scenes, `gulp deploy` executes `gcloud preview app deploy ./dist`,
+also consuming any additional arguments you might have provided to `gulp deploy`.
+
 Once deployed, the website can be accessed from `https://my-project-id.appspot.com`.
 Where `my-project-id` is the Project ID you initially specified.
 
