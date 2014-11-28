@@ -13,7 +13,7 @@ a `deploy` task.
 
 You will need [NodeJS](http://nodejs.org/), [npm](https://www.npmjs.org/) and [yeoman](http://yeoman.io/) installed.
 
-1. Install this generator with `npm install -g yeoman/generator-mobile#wsk`.
+1. Install this generator with `npm install -g yeoman/generator-mobile`.
 2. Run `yo mobile` and answer a few questions about the site you want to build.
 3. The latest release will be fetched from [Web Starker Kit repo][wsk-repo] 
    and adjusted accordingly to your answers.
