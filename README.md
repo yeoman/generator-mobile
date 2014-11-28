@@ -21,7 +21,7 @@ All optional via prompts:
 
 ## Getting Started
 
-- Install: `npm install -g generator-mobile`
+- Install: `npm install -g yeoman/generator-mobile#legacy`
 - Run: `yo mobile`
 - Perform a build: `grunt`
 - Run local server: `grunt serve`
