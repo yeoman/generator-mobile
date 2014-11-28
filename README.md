@@ -1,4 +1,4 @@
-# Generator Mobile [![Build Status](https://secure.travis-ci.org/yeoman/generator-jquery.svg?branch=master)](https://travis-ci.org/yeoman/generator-jquery)
+# Generator Mobile [![Build Status](https://secure.travis-ci.org/yeoman/generator-mobile.svg?branch=legacy)](https://travis-ci.org/yeoman/generator-mobile)
 
 An experimental Yeoman generator for mobile-first web apps by Addy Osmani and Matt Gaunt. A good reference point for setting up a mobile web development workflow with [Grunt](http://gruntjs.com).
 
