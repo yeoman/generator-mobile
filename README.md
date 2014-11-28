@@ -80,7 +80,7 @@ Copyright (c) Google
 [wsk-repo]: https://github.com/google/web-starter-kit
 [wsk-screenshot1]: https://camo.githubusercontent.com/a1b538962fa669f54f37509f8961613aa4753254/687474703a2f2f692e696d6775722e636f6d2f6e475572456d782e706e67
 [wsk-screenshot2]: https://cloud.githubusercontent.com/assets/25405/5183611/9ace76a4-74a8-11e4-978a-17fda7eb4cfd.png
-[travis-img]: https://secure.travis-ci.org/yeoman/generator-mobile.svg?branch=wsk
+[travis-img]: https://secure.travis-ci.org/yeoman/generator-mobile.svg?branch=master
 [travis-link]: https://travis-ci.org/yeoman/generator-mobile
 [aws-s3]: http://docs.aws.amazon.com/AmazonS3/latest/dev/website-hosting-custom-domain-walkthrough.html
 [gh-pages]: https://pages.github.com/
