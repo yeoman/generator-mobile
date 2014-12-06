@@ -36,7 +36,7 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
       desc: 'Be quiet; only errors will be shown',
       type: Boolean,
       defaults: false
-    })
+    });
     this.quiet = this.options['quiet'];
     this.verbose = !this.quiet;
 
@@ -91,7 +91,7 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
            .info('Fetching %s ...', url)
            .info(chalk.yellow('This might take a few moments'));
         downloader.use(function (res) {
-          res.on('data', function () { self.log.write('.') }) ;
+          res.on('data', function () { self.log.write('.') });
         });
       }
 
@@ -132,7 +132,7 @@ var MobileGenerator = module.exports = yeoman.generators.Base.extend({
 
       // pagespeed
       if (this.prompts.siteUrl) {
-        var repl = "$1url: '" + this.prompts.siteUrl + "'"
+        var repl = "$1url: '" + this.prompts.siteUrl + "'";
         gulpfile = gulpfile.replace(/(pagespeed(?:.|\s)+)url:[^,]+/m, repl);
       }
 
