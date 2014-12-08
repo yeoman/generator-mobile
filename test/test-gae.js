@@ -1,7 +1,6 @@
+/*global describe, before, it*/
 'use strict';
 
-var exec = require('child_process').exec;
-var path = require('path');
 var assert = require('yeoman-generator').assert;
 var testUtil = require('./util');
 
@@ -19,7 +18,7 @@ describe('mobile:app - GAE hosting', function () {
   it('configures gcloud', function () {
     assert.file('.gcloud/properties');
 
-    var prop = '^\s*project\\s+=\\s+my-cloud-project$';
+    var prop = '^project\\s+=\\s+my-cloud-project$';
     assert.fileContent('.gcloud/properties', new RegExp(prop, 'm'));
   });
 

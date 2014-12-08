@@ -1,8 +1,8 @@
+/*global describe, before, it*/
 'use strict';
 
 var fs = require('fs');
 var exec = require('child_process').exec;
-var path = require('path');
 
 var assert = require('yeoman-generator').assert;
 var chalk = require('chalk');

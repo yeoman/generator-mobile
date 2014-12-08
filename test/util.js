@@ -7,9 +7,11 @@ var helpers = require('yeoman-generator').test;
 function mockGitHub() {
   nock.disableNetConnect();
 
+  /*jshint camelcase:false */
   nock('https://api.github.com')
     .get('/repos/google/web-starter-kit/releases')
     .reply(200, [{tag_name: 'v0.5.2'}]);
+  /*jshint camelcase:true */
 
   nock('https://github.com')
     .filteringPath(/archive\/.*/, 'archive/zip')
@@ -23,10 +25,10 @@ function mockGitHub() {
 
 function runGenerator(answers, opts, callback) {
   answers = answers || {};
-  answers['siteName'] = answers['siteName'] || 'Test site';
-  answers['siteDescription'] = answers['siteDescription'] || 'Dummy desc';
-  answers['siteUrl'] = answers['siteUrl'] || 'http://test.example.org';
-  answers['layoutChoice'] = answers['layoutChoice'] || 'default';
+  answers.siteName = answers.siteName || 'Test site';
+  answers.siteDescription = answers.siteDescription || 'Dummy desc';
+  answers.siteUrl = answers.siteUrl || 'http://test.example.org';
+  answers.layoutChoice = answers.layoutChoice || 'default';
 
   if (typeof opts === 'function') {
     callback = opts;
@@ -49,4 +51,5 @@ function runGenerator(answers, opts, callback) {
 module.exports = {
   mockGitHub: mockGitHub,
   runGenerator: runGenerator
-}
+};
+

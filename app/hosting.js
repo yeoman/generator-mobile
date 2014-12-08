@@ -13,7 +13,7 @@ var SERVER_CONFIG = {
     filename: '.htaccess',
     url: 'https://raw.githubusercontent.com/h5bp/server-configs-apache/master/dist/.htaccess'
   }
-}
+};
 
 
 function config(provider) {
@@ -31,20 +31,19 @@ function fetchConfig(provider, callback) {
     return;
   }
   request(cfg.url, function (err, res, body) {
-    if (!err && res.statusCode != 200) {
+    if (!err && res.statusCode !== 200) {
       err = new Error('config fetch error ' + res.statusCode);
     }
     callback(err, cfg, body);
   });
 }
 
-function deployTaskFilename(provider, tool) {
-
-}
+//function deployTaskFilename(provider, tool) {
+//}
 
 module.exports = {
   config: config,
   isSupported: isSupported,
   fetchConfig: fetchConfig,
-  deployTaskFilename: deployTaskFilename
-}
+  //deployTaskFilename: deployTaskFilename
+};

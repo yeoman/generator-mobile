@@ -22,11 +22,11 @@ function isGitHub(url) {
 // from other answers.
 function populateMissing(answers) {
   if (!answers.siteUrl && answers.githubTarget) {
-    var gh = answers.githubTarget.match(RE_GITHUB_TARGET);
-    if (isGitHub(gh[2])) {
-      answers.siteUrl = 'https://' + gh[2];
+    var t1 = answers.githubTarget.match(RE_GITHUB_TARGET);
+    if (isGitHub(t1[2])) {
+      answers.siteUrl = 'https://' + t1[2];
     } else {
-      answers.siteUrl = 'https://' + gh[1] + '.github.io/' + gh[2];
+      answers.siteUrl = 'https://' + t1[1] + '.github.io/' + t1[2];
     }
   }
 
@@ -35,14 +35,14 @@ function populateMissing(answers) {
     answers.isGitHubProject = match[2] && match[2].length > 1;
 
     if (!answers.githubTarget) {
-      var t = match[1].split('.')[0] + '/' + (answers.isGitHubProject ? match[2] : match[1]);
-      answers.githubTarget = t.replace(/\/\//g, '/');
+      var t2 = match[1].split('.')[0] + '/' + (answers.isGitHubProject ? match[2] : match[1]);
+      answers.githubTarget = t2.replace(/\/\//g, '/');
     }
   }
 
   if (answers.githubTarget) {
-    var gh = answers.githubTarget.match(RE_GITHUB_TARGET);
-    answers.githubBranch = gh[2] == gh[1] + '.github.io' ? 'master' : 'gh-pages';
+    var t3 = answers.githubTarget.match(RE_GITHUB_TARGET);
+    answers.githubBranch = t3[2] === (t3[1] + '.github.io') ? 'master' : 'gh-pages';
   }
 
   if (answers.siteUrl) {
@@ -64,19 +64,23 @@ function questions(defaults) {
       default: defaults.siteDescription
     },
     {
-      message: ("Site URL (e.g. www.example.org, https://owner.github.io),\n  "+
-                "hit enter to skip.\n "),
+      message: ('Site URL (e.g. www.example.org, https://owner.github.io),\n  '+
+                'hit enter to skip.\n '),
       name: 'siteUrl',
       default: defaults.siteUrl,
       filter: function (url) {
-        if (url && url.substring(0, 4) !== 'http')
+        if (url && url.substring(0, 4) !== 'http') {
           url = 'http://' + url;
+        }
         return url;
       },
       validate: function (url) {
-        if (!url || RE_URL.test(url))
+        if (!url || RE_URL.test(url)) {
           return true;
-        return "That doesn't look like a valid URL"
+        }
+        /*jshint quotmark:false */
+        return "That doesn't look like a valid URL";
+        /*jshint quotmark:single */
       }
     },
     {
@@ -90,8 +94,8 @@ function questions(defaults) {
       default: defaults.layoutChoice || 'default'
     },
     {
-      message: ("Google Analytics tracking ID, or hit enter to skip.\n  "+
-                "(get your tracking ID at https://www.google.com/analytics/web/)\n "),
+      message: ('Google Analytics tracking ID, or hit enter to skip.\n  '+
+                '(get your tracking ID at https://www.google.com/analytics/web/)\n '),
       name: 'gaTrackId',
       default: defaults.gaTrackId
     },
@@ -112,7 +116,9 @@ function questions(defaults) {
         {value: 'paas', name: 'PaaS (GAE, Heroku)'},
         {value: 'static', name: 'Static (GitHub, GCS, S3)'},
         {value: 'server', name: 'Server (Apache, Nginx, etc.)'},
+        /*jshint quotmark:false */
         {value: 'none', name: "Nowhere, don't worry about it"}
+        /*jshint quotmark:single */
       ],
       default: function (answers) {
         return defaults.hostingCat ||
@@ -185,8 +191,10 @@ function questions(defaults) {
     // -------------- Heroku (PaaS hosting) ------------------
 
     {
+      /*jshint quotmark:false */
       message: ("What is your Heroku app name?\n  "+
                 "(just hitting enter is OK, we'll create one for you)\n "),
+      /*jshint quotmark:single */
       name: 'herokuApp',
       default: defaults.herokuApp,
       when: function (answers) {
@@ -197,7 +205,7 @@ function questions(defaults) {
     // -------------- GCS / S3 (static hosting) ------------------
 
     {
-      message: "Site domain (e.g. www.example.org) or a bucket name",
+      message: 'Site domain (e.g. www.example.org) or a bucket name',
       name: 'siteDomain',
       default: defaults.siteDomain,
       when: function (answers) {
@@ -209,11 +217,12 @@ function questions(defaults) {
     // -------------- GitHub (static hosting) ------------------
 
     {
-      message: "GitHub username or owner/project",
+      message: 'GitHub username or owner/project',
       name: 'githubTarget',
       default: function (answers) {
-        if (defaults.githubTarget)
+        if (defaults.githubTarget) {
           return defaults.githubTarget;
+        }
 
         if (isGitHub(answers.siteUrl)) {
           var match = answers.siteUrl.match(RE_URL),
@@ -233,12 +242,15 @@ function questions(defaults) {
         return user && repo ? [user, repo].join('/') : '';
       },
       validate: function (v) {
-        if (RE_GITHUB_TARGET.test(v))
+        if (RE_GITHUB_TARGET.test(v)) {
           return true;
+        }
+        /*jshint quotmark:false */
         return "It's either 'owner' or 'owner/repo'";
+        /*jshint quotmark:single */
       },
       filter: function (v) {
-        if (v && v.indexOf('/') == -1) {
+        if (v && v.indexOf('/') === -1) {
           v += '/' + v + '.github.io';
         }
         return (v || '').replace(/["']/g, '');
@@ -268,13 +280,15 @@ function questions(defaults) {
       message: 'Deployment URL (e.g. user@server:[path])',
       name: 'deployDest',
       default: function (answers) {
-        if (defaults.deployDest)
+        if (defaults.deployDest) {
           return defaults.deployDest;
+        }
         var user = process.env.USER || process.env.USERNAME;
         var host = extractDomain(answers.siteUrl);
         var dest = '';
-        if (user && host)
+        if (user && host) {
           dest = user + '@' + host + ':' + (answers.siteName || '');
+        }
         return dest;
       },
       when: function (answers) {

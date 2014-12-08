@@ -1,6 +1,7 @@
 /**
  * WSK dependencies check module
  */
+'use strict';
 
 var exec = require('child_process').exec;
 var events = require('events');
@@ -9,6 +10,47 @@ var iniparser = require('iniparser');
 var PASSED = 'passed',
     FAILED = 'failed';
 
+
+function checkGit(callback) {
+  exec('git config --list', function (err, stdout) {
+    if (err) {
+      err = new Error('git: not installed (' + err.message + ')');
+      callback(FAILED, {what: 'git', error: err});
+      return;
+    }
+
+    var data = iniparser.parseString(stdout);
+
+    if (data['user.name'] && data['user.email']) {
+      callback(PASSED, {what: 'git', data: data});
+    } else {
+      var errNoConf = new Error('git: not configured');
+      callback(FAILED, {what: 'git', data: data, error: errNoConf});
+    }
+  });
+}
+
+function checkGcloud(callback) {
+  exec('gcloud config list --format json', function (err, stdout) {
+    if (err) {
+      err = new Error('gcloud: not installed (' + err.message + ')');
+      callback(FAILED, {what: 'gcloud', error: err});
+      return;
+    }
+
+    var cfg = {};
+    try {
+      cfg = JSON.parse(stdout);
+    } catch (err) {}
+
+    if (cfg.core && cfg.core.account) {
+      callback(PASSED, {what: 'gcloud', data: cfg});
+    } else {
+      var errNoConf = new Error('gcloud: not configured');
+      callback(FAILED, {what: 'gcloud', data: cfg, error: errNoConf});
+    }
+  });
+}
 
 function filterChecksFor(reqs) {
   var checks = [];
@@ -23,7 +65,6 @@ function filterChecksFor(reqs) {
 
   return checks;
 }
-
 
 function checkAll(reqs) {
   var e = new events.EventEmitter();
@@ -46,51 +87,10 @@ function checkAll(reqs) {
 
     for (var i = 0; i < checks.length; i++) {
       checks[i](maybeDone);
-    };
+    }
   });
 
   return e;
-}
-
-function checkGit(callback) {
-  exec("git config --list", function (err, stdout) {
-    if (err) {
-      err = new Error('git: not installed (' + err.message + ')');
-      callback(FAILED, {what: 'git', error: err});
-      return;
-    }
-
-    var data = iniparser.parseString(stdout);
-
-    if (data['user.name'] && data['user.email']) {
-      callback(PASSED, {what: 'git', data: data});
-    } else {
-      var err = new Error('git: not configured');
-      callback(FAILED, {what: 'git', data: data, error: err});
-    }
-  });
-}
-
-function checkGcloud(callback) {
-  exec("gcloud config list --format json", function (err, stdout) {
-    if (err) {
-      err = new Error('gcloud: not installed (' + err.message + ')');
-      callback(FAILED, {what: 'gcloud', error: err});
-      return;
-    }
-
-    var cfg = {};
-    try {
-      cfg = JSON.parse(stdout);
-    } catch (err) {}
-
-    if (cfg.core && cfg.core.account) {
-      callback(PASSED, {what: 'gcloud', data: cfg});
-    } else {
-      var err = new Error('gcloud: not configured');
-      callback(FAILED, {what: 'gcloud', data: cfg, error: err});
-    }
-  });
 }
 
 
@@ -100,4 +100,5 @@ module.exports = {
   checkAll: checkAll,
   checkGit: checkGit,
   checkGcloud: checkGcloud
-}
+};
+

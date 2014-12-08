@@ -1,11 +1,8 @@
+/*global describe, before, it*/
 'use strict';
 
 var fs = require('fs');
-var exec = require('child_process').exec;
-var path = require('path');
-var nock = require('nock');
 var assert = require('yeoman-generator').assert;
-var helpers = require('yeoman-generator').test;
 var testUtil = require('./util');
 
 describe('mobile:app', function () {
@@ -52,7 +49,9 @@ describe('mobile:app', function () {
     });
 
     it('configures Google Analytics', function () {
+      /*jshint quotmark:false */
       var r = "ga\\('create', 'UA-12345-6'";
+      /*jshint quotmark:single */
       assert.fileContent('app/index.html', new RegExp(r, 'm'));
     });
 
@@ -87,7 +86,7 @@ describe('mobile:app', function () {
       assert.noFileContent('gulpfile.js', /app\.yaml/);
     });
 
-    it("does not have a deploy task", function () {
+    it('does not have a deploy task', function () {
       assert.noFileContent('gulpfile.js', /gulp.task\('deploy/);
       assert.noFile('dist/.git');
     });
@@ -98,7 +97,9 @@ describe('mobile:app', function () {
 
     // TODO: remove on the next WSK release
     it('temporary replaces "clean" task', function () {
+      /*jshint quotmark:false */
       var t = "^gulp\\.task\\('clean', del\\.bind\\(null, \\['\\.tmp', 'dist/\\*', '!dist/\\.git'\\]\\)\\);$";
+      /*jshint quotmark:true */
       assert.fileContent('gulpfile.js', new RegExp(t, 'm'));
     });
 

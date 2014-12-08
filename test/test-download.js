@@ -1,4 +1,4 @@
-/*global describe, beforeEach, it*/
+/*global describe, before, after, afterEach, it*/
 'use strict';
 
 var assert = require('yeoman-generator').assert;
@@ -6,11 +6,12 @@ var nock = require('nock');
 var download = require('../app/download');
 
 describe('download module', function () {
-  before(function () { nock.disableNetConnect() });
-  afterEach(function () { nock.cleanAll() });
-  after(function () { nock.enableNetConnect() });
+  before(function () { nock.disableNetConnect(); });
+  afterEach(function () { nock.cleanAll(); });
+  after(function () { nock.enableNetConnect(); });
 
   it('fetches latest release version and creates downloader', function (done) {
+    /*jshint camelcase:false */
     var scope = nock('https://api.github.com')
       .get('/repos/google/web-starter-kit/releases')
       .reply(200, [
@@ -18,10 +19,13 @@ describe('download module', function () {
         {tag_name: 'v2'},
         {tag_name: 'v2.5.2'}
       ]);
+    /*jshint camelcase:true */
 
     download({}, function (err, d, url, ver) {
       assert(!err, err);
+      /*jshint camelcase:false */
       assert.deepEqual(ver, {tag_name: 'v2.5.2'});
+      /*jshint camelcase:false */
       assert.equal(url, download.WSK_ZIP_URL + 'v2.5.2.zip');
       assert(d);
 

@@ -1,4 +1,4 @@
-/*global describe, beforeEach, it*/
+/*global describe, before, it*/
 'use strict';
 
 var assert = require('yeoman-generator').assert;
@@ -24,13 +24,15 @@ describe('prompts module', function () {
   describe('githubTarget', function () {
     var ghTarget;
     before(function () {
-      for (var i = 0, qq = prompt.questions(), q; q = qq[i]; i++) {
-        if (q.name == 'githubTarget') {
+      for (var i = 0, qq = prompt.questions(), q; (q = qq[i]); i++) {
+        if (q.name === 'githubTarget') {
           ghTarget = q;
           break;
         }
       }
+      /*jshint expr:true */
       !ghTarget && assert.fail('Could not find "githubTarget" question');
+      /*jshint expr:false */
     });
 
     it('validates input', function () {
@@ -42,12 +44,14 @@ describe('prompts module', function () {
     });
 
     it('filters input', function () {
+      /*jshint quotmark:false */
       assert.equal(ghTarget.filter('owner/repo'), 'owner/repo');
       assert.equal(ghTarget.filter('"owner/repo"'), 'owner/repo');
       assert.equal(ghTarget.filter("'owner/repo'"), 'owner/repo');
       assert.equal(ghTarget.filter(''), '');
       assert.equal(ghTarget.filter(null), '');
       assert.equal(ghTarget.filter(undefined), '');
+      /*jshint quotmark:single */
     });
 
     it('knows when to ask the question', function () {
