@@ -1,6 +1,6 @@
 {
   "name": "generator-mobile",
-  "version": "2.0.0-alpha1",
+  "version": "2.0.0-alpha",
   "description": "Yeoman generator for mobile based on Web Starter Kit",
   "homepage": "https://github.com/yeoman/generator-mobile",
   "bugs": "https://github.com/yeoman/generator-mobile/issues",
@@ -22,8 +22,6 @@
     "web",
     "app",
     "front-end",
-    "h5bp",
-    "modernizr",
     "mobile",
     "wsk",
     "web-starter-kit"
