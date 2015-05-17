@@ -1,6 +1,5 @@
 /*global describe, before, it*/
 'use strict';
-
 var fs = require('fs');
 var exec = require('child_process').exec;
 

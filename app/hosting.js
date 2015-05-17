@@ -1,5 +1,4 @@
 'use strict';
-
 var request = require('request');
 
 
@@ -38,12 +37,8 @@ function fetchConfig(provider, callback) {
   });
 }
 
-//function deployTaskFilename(provider, tool) {
-//}
-
 module.exports = {
   config: config,
   isSupported: isSupported,
-  fetchConfig: fetchConfig,
-  //deployTaskFilename: deployTaskFilename
+  fetchConfig: fetchConfig
 };

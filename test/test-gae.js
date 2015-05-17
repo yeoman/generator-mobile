@@ -1,6 +1,5 @@
 /*global describe, before, it*/
 'use strict';
-
 var assert = require('yeoman-generator').assert;
 var testUtil = require('./util');
 

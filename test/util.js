@@ -1,5 +1,4 @@
 'use strict';
-
 var path = require('path');
 var nock = require('nock');
 var helpers = require('yeoman-generator').test;
@@ -7,11 +6,9 @@ var helpers = require('yeoman-generator').test;
 function mockGitHub() {
   nock.disableNetConnect();
 
-  /*jshint camelcase:false */
   nock('https://api.github.com')
     .get('/repos/google/web-starter-kit/releases')
     .reply(200, [{tag_name: 'v0.5.2'}]);
-  /*jshint camelcase:true */
 
   nock('https://github.com')
     .filteringPath(/archive\/.*/, 'archive/zip')
@@ -52,4 +49,3 @@ module.exports = {
   mockGitHub: mockGitHub,
   runGenerator: runGenerator
 };
-

@@ -1,5 +1,4 @@
 'use strict';
-
 var path = require('path');
 var iniparser = require('iniparser');
 
@@ -78,9 +77,8 @@ function questions(defaults) {
         if (!url || RE_URL.test(url)) {
           return true;
         }
-        /*jshint quotmark:false */
-        return "That doesn't look like a valid URL";
-        /*jshint quotmark:single */
+
+        return 'That doesn\'t look like a valid URL';
       }
     },
     {
@@ -116,9 +114,7 @@ function questions(defaults) {
         {value: 'paas', name: 'PaaS (GAE, Heroku)'},
         {value: 'static', name: 'Static (GitHub, GCS, S3)'},
         {value: 'server', name: 'Server (Apache, Nginx, etc.)'},
-        /*jshint quotmark:false */
-        {value: 'none', name: "Nowhere, don't worry about it"}
-        /*jshint quotmark:single */
+        {value: 'none', name: 'Nowhere, don\'t worry about it'}
       ],
       default: function (answers) {
         return defaults.hostingCat ||
@@ -191,10 +187,8 @@ function questions(defaults) {
     // -------------- Heroku (PaaS hosting) ------------------
 
     {
-      /*jshint quotmark:false */
-      message: ("What is your Heroku app name?\n  "+
-                "(just hitting enter is OK, we'll create one for you)\n "),
-      /*jshint quotmark:single */
+      message: ('What is your Heroku app name?\n  ' +
+                '(just hitting enter is OK, we\'ll create one for you)\n '),
       name: 'herokuApp',
       default: defaults.herokuApp,
       when: function (answers) {
@@ -245,9 +239,8 @@ function questions(defaults) {
         if (RE_GITHUB_TARGET.test(v)) {
           return true;
         }
-        /*jshint quotmark:false */
-        return "It's either 'owner' or 'owner/repo'";
-        /*jshint quotmark:single */
+
+        return 'It\'s either \'owner\' or \'owner/repo\'';
       },
       filter: function (v) {
         if (v && v.indexOf('/') === -1) {

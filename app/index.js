@@ -1,5 +1,4 @@
 'use strict';
-
 var exec = require('child_process').exec;
 var path = require('path');
 var yeoman = require('yeoman-generator');
@@ -76,9 +75,9 @@ module.exports = yeoman.generators.Base.extend({
     var self = this,
         done = this.async();
 
-    /*jshint expr:true */
-    this.verbose && this.log.write().info('Getting latest WSK release version ...');
-    /*jshint expr:false */
+    if (this.verbose) {
+      this.log.write().info('Getting latest WSK release version ...');
+    }
 
     download({extract: true, strip: 1}, function (err, downloader, url, ver) {
       if (err) {
@@ -87,11 +86,9 @@ module.exports = yeoman.generators.Base.extend({
       }
 
       if (self.verbose) {
-        /*jshint camelcase:false */
         self.log.info('Found release %s', ver.tag_name)
-           .info('Fetching %s ...', url)
-           .info(chalk.yellow('This might take a few moments'));
-        /*jshint camelcase:true */
+          .info('Fetching %s ...', url)
+          .info(chalk.yellow('This might take a few moments'));
         downloader.use(function (res) {
           res.on('data', function () { self.log.write('.'); });
         });
@@ -112,9 +109,10 @@ module.exports = yeoman.generators.Base.extend({
 
         checks.on('passed', function (res) {
           self.checks[res.what] = {data: res.data};
-          /*jshint expr:true */
-          self.verbose && self.log.ok(res.what + ' ' + (res.result || ''));
-          /*jshint expr:false */
+
+          if (self.verbose) {
+            self.log.ok(res.what + ' ' + (res.result || ''));
+          }
         });
 
         checks.on('failed', function (res) {
@@ -129,9 +127,9 @@ module.exports = yeoman.generators.Base.extend({
 
   writing: {
     gulpfile: function () {
-      /*jshint expr:true */
-      this.verbose && this.log.info('Configuring gulpfile.js');
-      /*jshint expr:false */
+      if (this.verbose) {
+        this.log.info('Configuring gulpfile.js');
+      }
 
       var filepath = path.join(this.destinationRoot(), 'gulpfile.js'),
           gulpfile = this.readFileAsString(filepath);
@@ -183,9 +181,9 @@ module.exports = yeoman.generators.Base.extend({
     // },
 
     packagejson: function () {
-      /*jshint expr:true */
-      this.verbose && this.log.info('Configuring package.json');
-      /*jshint expr:false */
+      if (this.verbose) {
+        this.log.info('Configuring package.json');
+      }
 
       var filepath = path.join(this.destinationRoot(), 'package.json'),
           pkg = JSON.parse(this.readFileAsString(filepath));
@@ -203,9 +201,9 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     webmanifest: function () {
-      /*jshint expr:true */
-      this.verbose && this.log.info('Configuring manifest.webapp');
-      /*jshint expr:false */
+      if (this.verbose) {
+        this.log.info('Configuring manifest.webapp');
+      }
 
       var filepath = path.join(this.destinationRoot(), 'app', 'manifest.webapp'),
           manifest = JSON.parse(this.readFileAsString(filepath));
@@ -221,9 +219,9 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     layout: function () {
-      /*jshint expr:true */
-      this.verbose && this.log.info('Configuring layout and contents');
-      /*jshint expr:false */
+      if (this.verbose) {
+        this.log.info('Configuring layout and contents');
+      }
 
       var basic = path.join(this.destinationRoot(), 'app', 'basic.html'),
           index = path.join(this.destinationRoot(), 'app', 'index.html'),
@@ -303,9 +301,10 @@ module.exports = yeoman.generators.Base.extend({
         'git remote add origin git@github.com:' + this.prompts.githubTarget
       ];
       exec(cmd.join(' && '), {cwd: path.join('dist')}, function (err, stdout) {
-        /*jshint expr:true */
-        log && log.write().info(stdout);
-        /*jshint expr:false */
+        if (log) {
+          log.write().info(stdout);
+        }
+
         done();
       });
     }
@@ -315,14 +314,15 @@ module.exports = yeoman.generators.Base.extend({
   install: {
     npminstall: function () {
       if (!this.skipInstall) {
-        /*jshint expr:true */
-        this.verbose && this.log.write()
-          .info('Running ' + chalk.yellow('npm install') + ' ' +
-                'to install the required dependencies. ' +
-                'If this fails, try running the command yourself.')
-          .info(chalk.yellow('This might take a few moments'))
-          .write();
-        /*jshint expr:false */
+        if (this.verbose) {
+          this.log.write()
+            .info('Running ' + chalk.yellow('npm install') + ' ' +
+                  'to install the required dependencies. ' +
+                  'If this fails, try running the command yourself.')
+            .info(chalk.yellow('This might take a few moments'))
+            .write();
+        }
+
         this.npmInstall();
       }
     },
@@ -341,10 +341,14 @@ module.exports = yeoman.generators.Base.extend({
           ];
 
       exec(cmd.join(' && '), function (err, stdout) {
-        /*jshint expr:true */
-        err && self.log.error(err);
-        self.verbose && self.log.write(stdout);
-        /*jshint expr:false */
+        if (err) {
+          self.log.error(err);
+        }
+
+        if (self.verbose) {
+          self.log.write(stdout);
+        }
+
         done();
       });
     }
@@ -352,9 +356,10 @@ module.exports = yeoman.generators.Base.extend({
 
   end: function () {
     if (this.messages.length === 0) {
-      /*jshint expr:true */
-      this.verbose && this.log.write().ok('You are all set now. Happy coding!');
-      /*jshint expr:false */
+      if (this.verbose) {
+        this.log.write().ok('You are all set now. Happy coding!');
+      }
+
       return;
     }
 
@@ -365,4 +370,3 @@ module.exports = yeoman.generators.Base.extend({
     }
   }
 });
-

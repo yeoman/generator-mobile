@@ -1,5 +1,4 @@
 'use strict';
-
 var path = require('path');
 var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
@@ -20,9 +19,7 @@ gulp.task('deploy:commit', function (done) {
     msg = process.argv.slice(im, im + 2)[1];
   }
   msg = msg || 'Production build';
-  /*jshint quotmark:false */
-  var cmd = ["git add .", "git commit -m '" + msg + "'", "git status"];
-  /*jshint quotmark:true */
+  var cmd = ['git add .', 'git commit -m \'' + msg + '\'', 'git status'];
   exec(cmd.join(' && '), {cwd: path.join(process.cwd(), 'dist')}, function (err, stdout, stderr) {
     if (!/working directory clean/m.test(stdout)) {
       console.log('--- ERROR log ---\n' + stderr);
