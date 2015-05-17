@@ -1,6 +1,5 @@
 /*global describe, before, it*/
 'use strict';
-
 var assert = require('yeoman-generator').assert;
 var prompt = require('../app/prompt');
 
@@ -30,9 +29,9 @@ describe('prompts module', function () {
           break;
         }
       }
-      /*jshint expr:true */
-      !ghTarget && assert.fail('Could not find "githubTarget" question');
-      /*jshint expr:false */
+      if (!ghTarget) {
+        assert.fail('Could not find "githubTarget" question');
+      }
     });
 
     it('validates input', function () {
@@ -44,14 +43,12 @@ describe('prompts module', function () {
     });
 
     it('filters input', function () {
-      /*jshint quotmark:false */
       assert.equal(ghTarget.filter('owner/repo'), 'owner/repo');
       assert.equal(ghTarget.filter('"owner/repo"'), 'owner/repo');
-      assert.equal(ghTarget.filter("'owner/repo'"), 'owner/repo');
+      assert.equal(ghTarget.filter('\'owner/repo\''), 'owner/repo');
       assert.equal(ghTarget.filter(''), '');
       assert.equal(ghTarget.filter(null), '');
       assert.equal(ghTarget.filter(undefined), '');
-      /*jshint quotmark:single */
     });
 
     it('knows when to ask the question', function () {

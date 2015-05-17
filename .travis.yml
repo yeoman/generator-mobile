@@ -7,4 +7,3 @@ node_js:
 before_script:
   - git config --global user.name "Travis-CI"
   - git config --global user.email "dummy@example.org"
-

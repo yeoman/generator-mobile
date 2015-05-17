@@ -1,5 +1,4 @@
 'use strict';
-
 var request = require('request');
 var Download = require('download');
 
@@ -21,7 +20,6 @@ function getLatestRelease(cb) {
       cb(err || new Error(body || 'web-starter-kit/releases replied with ' + res.statusCode));
       return;
     }
-    /*jshint camelcase:false */
     var release = {tag_name: ''};
     for (var i = 0, r; (r = body[i]); i++) {
       if (release.tag_name < r.tag_name) {
@@ -31,7 +29,7 @@ function getLatestRelease(cb) {
     if (!release.tag_name) {
       err = new Error('could not fetch WSK release version');
     }
-    /*jshint camelcase:true */
+
     cb(err, release);
   });
 }
@@ -42,9 +40,9 @@ function createDownloader(opts, cb) {
       cb(err);
       return;
     }
-    /*jshint camelcase:false */
+
     var url = WSK_ZIP_URL + ver.tag_name + '.zip';
-    /*jshint camelcase:true */
+
     cb(null, new Download(opts).get(url), url, ver);
   });
 }

@@ -9,7 +9,7 @@ ID, which is also how you'll be able to access the published website.
 What the generator does when using 'deploy to GAE' option is the following:
 
 1. Creates a `.gcloud/properties` file with the specified Project ID.
-2. Copies `app.yaml` from [H5BP GAE server-config](https://github.com/h5bp/server-configs-gae)
+2. Copies `app.yaml` from [H5BP GAE server configs](https://github.com/h5bp/server-configs-gae)
    to `app/app.yaml`.
 3. Modifies `app/app.yaml` to use correct Project ID, the one you specified.
 

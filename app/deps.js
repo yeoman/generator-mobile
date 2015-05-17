@@ -2,7 +2,6 @@
  * WSK dependencies check module
  */
 'use strict';
-
 var exec = require('child_process').exec;
 var events = require('events');
 var iniparser = require('iniparser');
@@ -101,4 +100,3 @@ module.exports = {
   checkGit: checkGit,
   checkGcloud: checkGcloud
 };
-
