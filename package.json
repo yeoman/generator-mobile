@@ -2,7 +2,7 @@
   "name": "generator-mobile",
   "version": "2.0.0-alpha",
   "description": "Scaffold out a mobile project based on Web Starter Kit",
-  "license": "BSD",
+  "license": "BSD-2-Clause",
   "main": "app/index.js",
   "repository": "yeoman/generator-mobile",
   "author": "Chrome Developer Relations",
