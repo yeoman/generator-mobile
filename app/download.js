@@ -49,5 +49,4 @@ function createDownloader(opts, cb) {
 
 
 module.exports = createDownloader;
-module.exports.WSK_RELEASES_URL = WSK_RELEASES_URL;
 module.exports.WSK_ZIP_URL = WSK_ZIP_URL;
