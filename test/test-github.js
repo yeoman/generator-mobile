@@ -2,16 +2,12 @@
 'use strict';
 var fs = require('fs');
 var exec = require('child_process').exec;
-
 var assert = require('yeoman-generator').assert;
 var chalk = require('chalk');
-
 var testUtil = require('./util');
 var deps = require('../app/deps');
 
-
 describe('mobile:app - GitHub hosting', function () {
-
   var checkGit;
 
   before(function (done) {
@@ -22,7 +18,6 @@ describe('mobile:app - GitHub hosting', function () {
   });
 
   describe('project', function () {
-
     before(function (done) {
       testUtil.mockGitHub();
       testUtil.runGenerator({
@@ -53,6 +48,7 @@ describe('mobile:app - GitHub hosting', function () {
       }
 
       assert.file('dist/.git');
+
       exec('git status', {cwd: 'dist'}, function (err, stdout) {
         assert.ok(!err, err);
         assert.ok(/working directory clean/m.test(stdout), stdout);
@@ -87,11 +83,9 @@ describe('mobile:app - GitHub hosting', function () {
         done();
       });
     });
-
-  });  // describe project
+  });
 
   describe('org/user', function () {
-
     before(function (done) {
       testUtil.mockGitHub();
       testUtil.runGenerator({
@@ -124,12 +118,10 @@ describe('mobile:app - GitHub hosting', function () {
       });
     });
 
-  });  // describe org/user
+  });
 
   describe('custom domain', function () {
-
     describe('for a user/org', function () {
-
       before(function (done) {
         testUtil.mockGitHub();
         testUtil.runGenerator({
@@ -148,11 +140,9 @@ describe('mobile:app - GitHub hosting', function () {
         assert.fileContent('tasks/deploy.js', /gulp\.task\('deploy'/);
         assert.fileContent('tasks/deploy.js', /'push', '-u', 'origin', 'master'/m);
       });
-
     });
 
     describe('as a repo', function () {
-
       before(function (done) {
         testUtil.mockGitHub();
         testUtil.runGenerator({
@@ -171,9 +161,6 @@ describe('mobile:app - GitHub hosting', function () {
         assert.fileContent('tasks/deploy.js', /gulp\.task\('deploy'/);
         assert.fileContent('tasks/deploy.js', /'push', '-u', 'origin', 'gh-pages'/m);
       });
-
     });
-
-  });  // describe custom domain
-
+  });
 });

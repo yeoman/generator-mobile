@@ -4,12 +4,10 @@ var path = require('path');
 var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
 var chalk = require('chalk');
-
 var prompt = require('./prompt');
 var download = require('./download');
 var hosting = require('./hosting');
 var deps = require('./deps');
-
 
 module.exports = yeoman.generators.Base.extend({
   constructor: function () {
@@ -20,47 +18,44 @@ module.exports = yeoman.generators.Base.extend({
       type: Boolean,
       defaults: false
     });
-    this.skipWelcome = this.options['skip-welcome-message'];
 
     this.option('skip-install', {
       desc: 'Do not install dependencies',
       type: Boolean,
       defaults: false
     });
-    this.skipInstall = this.options['skip-install'];
 
     this.option('quiet', {
       desc: 'Be quiet; only errors will be shown',
       type: Boolean,
       defaults: false
     });
+
+    this.skipWelcome = this.options['skip-welcome-message'];
+    this.skipInstall = this.options['skip-install'];
     this.quiet = this.options.quiet;
     this.verbose = !this.quiet;
-
-    // load package
     this.pkg = require('../package.json');
-
-    // info/error/warning messages during the generation process
     this.messages = [];
-
-    // dependencies checks;
     this.checks = {};
   },
 
   prompting: function () {
-    var self = this,
-        done = this.async();
+    var self = this;
+    var done = this.async();
 
     var promptUser = function (defaults) {
       self.prompt(prompt.questions(defaults), function (answers) {
         prompt.populateMissing(answers);
+
         if (!answers.confirmed) {
           promptUser(answers);
-        } else {
-          delete answers.confirmed;
-          self.prompts = answers;
-          done();
+          return;
         }
+
+        delete answers.confirmed;
+        self.prompts = answers;
+        done();
       });
     };
 
@@ -72,14 +67,17 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   configuring: function () {
-    var self = this,
-        done = this.async();
+    var self = this;
+    var done = this.async();
 
     if (this.verbose) {
       this.log.write().info('Getting latest WSK release version ...');
     }
 
-    download({extract: true, strip: 1}, function (err, downloader, url, ver) {
+    download({
+      extract: true,
+      strip: 1
+    }, function (err, downloader, url, ver) {
       if (err) {
         self.log.error(err);
         process.exit(1);
@@ -89,8 +87,11 @@ module.exports = yeoman.generators.Base.extend({
         self.log.info('Found release %s', ver.tag_name)
           .info('Fetching %s ...', url)
           .info(chalk.yellow('This might take a few moments'));
+
         downloader.use(function (res) {
-          res.on('data', function () { self.log.write('.'); });
+          res.on('data', function () {
+            self.log.write('.');
+          });
         });
       }
 
@@ -105,8 +106,8 @@ module.exports = yeoman.generators.Base.extend({
         }
 
         var checks = deps.checkAll(self.prompts);
-        checks.on('done', done);
 
+        checks.on('done', done);
         checks.on('passed', function (res) {
           self.checks[res.what] = {data: res.data};
 
@@ -121,7 +122,6 @@ module.exports = yeoman.generators.Base.extend({
           self.log.error(res.error.message);
         });
       });
-
     });
   },
 
@@ -131,62 +131,41 @@ module.exports = yeoman.generators.Base.extend({
         this.log.info('Configuring gulpfile.js');
       }
 
-      var filepath = path.join(this.destinationRoot(), 'gulpfile.js'),
-          gulpfile = this.readFileAsString(filepath);
+      var filepath = path.join(this.destinationRoot(), 'gulpfile.js');
+      var gulpfile = this.readFileAsString(filepath);
+      var repl;
 
       // pagespeed
       if (this.prompts.siteUrl) {
-        /*jshint quotmark:false */
-        var repl = "$1url: '" + this.prompts.siteUrl + "'";
+        repl = '$1url: \'' + this.prompts.siteUrl + '\'';
         gulpfile = gulpfile.replace(/(pagespeed(?:.|\s)+)url:[^,]+/m, repl);
-        /*jshint quotmark:single */
       }
 
       // server-config
       var cfg = hosting.config(this.prompts.hostingChoice);
+
       if (cfg) {
-        /*jshint quotmark:false */
-        gulpfile = gulpfile.replace(/['"].*apache-server-configs.*['"]/m, "'app/" + cfg.filename + "'");
-        /*jshint quotmark:single */
+        gulpfile = gulpfile.replace(/['"].*apache-server-configs.*['"]/m, '\'app/' + cfg.filename + '\'');
       } else {
         gulpfile = gulpfile.replace(/^.*apache-server-configs.*$/m, '');
       }
 
       // TODO: remove this and the corresponding test on the next WSK release
-      /*jshint quotmark:false */
       gulpfile = gulpfile.replace(
         /^gulp\.task\('clean', del\.bind\(null, \['\.tmp', 'dist'\]\)\);$/m,
-        "gulp.task('clean', del.bind(null, ['.tmp', 'dist/*', '!dist/.git']));");
-      /*jshint quotmark:single */
+        'gulp.task(\'clean\', del.bind(null, [\'.tmp\', \'dist/*\', \'!dist/.git\']));'
+      );
 
       this.writeFileFromString(gulpfile, filepath);
     },
-
-    // serverconfig: function () {
-    //   if (!hosting.isSupported(this.prompts.hostingChoice))
-    //     return;
-
-    //   this.verbose && this.log.info('Fetching server config');
-
-    //   var done = this.async();
-    //   hosting.fetchConfig(this.prompts.hostingChoice, function (err, cfg, content) {
-    //     if (!err) {
-    //       // TODO: adjust Project ID if it is GAE
-    //       this.dest.write(path.join('app', cfg.filename), content);
-    //     } else {
-    //       this.log.error(err);
-    //     }
-    //     done();
-    //   }.bind(this));
-    // },
 
     packagejson: function () {
       if (this.verbose) {
         this.log.info('Configuring package.json');
       }
 
-      var filepath = path.join(this.destinationRoot(), 'package.json'),
-          pkg = JSON.parse(this.readFileAsString(filepath));
+      var filepath = path.join(this.destinationRoot(), 'package.json');
+      var pkg = JSON.parse(this.readFileAsString(filepath));
 
       pkg.name = (this.prompts.siteName || 'replace me')
         .replace(/[^0-9a-z_\-]/ig, '-')
@@ -195,8 +174,8 @@ module.exports = yeoman.generators.Base.extend({
       pkg.description = this.prompts.siteDescription;
       pkg.homepage = this.prompts.siteUrl;
       pkg.main = 'app/index.html';
-      delete pkg.devDependencies['apache-server-configs'];
 
+      delete pkg.devDependencies['apache-server-configs'];
       this.writeFileFromString(JSON.stringify(pkg, null, 2), filepath);
     },
 
@@ -205,8 +184,8 @@ module.exports = yeoman.generators.Base.extend({
         this.log.info('Configuring manifest.webapp');
       }
 
-      var filepath = path.join(this.destinationRoot(), 'app', 'manifest.webapp'),
-          manifest = JSON.parse(this.readFileAsString(filepath));
+      var filepath = path.join(this.destinationRoot(), 'app', 'manifest.webapp');
+      var manifest = JSON.parse(this.readFileAsString(filepath));
 
       manifest.name = this.prompts.siteName;
       manifest.description = this.prompts.siteDescription;
@@ -223,9 +202,11 @@ module.exports = yeoman.generators.Base.extend({
         this.log.info('Configuring layout and contents');
       }
 
-      var basic = path.join(this.destinationRoot(), 'app', 'basic.html'),
-          index = path.join(this.destinationRoot(), 'app', 'index.html'),
-          content;
+      var basic = path.join(this.destinationRoot(), 'app', 'basic.html');
+      var index = path.join(this.destinationRoot(), 'app', 'index.html');
+      var content;
+      var repl1;
+      var repl2;
 
       // Layout
       if (this.prompts.layoutChoice === 'default') {
@@ -233,6 +214,7 @@ module.exports = yeoman.generators.Base.extend({
       } else if (this.prompts.layoutChoice === 'ie8') {
         content = this.read(basic);
       }
+
       this.dest.delete(basic);
 
       // Google Analytics
@@ -242,18 +224,17 @@ module.exports = yeoman.generators.Base.extend({
 
       // Site name and description
       if (this.prompts.siteName) {
-        var repl1 = '$1' + this.prompts.siteName + '$2';
+        repl1 = '$1' + this.prompts.siteName + '$2';
         content = content.replace(/(<title>).*(<\/title>)/, repl1);
       }
+
       if (this.prompts.siteDescription) {
-        var repl2 = '$1' + this.prompts.siteDescription + '$2';
+        repl2 = '$1' + this.prompts.siteDescription + '$2';
         content = content.replace(/(<meta\s+name=["']description["']\s+content=["']).*(["'])/, repl2);
       }
 
       this.writeFileFromString(content, index);
     },
-
-    // --------------------- hosting / deployment tasks ---------------------
 
     gcloud: function () {
       if (this.prompts.hostingChoice !== 'gae') {
@@ -265,6 +246,7 @@ module.exports = yeoman.generators.Base.extend({
       this.template('deploy_gae.js', path.join('tasks', 'deploy.js'));
 
       var done = this.async();
+
       hosting.fetchConfig('gae', function (err, cfg, content) {
         if (!err) {
           content = content.replace(/^(application:\s+).*$/m, '$1' + this.prompts.gcloudProjectId);
@@ -272,6 +254,7 @@ module.exports = yeoman.generators.Base.extend({
         } else {
           this.log.error(err);
         }
+
         done();
       }.bind(this));
     },
@@ -283,6 +266,7 @@ module.exports = yeoman.generators.Base.extend({
 
       this.dest.mkdir('dist');
       this.template('deploy_github.js', path.join('tasks', 'deploy.js'));
+
       if (this.prompts.siteHost && !prompt.isGitHub(this.prompts.siteHost)) {
         this.dest.write(path.join('app', 'CNAME'), this.prompts.siteHost);
       }
@@ -291,16 +275,17 @@ module.exports = yeoman.generators.Base.extend({
         return;
       }
 
-      var log = !this.quiet && this.log,
-          done = this.async();
+      var log = !this.quiet && this.log;
+      var done = this.async();
 
       var cmd = [
         'git init .',
         'git checkout -b ' + this.prompts.githubBranch,
         'git commit --allow-empty -m "Initial empty commit"',
         'git remote add origin git@github.com:' + this.prompts.githubTarget
-      ];
-      exec(cmd.join(' && '), {cwd: path.join('dist')}, function (err, stdout) {
+      ].join(' && ');
+
+      exec(cmd, {cwd: path.join('dist')}, function (err, stdout) {
         if (log) {
           log.write().info(stdout);
         }
@@ -308,23 +293,24 @@ module.exports = yeoman.generators.Base.extend({
         done();
       });
     }
-
   },
 
   install: {
     npminstall: function () {
-      if (!this.skipInstall) {
-        if (this.verbose) {
-          this.log.write()
-            .info('Running ' + chalk.yellow('npm install') + ' ' +
-                  'to install the required dependencies. ' +
-                  'If this fails, try running the command yourself.')
-            .info(chalk.yellow('This might take a few moments'))
-            .write();
-        }
-
-        this.npmInstall();
+      if (this.options['skip-install']) {
+        return;
       }
+
+      if (this.verbose) {
+        this.log.write()
+          .info('Running ' + chalk.yellow('npm install') + ' ' +
+                'to install the required dependencies. ' +
+                'If this fails, try running the command yourself.')
+          .info(chalk.yellow('This might take a few moments'))
+          .write();
+      }
+
+      this.npmInstall();
     },
 
     git: function () {
@@ -332,15 +318,15 @@ module.exports = yeoman.generators.Base.extend({
         return;
       }
 
-      var self = this,
-          done = this.async(),
-          cmd = [
-            'git init',
-            'git add .',
-            'git commit -m "Initial commit"'
-          ];
+      var self = this;
+      var done = this.async();
+      var cmd = [
+        'git init',
+        'git add .',
+        'git commit -m "Initial commit"'
+      ].join(' && ');
 
-      exec(cmd.join(' && '), function (err, stdout) {
+      exec(cmd, function (err, stdout) {
         if (err) {
           self.log.error(err);
         }

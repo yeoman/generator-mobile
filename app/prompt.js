@@ -7,7 +7,6 @@ var RE_URL = /^(?:https?:\/\/)?([a-z0-9\-_]+(?:\.[a-z0-9\-_]+)*(?::\d+)?)(\/.*)?
 // "owner/repo" or "owner"
 var RE_GITHUB_TARGET = /^([a-z0-9][a-z0-9\-]*)(?:\/([a-z0-9_\-\.]+))?$/i;
 
-
 function extractDomain(url) {
   var match = (url || '').match(RE_URL);
   return match && match[1];
@@ -22,6 +21,7 @@ function isGitHub(url) {
 function populateMissing(answers) {
   if (!answers.siteUrl && answers.githubTarget) {
     var t1 = answers.githubTarget.match(RE_GITHUB_TARGET);
+
     if (isGitHub(t1[2])) {
       answers.siteUrl = 'https://' + t1[2];
     } else {
@@ -30,11 +30,13 @@ function populateMissing(answers) {
   }
 
   if (isGitHub(answers.siteUrl)) {
+    var t2;
     var match = answers.siteUrl.match(RE_URL);
+
     answers.isGitHubProject = match[2] && match[2].length > 1;
 
     if (!answers.githubTarget) {
-      var t2 = match[1].split('.')[0] + '/' + (answers.isGitHubProject ? match[2] : match[1]);
+     t2 = match[1].split('.')[0] + '/' + (answers.isGitHubProject ? match[2] : match[1]);
       answers.githubTarget = t2.replace(/\/\//g, '/');
     }
   }
@@ -51,26 +53,28 @@ function populateMissing(answers) {
 
 function questions(defaults) {
   defaults = defaults || {};
-  return [
-    {
+
+  return [{
       message: 'Site name',
       name: 'siteName',
       default: defaults.siteName || process.cwd().split(path.sep).pop()
-    },
-    {
+    }, {
       message: 'Site description',
       name: 'siteDescription',
       default: defaults.siteDescription
-    },
-    {
-      message: ('Site URL (e.g. www.example.org, https://owner.github.io),\n  '+
-                'hit enter to skip.\n '),
+    }, {
+      message: [
+        'Site URL (e.g. www.example.org, https://owner.github.io)',
+        '  hit enter to skip.',
+        ''
+      ].join('\n'),
       name: 'siteUrl',
       default: defaults.siteUrl,
       filter: function (url) {
         if (url && url.substring(0, 4) !== 'http') {
           url = 'http://' + url;
         }
+
         return url;
       },
       validate: function (url) {
@@ -80,8 +84,7 @@ function questions(defaults) {
 
         return 'That doesn\'t look like a valid URL';
       }
-    },
-    {
+    }, {
       message: 'Do you want a default layout?',
       name: 'layoutChoice',
       type: 'list',
@@ -90,23 +93,12 @@ function questions(defaults) {
         {value: 'ie8', name: 'No, barebones HTML file'}
       ],
       default: defaults.layoutChoice || 'default'
-    },
-    {
+    }, {
       message: ('Google Analytics tracking ID, or hit enter to skip.\n  '+
                 '(get your tracking ID at https://www.google.com/analytics/web/)\n '),
       name: 'gaTrackId',
       default: defaults.gaTrackId
-    },
-    // {
-    //   message: 'Use build system? (Gulp, Sass, etc.)',
-    //   name: 'shouldUseBuild',
-    //   type: 'confirm',
-    //   default: typeof defaults.shouldUseBuild == 'boolean' ? defaults.shouldUseBuild : true
-    // },
-
-    // -------------- hosting providers ------------------
-
-    {
+    }, {
       message: 'Where would you like to host the site?',
       name: 'hostingCat',
       type: 'list',
@@ -117,11 +109,9 @@ function questions(defaults) {
         {value: 'none', name: 'Nowhere, don\'t worry about it'}
       ],
       default: function (answers) {
-        return defaults.hostingCat ||
-        (isGitHub(answers.siteUrl) ? 'static' : 'none');
+        return defaults.hostingCat || (isGitHub(answers.siteUrl) ? 'static' : 'none');
       }
-    },
-    {
+    }, {
       message: 'Which PaaS is it?',
       name: 'hostingChoice',
       type: 'list',
@@ -134,8 +124,7 @@ function questions(defaults) {
       when: function (answers) {
         return answers.hostingCat === 'paas';
       }
-    },
-    {
+    }, {
       message: 'Which static hosting is it?',
       name: 'hostingChoice',
       type: 'list',
@@ -146,14 +135,12 @@ function questions(defaults) {
         {value: 'none', name: 'Other (not supported)'}
       ],
       default: function (answers) {
-        return defaults.hostingChoice ||
-               (isGitHub(answers.siteUrl) ? 'github' : 'none');
+        return defaults.hostingChoice || (isGitHub(answers.siteUrl) ? 'github' : 'none');
       },
       when: function (answers) {
         return answers.hostingCat === 'static';
       }
-    },
-    {
+    }, {
       message: 'Which server is it?',
       name: 'hostingChoice',
       type: 'list',
@@ -167,13 +154,12 @@ function questions(defaults) {
       when: function (answers) {
         return answers.hostingCat === 'server';
       }
-    },
-
-    // -------------- GAE (PaaS hosting) ------------------
-
-    {
-      message: ('What Project ID shall we use?\n  '+
-                '(you can see all your projects on https://cloud.google.com/console)\n '),
+    }, {
+      message: [
+        'What Project ID shall we use?',
+        '  (you can see all your projects on https://cloud.google.com/console)',
+        ''
+      ].join('\n'),
       name: 'gcloudProjectId',
       default: defaults.gcloudProjectId,
       validate: function (v) {
@@ -182,57 +168,51 @@ function questions(defaults) {
       when: function (answers) {
         return answers.hostingChoice === 'gae';
       }
-    },
-
-    // -------------- Heroku (PaaS hosting) ------------------
-
-    {
-      message: ('What is your Heroku app name?\n  ' +
-                '(just hitting enter is OK, we\'ll create one for you)\n '),
+    }, {
+      message: [
+        'What is your Heroku app name?',
+        '  (just hitting enter is OK, we\'ll create one for you)',
+        ''
+      ],
       name: 'herokuApp',
       default: defaults.herokuApp,
       when: function (answers) {
         return answers.hostingChoice === 'heroku';
       }
-    },
-
-    // -------------- GCS / S3 (static hosting) ------------------
-
-    {
+    }, {
       message: 'Site domain (e.g. www.example.org) or a bucket name',
       name: 'siteDomain',
       default: defaults.siteDomain,
       when: function (answers) {
-        return ['gcs', 's3'].indexOf(answers.hostingChoice) >= 0 &&
-               !answers.siteUrl;
+        return ['gcs', 's3'].indexOf(answers.hostingChoice) >= 0 && !answers.siteUrl;
       }
-    },
-
-    // -------------- GitHub (static hosting) ------------------
-
-    {
+    }, {
       message: 'GitHub username or owner/project',
       name: 'githubTarget',
       default: function (answers) {
+        var user;
+        var repo;
+
         if (defaults.githubTarget) {
           return defaults.githubTarget;
         }
 
         if (isGitHub(answers.siteUrl)) {
-          var match = answers.siteUrl.match(RE_URL),
-              name = match[1].split('.')[0],
-              p = match[2] && match[2].length > 1 ? match[2] : '/' + name + '.github.io';
+          var match = answers.siteUrl.match(RE_URL);
+          var name = match[1].split('.')[0];
+          var p = match[2] && match[2].length > 1 ? match[2] : '/' + name + '.github.io';
+
           return name + p;
         }
 
-        var user;
         try {
           var gitcfg = iniparser.parseSync(path.join(process.env.HOME, '.gitconfig'));
           user = (gitcfg.github || {}).user;
         } catch (err) {}
-        user = user || process.env.USER || process.env.USERNAME;
 
-        var repo = extractDomain(answers.siteUrl) || (user + '.github.io');
+        user = user || process.env.USER || process.env.USERNAME;
+        repo = extractDomain(answers.siteUrl) || (user + '.github.io');
+
         return user && repo ? [user, repo].join('/') : '';
       },
       validate: function (v) {
@@ -246,16 +226,13 @@ function questions(defaults) {
         if (v && v.indexOf('/') === -1) {
           v += '/' + v + '.github.io';
         }
+
         return (v || '').replace(/["']/g, '');
       },
       when: function (answers) {
         return answers.hostingChoice === 'github';
       }
-    },
-
-    // -------------- deployment (server only) ------------------
-
-    {
+    }, {
       message: 'What is your deployment strategy?',
       name: 'deployChoice',
       type: 'list',
@@ -268,27 +245,28 @@ function questions(defaults) {
       when: function (answers) {
         return answers.hostingCat === 'server';
       }
-    },
-    {
+    }, {
       message: 'Deployment URL (e.g. user@server:[path])',
       name: 'deployDest',
       default: function (answers) {
         if (defaults.deployDest) {
           return defaults.deployDest;
         }
+
         var user = process.env.USER || process.env.USERNAME;
         var host = extractDomain(answers.siteUrl);
         var dest = '';
+
         if (user && host) {
           dest = user + '@' + host + ':' + (answers.siteName || '');
         }
+
         return dest;
       },
       when: function (answers) {
         return answers.deployChoice && answers.deployChoice !== 'none';
       }
-    },
-    {
+    }, {
       message: 'Looks good?',
       name: 'confirmed',
       type: 'confirm',
@@ -296,7 +274,6 @@ function questions(defaults) {
     }
   ];
 }
-
 
 module.exports = {
   questions: questions,

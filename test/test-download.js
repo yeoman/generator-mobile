@@ -5,9 +5,17 @@ var nock = require('nock');
 var download = require('../app/download');
 
 describe('download module', function () {
-  before(function () { nock.disableNetConnect(); });
-  afterEach(function () { nock.cleanAll(); });
-  after(function () { nock.enableNetConnect(); });
+  before(function () {
+    nock.disableNetConnect();
+  });
+
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
+  after(function () {
+    nock.enableNetConnect();
+  });
 
   it('fetches latest release version and creates downloader', function (done) {
     var scope = nock('https://api.github.com')
@@ -27,6 +35,7 @@ describe('download module', function () {
       if (!scope.isDone()) {
         assert.fail('pending mocks: ' + scope.pendingMocks());
       }
+
       done();
     });
   });

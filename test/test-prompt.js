@@ -22,6 +22,7 @@ describe('prompts module', function () {
 
   describe('githubTarget', function () {
     var ghTarget;
+
     before(function () {
       for (var i = 0, qq = prompt.questions(), q; (q = qq[i]); i++) {
         if (q.name === 'githubTarget') {
@@ -29,6 +30,7 @@ describe('prompts module', function () {
           break;
         }
       }
+
       if (!ghTarget) {
         assert.fail('Could not find "githubTarget" question');
       }
@@ -63,7 +65,6 @@ describe('prompts module', function () {
       assert.equal(ghTarget.default({siteUrl: 'http://owner.github.io'}),
         'owner/owner.github.io');
     });
-
   });
 
   describe('populateMissing', function () {

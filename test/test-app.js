@@ -5,9 +5,7 @@ var assert = require('yeoman-generator').assert;
 var testUtil = require('./util');
 
 describe('mobile:app', function () {
-
   describe('default layout, no hosting', function () {
-
     before(function (done) {
       testUtil.mockGitHub();
       testUtil.runGenerator({
@@ -37,8 +35,11 @@ describe('mobile:app', function () {
     });
 
     it('sets site description in index.html', function () {
-      var r = '<meta\\s+name=["\']description["\']\\s+content=["\']' +
-              'Dummy description["\']';
+      var r = [
+        '<meta\\s+name=["\']description["\']\\s+content=["\']',
+        'Dummy description["\']'
+      ].join('');
+
       assert.fileContent('app/index.html', new RegExp(r, 'm'));
     });
 
@@ -48,9 +49,7 @@ describe('mobile:app', function () {
     });
 
     it('configures Google Analytics', function () {
-      /*jshint quotmark:false */
-      var r = "ga\\('create', 'UA-12345-6'";
-      /*jshint quotmark:single */
+      var r = 'ga\\(\'create\', \'UA-12345-6\'';
       assert.fileContent('app/index.html', new RegExp(r, 'm'));
     });
 
@@ -96,11 +95,8 @@ describe('mobile:app', function () {
 
     // TODO: remove on the next WSK release
     it('temporary replaces "clean" task', function () {
-      /*jshint quotmark:false */
-      var t = "^gulp\\.task\\('clean', del\\.bind\\(null, \\['\\.tmp', 'dist/\\*', '!dist/\\.git'\\]\\)\\);$";
-      /*jshint quotmark:true */
+      var t = '^gulp\\.task\\(\'clean\', del\\.bind\\(null, \\[\'\\.tmp\', \'dist/\\*\', \'!dist/\\.git\'\\]\\)\\);$';
       assert.fileContent('gulpfile.js', new RegExp(t, 'm'));
     });
-
   });
 });

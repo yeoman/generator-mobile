@@ -1,8 +1,6 @@
 'use strict';
 var request = require('request');
 
-
-// TODO: support other providers
 var SERVER_CONFIG = {
   gae: {
     filename: 'app.yaml',
@@ -14,26 +12,28 @@ var SERVER_CONFIG = {
   }
 };
 
-
 function config(provider) {
   return SERVER_CONFIG[provider];
 }
 
 function isSupported(provider) {
-  return !!config(provider);
+  return config(provider) ? true : false;
 }
 
-function fetchConfig(provider, callback) {
+function fetchConfig(provider, cb) {
   var cfg = config(provider);
+
   if (!cfg) {
-    callback(new Error('unknown provider: ' + provider));
+    cb(new Error('unknown provider: ' + provider));
     return;
   }
+
   request(cfg.url, function (err, res, body) {
     if (!err && res.statusCode !== 200) {
       err = new Error('config fetch error ' + res.statusCode);
     }
-    callback(err, cfg, body);
+
+    cb(err, cfg, body);
   });
 }
 

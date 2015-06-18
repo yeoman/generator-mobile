@@ -15,9 +15,8 @@ describe('mobile:app - GAE hosting', function () {
   });
 
   it('configures gcloud', function () {
-    assert.file('.gcloud/properties');
-
     var prop = '^project\\s+=\\s+my-cloud-project$';
+    assert.file('.gcloud/properties');
     assert.fileContent('.gcloud/properties', new RegExp(prop, 'm'));
   });
 
@@ -30,5 +29,4 @@ describe('mobile:app - GAE hosting', function () {
     assert.fileContent('tasks/deploy.js', /gulp\.task\('deploy'/);
     assert.fileContent('tasks/deploy.js', /'app', 'deploy', 'dist'/);
   });
-
 });
