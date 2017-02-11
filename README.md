@@ -1,5 +1,7 @@
 # Generator Mobile [![Build Status][travis-img]][travis-link] 
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/yeoman/generator-mobile.svg)](https://greenkeeper.io/)
+
 A mobile-first generator based on [Web Starter Kit][wsk-repo].
 
 [![Web Starter Kit][wsk-screenshot1]][wsk-repo]
